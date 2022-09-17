@@ -1,0 +1,4 @@
+.vscode
+logs
+target
+src/main/java/com/binance/trader/PrivateConfig.java
