@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 
 import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.trader.entities.AccountInfo;
+import com.binance.trader.entities.Ticker;
 import com.google.gson.Gson;
 
 public class Trader {
@@ -16,19 +17,36 @@ public class Trader {
         this.client = new SpotClientImpl(PrivateConfig.TESTNET_API_KEY, PrivateConfig.TESTNET_SECRET_KEY, PrivateConfig.TESTNET_URL);
     }
 
-    public void trade() {
+    public void trade(String symbol) {
         LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
-
         Long timestamp = Instant.now().toEpochMilli();
         parameters.put("timestamp", timestamp);
     
         String result = client.createTrade().account(parameters);
+        AccountInfo accountInfo = deserialize(result, AccountInfo.class);
+    
+        String cryptoBuy = symbol.substring(0, 3);
+        String freeBalance = accountInfo.getBalance(cryptoBuy).freeBalance();
+        print(freeBalance);
+    }
+
+    public void getTicker() {
+        LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
+        parameters.put("symbol", "BTCUSDT");
+
+        String result = client.createMarket().tickerSymbol(parameters);
+        Ticker ticker = deserialize(result, Ticker.class);
+        print(ticker.getPrice());
+    }
+
+    private <T> T deserialize(String json, Class<T> objectClass) {
         Gson gson = new Gson();
-        AccountInfo accountInfo = gson.fromJson(result, AccountInfo.class);
-    
-        String symbol = "BNB";
-        System.out.println(accountInfo.getBalance(symbol).freeBalance());
-    
+        T object = gson.fromJson(json, objectClass);
+        return object;
+    }
+
+    private <T> void print(T text) {
+        System.out.println(text);
     }
     
 }
