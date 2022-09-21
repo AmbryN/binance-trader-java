@@ -2,6 +2,10 @@
 
 **WORK IN PROGRESS**
 
+It allows :
+* To select a crypto pair to trade from the available pairs
+* To select a trading strategy from the available list
+
 Planned features :
 * Trade a specific crypto pair (e.g. BTCUSDT) by sending actual buy and sell orders using Binance's wallet balance
 * Select and use a trading strategy (e.g. Moving Average) with variable bservation period, number of periods used for the moving average calculation and refresh time of the bot

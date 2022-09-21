@@ -31,6 +31,12 @@ public class App
         trader.trade();        
     }
 
+    /**
+     * The method is used to print the available symbols 
+     * the user can trade and to prompt him for a selection
+     * @param scanner Interface to System.in to get user input
+     * @return the selected Symbol the user wants to trade
+     */
     private static Symbol symbolSelection(Scanner scanner) {
         
         System.out.println("What symbol do you want to trade? ");
@@ -47,6 +53,12 @@ public class App
         }
     }
 
+    /**
+     * The method is used to print the available strategies 
+     * the user can use to trade and to prompt him for a selection
+     * @param scanner Interface to System.in to get user input
+     * @return the select Strategy the user wants to use
+     */
     private static Strategy strategySelection(Scanner scanner) {
         
         System.out.println("What strategy do you want to use? ");
@@ -67,6 +79,12 @@ public class App
         }
     }
 
+    /**
+     * Method to get and to check the validiy of
+     * the user input
+     * @param scanner
+     * @return int of the selected answer
+     */
     private static int getUserInput(Scanner scanner) {
         System.out.print("Selection: ");
         int userInput = -1;
