@@ -5,7 +5,7 @@ public class AccountInfo {
     int takerCommission;
     int buyerCommission;
     int sellerCommission;
-    boolean carTrader;
+    boolean canTrade;
     boolean canWithdraw;
     boolean canDeposit;
     boolean brokered;
@@ -13,6 +13,10 @@ public class AccountInfo {
     String accountType;
     Balance[] balances;
     String[] permissions;
+
+    AccountInfo(Balance[] balances) {
+        this.balances = balances;
+    }
 
     public Balance getBalance(String symbol) {
         for (Balance balance : balances) {
