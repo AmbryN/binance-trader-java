@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.trader.entities.AccountInfo;
 import com.binance.trader.entities.Ticker;
-import com.binance.trader.enums.Strategy;
+import com.binance.trader.intefaces.Strategy;
 import com.binance.trader.enums.Symbol;
 import com.google.gson.Gson;
 
@@ -17,10 +17,10 @@ public class Trader {
     private Strategy strategy;
     
         
-    public Trader(Symbol symbol, Strategy strategy) {
+    public Trader(Symbol symbol, Strategy stragegy) {
         this.client = new SpotClientImpl(PrivateConfig.TESTNET_API_KEY, PrivateConfig.TESTNET_SECRET_KEY, PrivateConfig.TESTNET_URL);
         this.symbol = symbol;
-        this.strategy = strategy;
+        this.strategy = stragegy;
     }
 
     public void trade() {
@@ -34,6 +34,7 @@ public class Trader {
         String cryptoBuy = this.symbol.getTraded();
         double freeBalance = accountInfo.getBalance(cryptoBuy).freeBalance();
         print(freeBalance);
+        this.strategy.execute();
     }
 
     public void getTicker() {

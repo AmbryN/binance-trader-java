@@ -1,10 +1,13 @@
 package com.binance.trader;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
-import com.binance.trader.enums.Strategy;
+import com.binance.trader.entities.MovingAvgStrategy;
 import com.binance.trader.enums.Symbol;
+import com.binance.trader.intefaces.Strategy;
 
 public class App 
 {
@@ -12,53 +15,61 @@ public class App
     {
         Scanner scanner = new Scanner(System.in);
 
-        Symbol symbol = Symbol.None;
-        Strategy strategy = Strategy.None;
+        Symbol symbol = null;
+        Strategy strategy = null;
 
-        while (symbol == Symbol.None) {
+        while (symbol == null) {
             symbol = symbolSelection(scanner);
-            if (symbol == Symbol.None) {
-                System.out.println("Please select one of the proposed choices!");
-            }
         }
-        while (strategy == Strategy.None) {
+        while (strategy == null) {
             strategy = strategySelection(scanner);
-            if (strategy == Strategy.None) {
-                System.out.println("Please select one of the proposed choices!");
-            }
         }
 
         scanner.close();
 
-        // Trader trader = new Trader(symbol, strategy);
-        // trader.trade();        
+        Trader trader = new Trader(symbol, strategy);
+        trader.trade();        
     }
 
     private static Symbol symbolSelection(Scanner scanner) {
         
-        System.out.println("What symbol do you want to trader? ");
+        System.out.println("What symbol do you want to trade? ");
         for (Symbol symbol : Symbol.values()) {
             System.out.println(symbol.getPosition() + ") " + symbol);
         }
 
-        int userSymbolChoice = getUserInput(scanner);
-        return Symbol.getSymbol(userSymbolChoice);
+        int userChoice = getUserInput(scanner);
+        if (userChoice < 0 || userChoice > Symbol.values().length - 1) {
+            System.out.println("Please select one of the proposed choices!");
+            return null;
+        } else {
+            return Symbol.getSymbol(userChoice);
+        }
     }
 
     private static Strategy strategySelection(Scanner scanner) {
         
         System.out.println("What strategy do you want to use? ");
-        for (Strategy strategy : Strategy.values()) {
-            System.out.println(strategy.getPosition() + ") " + strategy);
+
+        List<Strategy> strategies = new ArrayList<Strategy>();
+        strategies.add(new MovingAvgStrategy());
+
+        for (int i = 0; i < strategies.size(); i++) {
+            System.out.println(i +") " + strategies.get(i));
         }
 
-        int userStrategyChoice = getUserInput(scanner);
-        return Strategy.getStrategy(userStrategyChoice);
+        int userChoice = getUserInput(scanner);
+        if (userChoice < 0 || userChoice > strategies.size() - 1) {
+            System.out.println("Please select one of the proposed choices!");
+            return null;
+        } else {
+            return strategies.get(userChoice);
+        }
     }
 
     private static int getUserInput(Scanner scanner) {
         System.out.print("Selection: ");
-        int userInput = 0;
+        int userInput = -1;
         try {
             userInput = scanner.nextInt();
         } catch (InputMismatchException e) {

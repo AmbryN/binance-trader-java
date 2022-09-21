@@ -1,8 +1,7 @@
 package com.binance.trader.enums;
 
 public enum Symbol {
-    BTCUSDT(1, "BTC", "USDT"),
-    None(0);
+    BTCUSDT(0, "BTC", "USDT");
 
     String traded;
     String quoted;
@@ -32,6 +31,6 @@ public enum Symbol {
                 return symbol;
             }
         }
-        return Symbol.None;
+        return null;
     };
 }
