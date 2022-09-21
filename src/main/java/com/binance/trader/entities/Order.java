@@ -1,16 +1,16 @@
 package com.binance.trader.entities;
 
-import com.binance.trader.enums.ORDER_SIDE;
-import com.binance.trader.enums.ORDER_TYPE;
+import com.binance.trader.enums.OrderSide;
+import com.binance.trader.enums.OrderType;
 
 public class Order {
     String symbol; 	
-    ORDER_SIDE side; 	
-    ORDER_TYPE type;
+    OrderSide side; 	
+    OrderType type;
     Float quantity;
     Float quoteOrderQty;
 
-    Order(String symbol, ORDER_SIDE side, ORDER_TYPE type, Float quantity, Float quoteOrderQty) {
+    Order(String symbol, OrderSide side, OrderType type, Float quantity, Float quoteOrderQty) {
         this.symbol = symbol;
         this.side = side;
         this.type = type;

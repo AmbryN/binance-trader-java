@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.trader.entities.AccountInfo;
 import com.binance.trader.entities.Ticker;
+import com.binance.trader.enums.Symbol;
 import com.google.gson.Gson;
 
 public class Trader {
@@ -17,7 +18,7 @@ public class Trader {
         this.client = new SpotClientImpl(PrivateConfig.TESTNET_API_KEY, PrivateConfig.TESTNET_SECRET_KEY, PrivateConfig.TESTNET_URL);
     }
 
-    public void trade(String symbol) {
+    public void trade(Symbol symbol) {
         LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
         Long timestamp = Instant.now().toEpochMilli();
         parameters.put("timestamp", timestamp);
@@ -25,7 +26,7 @@ public class Trader {
         String result = client.createTrade().account(parameters);
         AccountInfo accountInfo = deserialize(result, AccountInfo.class);
     
-        String cryptoBuy = symbol.substring(0, 3);
+        String cryptoBuy = symbol.getBuySymbol();
         double freeBalance = accountInfo.getBalance(cryptoBuy).freeBalance();
         print(freeBalance);
     }

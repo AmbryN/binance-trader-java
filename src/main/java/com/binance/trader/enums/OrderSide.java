@@ -1,6 +1,6 @@
 package com.binance.trader.enums;
 
-public enum ORDER_SIDE {
+public enum OrderSide {
     BUY,
     SELL,
 }

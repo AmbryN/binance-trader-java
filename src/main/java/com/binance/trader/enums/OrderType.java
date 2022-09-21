@@ -1,6 +1,6 @@
 package com.binance.trader.enums;
 
-public enum ORDER_TYPE {
+public enum OrderType {
     LIMIT,
     MARKET,
     STOP_LOSS,
