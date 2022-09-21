@@ -2,18 +2,16 @@ package com.binance.trader.entities;
 
 public class Balance {
     String asset;
-    String free;
-    String locked;
+    double free;
+    double locked;
 
-    Balance() {}
-
-    Balance(String asset, String free, String locked) {
+    Balance(String asset, double free, double locked) {
         this.asset = asset;
         this.free = free;
         this.locked = locked;
     }
 
-    public String freeBalance() {
+    public double freeBalance() {
         return this.free;
     }
 }

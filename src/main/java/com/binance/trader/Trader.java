@@ -26,7 +26,7 @@ public class Trader {
         AccountInfo accountInfo = deserialize(result, AccountInfo.class);
     
         String cryptoBuy = symbol.substring(0, 3);
-        String freeBalance = accountInfo.getBalance(cryptoBuy).freeBalance();
+        double freeBalance = accountInfo.getBalance(cryptoBuy).freeBalance();
         print(freeBalance);
     }
 

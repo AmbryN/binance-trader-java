@@ -14,14 +14,12 @@ public class AccountInfo {
     Balance[] balances;
     String[] permissions;
 
-    AccountInfo() {}
-
     public Balance getBalance(String symbol) {
         for (Balance balance : balances) {
             if (balance.asset.equals(symbol)) {
                 return balance;
             }
         }
-        return new Balance(symbol, "0", "0");
+        return new Balance(symbol, 0.0, 0.0);
     }
 }
