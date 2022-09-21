@@ -8,6 +8,7 @@ import java.util.Scanner;
 import com.binance.trader.entities.MovingAvgStrategy;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.intefaces.Strategy;
+import com.binance.trader.utils.Logger;
 
 public class App 
 {
@@ -21,14 +22,42 @@ public class App
         while (symbol == null) {
             symbol = symbolSelection(scanner);
         }
+
         while (strategy == null) {
             strategy = strategySelection(scanner);
         }
 
-        scanner.close();
+        Logger.print("=== SUMMARY ===");
+        Logger.print("You want to trade :");
+        Logger.print("Symbol: " +symbol);
+        Logger.print("Strategy: " +strategy);
 
-        Trader trader = new Trader(symbol, strategy);
-        trader.trade();        
+        if (start(scanner)) {
+            Trader trader = new Trader(symbol, strategy);
+            trader.trade();  
+        } 
+        scanner.close();    
+    }
+
+    /**
+     * The method is used to ask the user to
+     * verify the trade parameters and prompt
+     * him to accept or decline them 
+     * @param scanner Interface to System.in to get user input
+     * @return if the user wants to start or not
+     */
+    private static boolean start(Scanner scanner) {
+        Logger.print("Is this OK for you? [y/n]");
+        String userInput = getUserInput(scanner).toLowerCase();
+        while (!userInput.equals("y") && !userInput.equals("n")) {
+            Logger.print("Please choose between 'y' or 'n'!");
+            userInput = getUserInput(scanner).toLowerCase();
+        }
+        if (userInput.equals("y")) {
+            return true;
+        } else {
+            return false;
+        } 
     }
 
     /**
@@ -44,7 +73,14 @@ public class App
             System.out.println(symbol.getPosition() + ") " + symbol);
         }
 
-        int userChoice = getUserInput(scanner);
+        String userInput = getUserInput(scanner);
+        int userChoice = -1;
+        try {
+            userChoice = Integer.parseInt(userInput);
+        } catch (NumberFormatException e) {
+            Logger.print("Please enter a valid integer!");
+        }
+        
         if (userChoice < 0 || userChoice > Symbol.values().length - 1) {
             System.out.println("Please select one of the proposed choices!");
             return null;
@@ -70,7 +106,14 @@ public class App
             System.out.println(i +") " + strategies.get(i));
         }
 
-        int userChoice = getUserInput(scanner);
+        String userInput = getUserInput(scanner);
+        int userChoice = -1;
+        try {
+            userChoice = Integer.parseInt(userInput);
+        } catch (NumberFormatException e) {
+            Logger.print("Please enter a valid integer!");
+        }
+
         if (userChoice < 0 || userChoice > strategies.size() - 1) {
             System.out.println("Please select one of the proposed choices!");
             return null;
@@ -80,21 +123,13 @@ public class App
     }
 
     /**
-     * Method to get and to check the validiy of
-     * the user input
+     * Method to get user input
      * @param scanner
-     * @return int of the selected answer
+     * @return User input string
      */
-    private static int getUserInput(Scanner scanner) {
+    private static String getUserInput(Scanner scanner) {
         System.out.print("Selection: ");
-        int userInput = -1;
-        try {
-            userInput = scanner.nextInt();
-        } catch (InputMismatchException e) {
-            System.out.println("Please enter a valid integer!");
-        } finally {
-            scanner.nextLine();
-        }
-        return userInput;
+        
+        return scanner.nextLine();
     }
 }
