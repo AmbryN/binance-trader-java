@@ -3,8 +3,8 @@ package com.binance.trader.enums;
 public enum Symbol {
     BTCUSDT(0, "BTC", "USDT");
 
-    String traded;
-    String quoted;
+    String base;
+    String quote;
     int position;
 
     Symbol(int position) {
@@ -13,12 +13,12 @@ public enum Symbol {
 
     Symbol(int position, String trade, String quote) {
         this.position = position;
-        this.traded = trade;
-        this.quoted = quote;
+        this.base = trade;
+        this.quote = quote;
     }
 
-    public String getTraded() {
-        return this.traded;
+    public String getBase() {
+        return this.base;
     }
 
     public int getPosition() {
