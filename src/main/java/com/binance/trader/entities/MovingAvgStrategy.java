@@ -36,14 +36,14 @@ public class MovingAvgStrategy implements Strategy {
         Logger.print(freeBalance);
     }
 
-    public double calculateMovingAvg(Symbol symbol) {
-        String result;
-        LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
-        parameters.put("symbol", symbol);
-        parameters.put("period", this.timePeriod);
-        parameters.put("periodNb", this.periodNb);
+    // public double calculateMovingAvg(Symbol symbol) {
+    //     String result;
+    //     LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
+    //     parameters.put("symbol", symbol);
+    //     parameters.put("period", this.timePeriod);
+    //     parameters.put("periodNb", this.periodNb);
 
-        return 0.0;
+    //     return 0.0;
         // try {
         //     result = this.client.createMarket().klines(parameters);
         // }
@@ -63,7 +63,7 @@ public class MovingAvgStrategy implements Strategy {
 
         // console.log(`===== Moving Average: ${movingAvg} ===== `)
         // return movingAvg;
-}
+// }
 
     private void getTicker() {
         LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
