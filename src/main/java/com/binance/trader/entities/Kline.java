@@ -3,26 +3,44 @@ package com.binance.trader.entities;
 import java.util.Date;
 
 public class Kline {
-    Long t;
-    Long T;
-    String s;
-    String i;
-    int f;
-    int L;
-    Float o;
-    Float c;
-    Float h;
-    Float l;
-    Float v;
-    int n;
-    boolean x;
-    Float q;
-    Float V;
-    Float Q;
+    Long openTime;
+    double openPrice;
+    double highPrice;
+    double lowPrice;
+    double closePrice;
+    double volume;
+    Long closeTime;
+    double quoteVolume;
+    int nbOfTrades;
+    double takerBuyBaseVolume;
+    double takerBuyQuoteVolume;
 
-    Kline() {}
+    public Kline(
+        Long openTime,
+        double openPrice,
+        double highPrice,
+        double lowPrice,
+        double closePrice,
+        double volume,
+        Long closeTime,
+        double quoteVolume,
+        int nbOfTrades,
+        double takerBuyBaseVolume,
+        double takerBuyQuoteVolume) {
+            this.openTime = openTime;
+            this.openPrice = openPrice;
+            this.highPrice = highPrice;
+            this.lowPrice = lowPrice;
+            this.closePrice = closePrice;
+            this.volume = volume;
+            this.closeTime = closeTime;
+            this.quoteVolume = quoteVolume;
+            this.nbOfTrades = nbOfTrades;
+            this.takerBuyBaseVolume = takerBuyBaseVolume;
+            this.takerBuyQuoteVolume = takerBuyQuoteVolume;
+    }
 
     public String toString() {
-        return ("Open time: " + new Date(t) + " / Close time: " + new Date(T) + " / Interval: " + i + " / Open price: " + o + " / Close price: " + c);
+        return ("Kline from " + new Date(closeTime) + " / Closed at " + closePrice);
     }
 }

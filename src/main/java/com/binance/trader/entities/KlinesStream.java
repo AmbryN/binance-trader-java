@@ -6,7 +6,7 @@ public class KlinesStream {
     String e;
     Long E;
     String s;
-    Kline k;
+    KlineDataStream k;
 
     KlinesStream() {}
 
