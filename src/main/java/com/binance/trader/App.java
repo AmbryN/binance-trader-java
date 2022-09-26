@@ -68,8 +68,11 @@ public class App
     private static Symbol symbolSelection(Scanner scanner) {
         
         System.out.println("What symbol do you want to trade? ");
-        for (Symbol symbol : Symbol.values()) {
-            System.out.println(symbol.getPosition() + ") " + symbol);
+        Symbol[] symbols = Symbol.values();
+        int index = 0;
+        for (Symbol symbol : symbols) {
+            System.out.println(index + ") " + symbol.name());
+            index++;
         }
 
         String userInput = getUserInput(scanner);
@@ -84,7 +87,7 @@ public class App
             System.out.println("Please select one of the proposed choices!");
             return null;
         } else {
-            return Symbol.getSymbol(userChoice);
+            return symbols[userChoice];
         }
     }
 

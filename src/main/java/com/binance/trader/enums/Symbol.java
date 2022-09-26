@@ -1,36 +1,32 @@
 package com.binance.trader.enums;
 
 public enum Symbol {
-    BTCUSDT(0, "BTC", "USDT");
+    BTCUSDT("BTCUSDT");
 
-    String base;
-    String quote;
-    int position;
+    String pair;
 
-    Symbol(int position) {
-        this.position = position;
-    }
-
-    Symbol(int position, String trade, String quote) {
-        this.position = position;
-        this.base = trade;
-        this.quote = quote;
+    Symbol(String pair) {
+        this.pair = pair;
     }
 
     public String getBase() {
-        return this.base;
+        return this.pair.substring(0, 3);
     }
 
-    public int getPosition() {
-        return this.position;
+    public String getQuote() {
+        return this.pair.substring(3);
     }
 
-    public static Symbol getSymbol(int userSymbol) {
+    public String getPair() {
+        return this.pair;
+    }
+
+    public static Symbol getSymbol(String pair) {
         for (Symbol symbol : Symbol.values()) {
-            if (userSymbol == symbol.position) {
+            if (symbol.getPair().equals(pair)) {
                 return symbol;
             }
         }
         return null;
-    };
+    }
 }
