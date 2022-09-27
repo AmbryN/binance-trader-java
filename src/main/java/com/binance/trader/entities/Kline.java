@@ -1,33 +1,32 @@
 package com.binance.trader.entities;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class Kline {
     Long openTime;
-    BigDecimal openPrice;
-    BigDecimal highPrice;
-    BigDecimal lowPrice;
-    BigDecimal closePrice;
-    BigDecimal volume;
+    Double openPrice;
+    Double highPrice;
+    Double lowPrice;
+    Double closePrice;
+    Double volume;
     Long closeTime;
-    BigDecimal quoteVolume;
+    Double quoteVolume;
     int nbOfTrades;
-    BigDecimal takerBuyBaseVolume;
-    BigDecimal takerBuyQuoteVolume;
+    Double takerBuyBaseVolume;
+    Double takerBuyQuoteVolume;
 
     public Kline(
         Long openTime,
-        BigDecimal openPrice,
-        BigDecimal highPrice,
-        BigDecimal lowPrice,
-        BigDecimal closePrice,
-        BigDecimal volume,
+        Double openPrice,
+        Double highPrice,
+        Double lowPrice,
+        Double closePrice,
+        Double volume,
         Long closeTime,
-        BigDecimal quoteVolume,
+        Double quoteVolume,
         int nbOfTrades,
-        BigDecimal takerBuyBaseVolume,
-        BigDecimal takerBuyQuoteVolume) {
+        Double takerBuyBaseVolume,
+        Double takerBuyQuoteVolume) {
             this.openTime = openTime;
             this.openPrice = openPrice;
             this.highPrice = highPrice;

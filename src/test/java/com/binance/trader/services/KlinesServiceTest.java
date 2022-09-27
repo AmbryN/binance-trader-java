@@ -15,7 +15,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -43,16 +42,16 @@ public class KlinesServiceTest {
         ArrayList<Kline> klines = service.fetchKlines(symbol);
         Kline expected = new Kline(
             1664213621000L, 
-            new BigDecimal("19034.77000000"), 
-            new BigDecimal("19034.77000000"),
-            new BigDecimal("19034.77000000"), 
-            new BigDecimal("19034.77000000"), 
-            new BigDecimal("0.08661800"), 
+            19034.77000000, 
+            19034.77000000,
+            19034.77000000, 
+            19034.77000000, 
+            0.08661800, 
             1664213621999L, 
-            new BigDecimal("1648.75370785"), 
+            1648.75370785, 
             2, 
-            new BigDecimal("0.00000000"),
-            new BigDecimal("0.00000000")
+            0.00000000,
+            0.00000000
             );
         boolean test = klines.get(0).equals(expected);
         assertTrue(test);

@@ -1,12 +1,16 @@
 package com.binance.trader.entities;
 
+import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.trader.PrivateConfig;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.intefaces.Strategy;
+import com.binance.trader.services.KlineService;
+import com.binance.trader.utils.Calculus;
 import com.binance.trader.utils.Deserializer;
 import com.binance.trader.utils.Logger;
 
@@ -36,7 +40,15 @@ public class MovingAvgStrategy implements Strategy {
         Logger.print(freeBalance);
     }
 
-    // public double calculateMovingAvg(Symbol symbol) {
+    public double calculateMovingAvg(Symbol symbol) {
+        KlineService klineService = new KlineService();
+        ArrayList<Kline> klines = klineService.fetchKlines(symbol);
+        ArrayList<Double> prices = new ArrayList<Double>();
+
+        klines.forEach((kline) -> prices.add(kline.closePrice));
+        
+        return Calculus.calculateAvg(prices);
+    }
     //     String result;
     //     LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
     //     parameters.put("symbol", symbol);

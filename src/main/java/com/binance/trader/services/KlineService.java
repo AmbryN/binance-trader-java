@@ -1,6 +1,5 @@
 package com.binance.trader.services;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -35,16 +34,16 @@ public class KlineService {
 
         for (JsonElement item : array) {
             Long openTime = gson.fromJson(item.getAsJsonArray().get(0), Long.class);
-            BigDecimal openPrice = gson.fromJson(item.getAsJsonArray().get(1), BigDecimal.class);
-            BigDecimal highPrice = gson.fromJson(item.getAsJsonArray().get(2), BigDecimal.class);
-            BigDecimal lowPrice = gson.fromJson(item.getAsJsonArray().get(3), BigDecimal.class);
-            BigDecimal closePrice = gson.fromJson(item.getAsJsonArray().get(4), BigDecimal.class);
-            BigDecimal volume = gson.fromJson(item.getAsJsonArray().get(5), BigDecimal.class);
+            Double openPrice = gson.fromJson(item.getAsJsonArray().get(1), Double.class);
+            Double highPrice = gson.fromJson(item.getAsJsonArray().get(2), Double.class);
+            Double lowPrice = gson.fromJson(item.getAsJsonArray().get(3), Double.class);
+            Double closePrice = gson.fromJson(item.getAsJsonArray().get(4), Double.class);
+            Double volume = gson.fromJson(item.getAsJsonArray().get(5), Double.class);
             Long closeTime = gson.fromJson(item.getAsJsonArray().get(6), Long.class);
-            BigDecimal quoteVolume = gson.fromJson(item.getAsJsonArray().get(7), BigDecimal.class);
+            Double quoteVolume = gson.fromJson(item.getAsJsonArray().get(7), Double.class);
             int nbOfTrades = gson.fromJson(item.getAsJsonArray().get(8), Integer.class);
-            BigDecimal takerBuyBaseVolume = gson.fromJson(item.getAsJsonArray().get(9), BigDecimal.class);
-            BigDecimal takerBuyQuoteVolume = gson.fromJson(item.getAsJsonArray().get(10), BigDecimal.class);
+            Double takerBuyBaseVolume = gson.fromJson(item.getAsJsonArray().get(9), Double.class);
+            Double takerBuyQuoteVolume = gson.fromJson(item.getAsJsonArray().get(10), Double.class);
 
             klines.add(new Kline(
                 openTime,
