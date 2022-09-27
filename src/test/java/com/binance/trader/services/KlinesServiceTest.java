@@ -13,6 +13,8 @@ import com.binance.trader.enums.Symbol;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -39,7 +41,7 @@ public class KlinesServiceTest {
         when(clientMock.createMarket()).thenReturn(marketMock);
         when(marketMock.klines(any(LinkedHashMap.class))).thenReturn(answer);
 
-        ArrayList<Kline> klines = service.fetchKlines(symbol);
+        ArrayList<Kline> klines = service.fetchKlines(symbol, "1h", 2);
         Kline expected = new Kline(
             1664213621000L, 
             19034.77000000, 

@@ -17,73 +17,72 @@ import com.binance.trader.utils.Logger;
 public class MovingAvgStrategy implements Strategy {
     private SpotClientImpl client;
     private String name = "MovingAvg";
-    private String timePeriod;
-    private String periodNb;
+    private String period;
+    private int nbOfPeriods;
 
-    public MovingAvgStrategy(String timePeriod, String periodNb) {
+    public MovingAvgStrategy(String period, int nbOfPeriods) {
         this.client = new SpotClientImpl(PrivateConfig.TESTNET_API_KEY, PrivateConfig.TESTNET_SECRET_KEY, PrivateConfig.TESTNET_URL);
-        this.timePeriod = timePeriod;
-        this.periodNb = periodNb;
+        this.period = period;
+        this.nbOfPeriods = nbOfPeriods;
     }
 
     @Override
     public void execute(Symbol symbol) {
-        LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
-        Long timestamp = Instant.now().toEpochMilli();
-        parameters.put("timestamp", timestamp);
-    
-        String result = client.createTrade().account(parameters);
-        AccountInfo accountInfo = Deserializer.deserialize(result, AccountInfo.class);
-    
-        String cryptoBuy = symbol.getBase();
-        double freeBalance = accountInfo.getBalance(cryptoBuy).freeBalance();
-        Logger.print(freeBalance);
+        ArrayList<Balance> balances = this.getBalances(symbol);
+
+        double movingAvg = this.calculateMovingAvg(symbol, this.period, this.nbOfPeriods);
+
+        double tickerPrice = this.getTicker(symbol);
+
+        boolean shouldBuy = false;
+        boolean shouldSell = false;
+
+        if (tickerPrice > movingAvg) {
+            shouldBuy = true;
+        } else {
+            shouldBuy = false;
+        }
+
+        if (tickerPrice < movingAvg) {
+            shouldSell = true;
+        } else {
+            shouldSell = false;
+        }
+        Logger.print("Base balance: " + balances.get(0).free + " / Quote balance: " + balances.get(1).free + " / Ticker " + tickerPrice + " / MAvg " + calculateMovingAvg(symbol, this.period, this.nbOfPeriods) + " / Should buy " + shouldBuy + " / Should sell " + shouldSell);
     }
 
-    public double calculateMovingAvg(Symbol symbol) {
+    private double calculateMovingAvg(Symbol symbol, String period, int nbOfPeriods) {        
         KlineService klineService = new KlineService();
-        ArrayList<Kline> klines = klineService.fetchKlines(symbol);
+        ArrayList<Kline> klines = klineService.fetchKlines(symbol, period, nbOfPeriods);
         ArrayList<Double> prices = new ArrayList<Double>();
 
         klines.forEach((kline) -> prices.add(kline.closePrice));
         
         return Calculus.calculateAvg(prices);
     }
-    //     String result;
-    //     LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
-    //     parameters.put("symbol", symbol);
-    //     parameters.put("period", this.timePeriod);
-    //     parameters.put("periodNb", this.periodNb);
 
-    //     return 0.0;
-        // try {
-        //     result = this.client.createMarket().klines(parameters);
-        // }
-        //     (this.symbol, this.period, { limit: this.movingAvgPeriod });
-        // } catch (err) {
-        //     console.error(`Error: ${err}`);
-        //     return;
-        // }
-
-        // let data = result.data
-        // // Compute the moving average
-        // let sum = data.reduce((accum, value) => {
-        //     accum += parseFloat(value[4])
-        //     return accum
-        // }, 0)
-        // let movingAvg = floorToDecimals(sum / data.length, 4)
-
-        // console.log(`===== Moving Average: ${movingAvg} ===== `)
-        // return movingAvg;
-// }
-
-    private void getTicker() {
+    private ArrayList<Balance> getBalances(Symbol symbol) {
         LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
-        parameters.put("symbol", "BTCUSDT");
+        Long timestamp = Instant.now().toEpochMilli();
+        parameters.put("timestamp", timestamp);
+
+        String result = client.createTrade().account(parameters);
+        AccountInfo accountInfo = Deserializer.deserialize(result, AccountInfo.class);
+        
+        ArrayList<Balance> balances = new ArrayList<>();
+        balances.add(accountInfo.getBalance(symbol.getBase()));
+        balances.add(accountInfo.getBalance(symbol.getPair()));
+        return balances;
+    }
+
+
+    private double getTicker(Symbol symbol) {
+        LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
+        parameters.put("symbol", symbol.getPair());
 
         String result = client.createMarket().tickerSymbol(parameters);
         Ticker ticker = Deserializer.deserialize(result, Ticker.class);
-        Logger.print(ticker.getPrice());
+        return ticker.price;
     }
 
     public String toString() {

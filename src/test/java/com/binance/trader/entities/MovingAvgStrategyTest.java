@@ -8,7 +8,6 @@ public class MovingAvgStrategyTest {
 
     @Before
     public void setup() {
-        strategy = new MovingAvgStrategy("1h", "20");
     }
 
     @Test

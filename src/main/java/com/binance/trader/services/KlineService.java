@@ -20,11 +20,11 @@ public class KlineService {
         this.client =  new SpotClientImpl(PrivateConfig.TESTNET_URL);
     }
 
-    public ArrayList<Kline> fetchKlines(Symbol symbol) {
+    public ArrayList<Kline> fetchKlines(Symbol symbol, String period, int nbOfPeriods) {
         LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
         parameters.put("symbol", symbol.getPair());
-        parameters.put("interval", "1s");
-        parameters.put("limit", 2);
+        parameters.put("interval", period);
+        parameters.put("limit", nbOfPeriods);
         Market market = this.client.createMarket();
         String klinesResult = market.klines(parameters);
 

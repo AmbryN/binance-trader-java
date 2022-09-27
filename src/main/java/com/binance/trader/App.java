@@ -102,7 +102,7 @@ public class App
         System.out.println("What strategy do you want to use? ");
 
         List<Strategy> strategies = new ArrayList<Strategy>();
-        strategies.add(new MovingAvgStrategy("1m", "25"));
+        strategies.add(new MovingAvgStrategy("1s", 25));
 
         for (int i = 0; i < strategies.size(); i++) {
             System.out.println(i +") " + strategies.get(i));
