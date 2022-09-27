@@ -18,7 +18,7 @@ public class KlineService {
     SpotClientImpl client;
 
     public KlineService() {
-        //this.client =  new SpotClientImpl(PrivateConfig.TESTNET_URL);
+        this.client =  new SpotClientImpl(PrivateConfig.TESTNET_URL);
     }
 
     public ArrayList<Kline> fetchKlines(Symbol symbol) {

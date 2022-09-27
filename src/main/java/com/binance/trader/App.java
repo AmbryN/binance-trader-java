@@ -7,38 +7,35 @@ import java.util.Scanner;
 import com.binance.trader.entities.MovingAvgStrategy;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.intefaces.Strategy;
-import com.binance.trader.services.KlineService;
 import com.binance.trader.utils.Logger;
 
 public class App 
 {
     public static void main( String[] args )
     {
-        KlineService service = new KlineService();
-        service.fetchKlines(Symbol.BTCUSDT);
-        // Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
 
-        // Symbol symbol = null;
-        // Strategy strategy = null;
+        Symbol symbol = null;
+        Strategy strategy = null;
 
-        // while (symbol == null) {
-        //     symbol = symbolSelection(scanner);
-        // }
+        while (symbol == null) {
+            symbol = symbolSelection(scanner);
+        }
 
-        // while (strategy == null) {
-        //     strategy = strategySelection(scanner, symbol);
-        // }
+        while (strategy == null) {
+            strategy = strategySelection(scanner, symbol);
+        }
 
-        // Logger.print("=== SUMMARY ===");
-        // Logger.print("You want to trade :");
-        // Logger.print("Symbol: " +symbol);
-        // Logger.print("Strategy: " +strategy);
+        Logger.print("=== SUMMARY ===");
+        Logger.print("You want to trade :");
+        Logger.print("Symbol: " +symbol);
+        Logger.print("Strategy: " +strategy);
 
-        // if (start(scanner)) {
-        //     Trader trader = new Trader(symbol, strategy);
-        //     trader.trade();  
-        // } 
-        // scanner.close();    
+        if (start(scanner)) {
+            Trader trader = new Trader(symbol, strategy);
+            trader.trade();  
+        } 
+        scanner.close();    
     }
 
     /**
