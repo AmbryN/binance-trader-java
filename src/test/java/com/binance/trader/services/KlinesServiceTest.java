@@ -12,8 +12,13 @@ import com.binance.trader.entities.Kline;
 import com.binance.trader.enums.Symbol;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -23,8 +28,8 @@ public class KlinesServiceTest {
     @Mock Market marketMock;
     
     @InjectMocks KlineService service;
-    final Symbol symbol = Symbol.BTCUSDT;
 
+    final Symbol symbol = Symbol.BTCUSDT;
 
     @Before
     public void setup() {
@@ -33,26 +38,26 @@ public class KlinesServiceTest {
 
     @Test
     public void shouldReturnAValidArrayOfKlines() {
-        String answer = "[[1664203948000,\"0.01634790\",\"0.80000000\",\"0.01575800\",\"0.01577100\",\"148976.11427815\",1664203948999,\"2434.19055334\",308,\"1756.87402397\",\"28.46694368\",\"0\"]]";
+        String answer = "[[1664213621000,\"19034.77000000\",\"19034.77000000\",\"19034.77000000\",\"19034.77000000\",\"0.08661800\",1664213621999,\"1648.75370785\",2,\"0.00000000\",\"0.00000000\",\"0\"]]";
         
-        LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
         when(clientMock.createMarket()).thenReturn(marketMock);
-        when(clientMock.createMarket().klines(parameters)).thenReturn(answer);
+        when(marketMock.klines(any(LinkedHashMap.class))).thenReturn(answer);
 
         ArrayList<Kline> klines = service.fetchKlines(symbol);
         Kline expected = new Kline(
-            1664203948000L, 
-            0.01634790, 
-            0.80000000,
-            0.01575800, 
-            0.01577100, 
-            148976.11427815, 
-            1664203948999L, 
-            2434.19055334, 
-            308, 
-            1756.87402397, 
-            28.46694368
+            1664213621000L, 
+            new BigDecimal("19034.77000000"), 
+            new BigDecimal("19034.77000000"),
+            new BigDecimal("19034.77000000"), 
+            new BigDecimal("19034.77000000"), 
+            new BigDecimal("0.08661800"), 
+            1664213621999L, 
+            new BigDecimal("1648.75370785"), 
+            2, 
+            new BigDecimal("0.00000000"),
+            new BigDecimal("0.00000000")
             );
-        assertEquals(expected, klines.get(0));
+        boolean test = klines.get(0).equals(expected);
+        assertTrue(test);
     }
 }

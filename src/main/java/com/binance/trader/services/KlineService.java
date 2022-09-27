@@ -1,9 +1,11 @@
 package com.binance.trader.services;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import com.binance.connector.client.impl.SpotClientImpl;
+import com.binance.connector.client.impl.spot.Market;
 import com.binance.trader.PrivateConfig;
 import com.binance.trader.entities.Kline;
 import com.binance.trader.enums.Symbol;
@@ -16,7 +18,7 @@ public class KlineService {
     SpotClientImpl client;
 
     public KlineService() {
-        this.client =  new SpotClientImpl(PrivateConfig.TESTNET_URL);
+        //this.client =  new SpotClientImpl(PrivateConfig.TESTNET_URL);
     }
 
     public ArrayList<Kline> fetchKlines(Symbol symbol) {
@@ -24,9 +26,8 @@ public class KlineService {
         parameters.put("symbol", symbol.getPair());
         parameters.put("interval", "1s");
         parameters.put("limit", 2);
-        String klinesResult = this.client.createMarket().klines(parameters);
-
-        System.out.println(klinesResult);
+        Market market = this.client.createMarket();
+        String klinesResult = market.klines(parameters);
 
         Gson gson = new Gson();
         JsonArray array = JsonParser.parseString(klinesResult).getAsJsonArray();
@@ -34,16 +35,16 @@ public class KlineService {
 
         for (JsonElement item : array) {
             Long openTime = gson.fromJson(item.getAsJsonArray().get(0), Long.class);
-            Float openPrice = gson.fromJson(item.getAsJsonArray().get(1), Float.class);
-            Float highPrice = gson.fromJson(item.getAsJsonArray().get(2), Float.class);
-            Float lowPrice = gson.fromJson(item.getAsJsonArray().get(3), Float.class);
-            Float closePrice = gson.fromJson(item.getAsJsonArray().get(4), Float.class);
-            Float volume = gson.fromJson(item.getAsJsonArray().get(5), Float.class);
+            BigDecimal openPrice = gson.fromJson(item.getAsJsonArray().get(1), BigDecimal.class);
+            BigDecimal highPrice = gson.fromJson(item.getAsJsonArray().get(2), BigDecimal.class);
+            BigDecimal lowPrice = gson.fromJson(item.getAsJsonArray().get(3), BigDecimal.class);
+            BigDecimal closePrice = gson.fromJson(item.getAsJsonArray().get(4), BigDecimal.class);
+            BigDecimal volume = gson.fromJson(item.getAsJsonArray().get(5), BigDecimal.class);
             Long closeTime = gson.fromJson(item.getAsJsonArray().get(6), Long.class);
-            Float quoteVolume = gson.fromJson(item.getAsJsonArray().get(7), Float.class);
+            BigDecimal quoteVolume = gson.fromJson(item.getAsJsonArray().get(7), BigDecimal.class);
             int nbOfTrades = gson.fromJson(item.getAsJsonArray().get(8), Integer.class);
-            Float takerBuyBaseVolume = gson.fromJson(item.getAsJsonArray().get(9), Float.class);
-            Float takerBuyQuoteVolume = gson.fromJson(item.getAsJsonArray().get(10), Float.class);
+            BigDecimal takerBuyBaseVolume = gson.fromJson(item.getAsJsonArray().get(9), BigDecimal.class);
+            BigDecimal takerBuyQuoteVolume = gson.fromJson(item.getAsJsonArray().get(10), BigDecimal.class);
 
             klines.add(new Kline(
                 openTime,
