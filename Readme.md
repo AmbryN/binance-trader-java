@@ -8,9 +8,8 @@ It allows :
 * To send actual buy and sell orders on Binance (currently being tested on Binance's Testnet)
 
 Planned features :
-* Set the strategy's variable (eg. oservation period, number of periods) used to execute said strategy
-* Improve User input experience and associated code
-* Set the logging level
+* Set the strategy's variable (e.g. observation period, number of periods) used to execute said strategy
+* Allow to set logging level
 * Log transactions to File and/or Database
 
 ## Usage
@@ -27,4 +26,4 @@ The bot is in early development stage: this part will be updated shortly.
 
 ## Authors
 
-* **Nicolas AMBRY** - *Initial work* - [AmbryN](https://github.com/AmbryN)
+* **AmbryN** - *Initial work* - [AmbryN](https://github.com/AmbryN)
