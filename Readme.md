@@ -20,7 +20,7 @@ The bot is in early development stage: this part will be updated shortly.
 * [Java](https://www.java.com/) - Programming language
 * [Binance Connector for Java](https://github.com/binance/binance-connector-java) - Interaction with Binance
 * [Gson](https://github.com/google/gson) - Deserialization
-* [JUnit](https://www.junit.fr/) - Test Suite
+* [JUnit](https://junit.org/junit4/) - Test Suite
 * [Mockito](https://site.mockito.org/) - Mocking / Stubbing Framework
 
 ## Authors
