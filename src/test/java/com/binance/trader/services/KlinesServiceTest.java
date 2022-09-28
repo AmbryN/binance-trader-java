@@ -12,9 +12,6 @@ import com.binance.trader.entities.Kline;
 import com.binance.trader.enums.Symbol;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -37,9 +34,9 @@ public class KlinesServiceTest {
     @Test
     public void shouldReturnAValidArrayOfKlines() {
         String answer = "[[1664213621000,\"19034.77000000\",\"19034.77000000\",\"19034.77000000\",\"19034.77000000\",\"0.08661800\",1664213621999,\"1648.75370785\",2,\"0.00000000\",\"0.00000000\",\"0\"]]";
-        
+        LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
         when(clientMock.createMarket()).thenReturn(marketMock);
-        when(marketMock.klines(any(LinkedHashMap.class))).thenReturn(answer);
+        when(marketMock.klines(parameters)).thenReturn(answer);
 
         ArrayList<Kline> klines = service.fetchKlines(symbol, "1h", 2);
         Kline expected = new Kline(

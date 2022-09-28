@@ -18,6 +18,54 @@ public class AccountInfo {
         this.balances = balances;
     }
 
+    public int getMakerCommission() {
+        return makerCommission;
+    }
+
+    public int getTakerCommission() {
+        return takerCommission;
+    }
+
+    public int getBuyerCommission() {
+        return buyerCommission;
+    }
+
+    public int getSellerCommission() {
+        return sellerCommission;
+    }
+
+    public boolean isCanTrade() {
+        return canTrade;
+    }
+
+    public boolean isCanWithdraw() {
+        return canWithdraw;
+    }
+
+    public boolean isCanDeposit() {
+        return canDeposit;
+    }
+
+    public boolean isBrokered() {
+        return brokered;
+    }
+
+    public Long getUpdateTime() {
+        return updateTime;
+    }
+
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public Balance[] getBalances() {
+        return balances;
+    }
+
+    public String[] getPermissions() {
+        return permissions;
+    }
+
     public Balance getBalance(String symbol) {
         for (Balance balance : balances) {
             if (balance.getAsset().equals(symbol)) {
