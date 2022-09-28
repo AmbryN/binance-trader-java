@@ -8,31 +8,33 @@ import com.binance.trader.enums.Symbol;
 import com.binance.trader.enums.TimeInForce;
 
 public class Order {
-    Symbol symbol; 	
-    OrderSide side; 	
-    OrderType type;
-    TimeInForce timeInForce;
-    Double price;
-    Double quantity;
-    Double quoteOrderQty;
+    private Symbol symbol; 	
+    private OrderSide side; 	
+    private OrderType type;
+    private TimeInForce timeInForce;
+    private Double price;
+    private Double quantity;
+    private Double quoteOrderQty;
 
-    public Order() {
-        this.symbol = null;
-        this.side = null;
-        this.type = null;
-        this.timeInForce = null;
-        this.price = null;
-        this.quantity = null;
-        this.quoteOrderQty = null;
-    }
+    public Order() {}
 
     public LinkedHashMap<String, Object> asParams() {
         LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
-        parameters.put("symbol", this.symbol.getPair());
-        parameters.put("side", this.side.toString());
-        parameters.put("type", this.type.toString());
-        parameters.put("timeInForce", this.timeInForce.toString());
-        parameters.put("price", this.price.toString());
+        if (this.symbol != null) {
+            parameters.put("symbol", this.symbol.getPair());
+        }
+        if (this.symbol != null) {
+            parameters.put("side", this.side.toString());
+        }
+        if (this.symbol != null) {
+            parameters.put("type", this.type.toString());
+        }
+        if (this.symbol != null) {
+            parameters.put("timeInForce", this.timeInForce.toString());
+        }
+        if (this.symbol != null) {
+            parameters.put("price", this.price.toString());
+        }
         if (this.quantity != null) {
             parameters.put("quantity", this.quantity.toString());
         }

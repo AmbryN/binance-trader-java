@@ -8,9 +8,10 @@ import com.binance.trader.intefaces.OrderBuilder;
 
 public class OrderBuildImpl implements OrderBuilder {
 
-    Order buyOrder;
+    private Order buyOrder;
 
-    OrderBuildImpl() {
+    @Override
+    public void reset() {
         this.buyOrder = new Order();
     }
 

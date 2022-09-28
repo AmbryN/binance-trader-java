@@ -7,6 +7,7 @@ import com.binance.trader.enums.Symbol;
 import com.binance.trader.enums.TimeInForce;
 
 public interface OrderBuilder {
+    public void reset();
     public void setSymbol(Symbol symbol);
     public void setSide(OrderSide side);
     public void setType(OrderType type);
