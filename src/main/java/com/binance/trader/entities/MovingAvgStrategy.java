@@ -1,15 +1,17 @@
 package com.binance.trader.entities;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.trader.PrivateConfig;
+import com.binance.trader.enums.OrderType;
 import com.binance.trader.enums.Symbol;
+import com.binance.trader.enums.TimeInForce;
 import com.binance.trader.intefaces.Strategy;
 import com.binance.trader.services.KlineService;
+import com.binance.trader.services.OrderService;
 import com.binance.trader.utils.Calculus;
 import com.binance.trader.utils.Deserializer;
 import com.binance.trader.utils.Logger;
@@ -19,6 +21,8 @@ public class MovingAvgStrategy implements Strategy {
     private String name = "MovingAvg";
     private String period;
     private int nbOfPeriods;
+    private final static double MIN_BASE_TRANSACTION = 0.00001;
+    private final static double MIN_QUOTE_TRANSACTION = 10;
 
     public MovingAvgStrategy(String period, int nbOfPeriods) {
         this.client = new SpotClientImpl(PrivateConfig.TESTNET_API_KEY, PrivateConfig.TESTNET_SECRET_KEY, PrivateConfig.TESTNET_URL);
@@ -28,27 +32,60 @@ public class MovingAvgStrategy implements Strategy {
 
     @Override
     public void execute(Symbol symbol) {
-        ArrayList<Balance> balances = this.getBalances(symbol);
+        
+        OrderService orderService = new OrderService();
 
-        double movingAvg = this.calculateMovingAvg(symbol, this.period, this.nbOfPeriods);
+        while(true) {
+            boolean shouldBuy = false;
+            boolean shouldSell = false;
 
-        double tickerPrice = this.getTicker(symbol);
+            ArrayList<Balance> balances = this.getBalances(symbol);
+            double baseBalance = balances.get(0).free;
+            double quoteBalance = balances.get(1).free;
+    
+            double tickerPrice = this.getTicker(symbol);
+            double movingAvg = this.calculateMovingAvg(symbol, this.period, this.nbOfPeriods);
+            
+            Logger.print("Base balance: " + baseBalance + " / Quote balance: " + quoteBalance + " / Ticker " + tickerPrice + " / MAvg " + calculateMovingAvg(symbol, this.period, this.nbOfPeriods) + " / Should buy " + shouldBuy + " / Should sell " + shouldSell);
 
-        boolean shouldBuy = false;
-        boolean shouldSell = false;
+            if (tickerPrice > movingAvg && quoteBalance > MIN_QUOTE_TRANSACTION) {
+                shouldBuy = true;
+                BuyOrderBuilder buyOrderBuilder = new BuyOrderBuilder();
+                buyOrderBuilder.setSymbol(symbol);
+                buyOrderBuilder.setSide();
+                buyOrderBuilder.setType(OrderType.LIMIT);
+                buyOrderBuilder.setTimeInForce(TimeInForce.IOC);
+                buyOrderBuilder.setPrice(tickerPrice);
+                buyOrderBuilder.setQuantity(Math.round(quoteBalance * 0.99 / tickerPrice * 1000000.) / 1000000.);
+                Order order = buyOrderBuilder.getResult();
 
-        if (tickerPrice > movingAvg) {
-            shouldBuy = true;
-        } else {
-            shouldBuy = false;
+                orderService.sendOrder(order);
+            } else {
+                shouldBuy = false;
+            }
+
+            if (tickerPrice < movingAvg && baseBalance > MIN_BASE_TRANSACTION) {
+                shouldSell = true;
+                SellOrderBuilder sellOrderBuilder = new SellOrderBuilder();
+                sellOrderBuilder.setSymbol(symbol);
+                sellOrderBuilder.setSide();
+                sellOrderBuilder.setType(OrderType.LIMIT);
+                sellOrderBuilder.setTimeInForce(TimeInForce.IOC);
+                sellOrderBuilder.setPrice(tickerPrice);
+                sellOrderBuilder.setQuantity(baseBalance);
+                Order order = sellOrderBuilder.getResult();
+
+                orderService.sendOrder(order);
+            } else {
+                shouldSell = false;
+            }
+            
+            // try {
+            //     Thread.sleep(5000);
+            // } catch (InterruptedException e) {
+            //     e.printStackTrace();
+            // }
         }
-
-        if (tickerPrice < movingAvg) {
-            shouldSell = true;
-        } else {
-            shouldSell = false;
-        }
-        Logger.print("Base balance: " + balances.get(0).free + " / Quote balance: " + balances.get(1).free + " / Ticker " + tickerPrice + " / MAvg " + calculateMovingAvg(symbol, this.period, this.nbOfPeriods) + " / Should buy " + shouldBuy + " / Should sell " + shouldSell);
     }
 
     private double calculateMovingAvg(Symbol symbol, String period, int nbOfPeriods) {        
@@ -71,7 +108,7 @@ public class MovingAvgStrategy implements Strategy {
         
         ArrayList<Balance> balances = new ArrayList<>();
         balances.add(accountInfo.getBalance(symbol.getBase()));
-        balances.add(accountInfo.getBalance(symbol.getPair()));
+        balances.add(accountInfo.getBalance(symbol.getQuote()));
         return balances;
     }
 
