@@ -8,50 +8,50 @@ import com.binance.trader.intefaces.OrderBuilder;
 
 public class OrderBuildImpl implements OrderBuilder {
 
-    private Order buyOrder;
+    private Order order;
 
     @Override
     public void reset() {
-        this.buyOrder = new Order();
+        this.order = new Order();
     }
 
     @Override
     public void setQuantity(Double quantity) {
-        this.buyOrder.setQuantity(quantity);
+        this.order.setQuantity(quantity);
     }
 
     @Override
     public void setQuoteOrderQty(Double quoteOrderQty) {
-        this.buyOrder.setQuoteOrderQty(quoteOrderQty);;
+        this.order.setQuoteOrderQty(quoteOrderQty);;
     }
 
     @Override
     public void setPrice(Double price) {
-        this.buyOrder.setPrice(price);
+        this.order.setPrice(price);
     }
 
     @Override
     public void setSide(OrderSide side) {
-        this.buyOrder.setSide(side);
+        this.order.setSide(side);
     }
 
     @Override
     public void setSymbol(Symbol symbol) {
-        this.buyOrder.setSymbol(symbol);
+        this.order.setSymbol(symbol);
     }
 
     @Override
     public void setTimeInForce(TimeInForce timeInForce) {
-        this.buyOrder.setTimeInForce(timeInForce);
+        this.order.setTimeInForce(timeInForce);
     }
 
     @Override
     public void setType(OrderType type) {
-        this.buyOrder.setType(type);
+        this.order.setType(type);
     }
 
     public Order getResult() {
-        return this.buyOrder;
+        return this.order;
     }
     
 }

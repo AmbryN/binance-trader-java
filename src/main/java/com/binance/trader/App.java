@@ -4,13 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.binance.trader.entities.MovingAvgStrategy;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.intefaces.Strategy;
-import com.binance.trader.utils.Logger;
 
 public class App 
 {
+    private static final Logger logger = LoggerFactory.getLogger(App.class);
+    
     public static void main( String[] args )
     {
         Scanner scanner = new Scanner(System.in);
@@ -26,10 +30,7 @@ public class App
             strategy = strategySelection(scanner, symbol);
         }
 
-        Logger.print("=== SUMMARY ===");
-        Logger.print("You want to trade :");
-        Logger.print("Symbol: " +symbol);
-        Logger.print("Strategy: " +strategy);
+        System.out.println("=== SUMMARY === \nYou want to trade: \nSymbol: " + symbol + "\nStrategy: " + strategy);
 
         if (start(scanner)) {
             Trader trader = new Trader(symbol, strategy);
@@ -46,10 +47,10 @@ public class App
      * @return if the user wants to start or not
      */
     private static boolean start(Scanner scanner) {
-        Logger.print("Is this OK for you? [y/n]");
+        System.out.println("Is this OK for you? [y/n]");
         String userInput = getUserInput(scanner).toLowerCase();
         while (!userInput.equals("y") && !userInput.equals("n")) {
-            Logger.print("Please choose between 'y' or 'n'!");
+            logger.error("Please choose between 'y' or 'n'!");
             userInput = getUserInput(scanner).toLowerCase();
         }
         if (userInput.equals("y")) {
@@ -80,11 +81,11 @@ public class App
         try {
             userChoice = Integer.parseInt(userInput);
         } catch (NumberFormatException e) {
-            Logger.print("Please enter a valid integer!");
+            logger.error("Please enter a valid integer!");
         }
         
         if (userChoice < 0 || userChoice > Symbol.values().length - 1) {
-            System.out.println("Please select one of the proposed choices!");
+            logger.error("Please select one of the proposed choices!");
             return null;
         } else {
             return symbols[userChoice];
@@ -113,11 +114,11 @@ public class App
         try {
             userChoice = Integer.parseInt(userInput);
         } catch (NumberFormatException e) {
-            Logger.print("Please enter a valid integer!");
+            logger.error("Please enter a valid integer!");
         }
 
         if (userChoice < 0 || userChoice > strategies.size() - 1) {
-            System.out.println("Please select one of the proposed choices!");
+            logger.error("Please select one of the proposed choices!");
             return null;
         } else {
             return strategies.get(userChoice);
@@ -130,7 +131,7 @@ public class App
      * @return User input string
      */
     private static String getUserInput(Scanner scanner) {
-        System.out.print("Selection: ");
+        System.out.println("Selection: ");
         
         return scanner.nextLine();
     }

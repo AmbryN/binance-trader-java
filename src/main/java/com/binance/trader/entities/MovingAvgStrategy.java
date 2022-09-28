@@ -4,6 +4,9 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.trader.PrivateConfig;
 import com.binance.trader.enums.OrderSide;
@@ -15,7 +18,6 @@ import com.binance.trader.services.KlineService;
 import com.binance.trader.services.OrderService;
 import com.binance.trader.utils.Calculus;
 import com.binance.trader.utils.Deserializer;
-import com.binance.trader.utils.Logger;
 
 public class MovingAvgStrategy implements Strategy {
     private SpotClientImpl client;
@@ -24,6 +26,8 @@ public class MovingAvgStrategy implements Strategy {
     private int nbOfPeriods;
     private final static double MIN_BASE_TRANSACTION = 0.00001;
     private final static double MIN_QUOTE_TRANSACTION = 10;
+
+    private static final Logger logger = LoggerFactory.getLogger(MovingAvgStrategy.class);
 
     public MovingAvgStrategy(String period, int nbOfPeriods) {
         this.client = new SpotClientImpl(PrivateConfig.TESTNET_API_KEY, PrivateConfig.TESTNET_SECRET_KEY, PrivateConfig.TESTNET_URL);
@@ -47,11 +51,12 @@ public class MovingAvgStrategy implements Strategy {
             double tickerPrice = this.getTicker(symbol);
             double movingAvg = this.calculateMovingAvg(symbol, this.period, this.nbOfPeriods);
             
-            Logger.print("Base balance: " + baseBalance + " / Quote balance: " + quoteBalance + " / Ticker " + tickerPrice + " / MAvg " + calculateMovingAvg(symbol, this.period, this.nbOfPeriods) + " / Should buy " + shouldBuy + " / Should sell " + shouldSell);
+            System.out.println("Base balance: " + baseBalance + " / Quote balance: " + quoteBalance + " / Ticker " + tickerPrice + " / MAvg " + calculateMovingAvg(symbol, this.period, this.nbOfPeriods) + " / Should buy " + shouldBuy + " / Should sell " + shouldSell);
 
             if (tickerPrice > movingAvg && quoteBalance > MIN_QUOTE_TRANSACTION) {
                 shouldBuy = true;
                 OrderBuildImpl orderBuilder = new OrderBuildImpl();
+                orderBuilder.reset();
                 orderBuilder.setSymbol(symbol);
                 orderBuilder.setSide(OrderSide.BUY);
                 orderBuilder.setType(OrderType.LIMIT);
@@ -68,6 +73,7 @@ public class MovingAvgStrategy implements Strategy {
             if (tickerPrice < movingAvg && baseBalance > MIN_BASE_TRANSACTION) {
                 shouldSell = true;
                 OrderBuildImpl orderBuilder = new OrderBuildImpl();
+                orderBuilder.reset();
                 orderBuilder.setSymbol(symbol);
                 orderBuilder.setSide(OrderSide.SELL);
                 orderBuilder.setType(OrderType.LIMIT);
@@ -80,12 +86,6 @@ public class MovingAvgStrategy implements Strategy {
             } else {
                 shouldSell = false;
             }
-            
-            // try {
-            //     Thread.sleep(5000);
-            // } catch (InterruptedException e) {
-            //     e.printStackTrace();
-            // }
         }
     }
 
