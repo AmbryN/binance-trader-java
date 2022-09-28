@@ -16,4 +16,20 @@ public class Ticker {
     public String getSymbol() {
         return this.symbol;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        if (this.getClass() != o.getClass()) {
+            return false;
+        }
+
+        Ticker ticker = (Ticker) o;
+        return this.symbol.equals(ticker.symbol) && this.price == ticker.price;
+    }
 }

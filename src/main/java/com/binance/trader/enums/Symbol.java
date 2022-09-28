@@ -21,7 +21,7 @@ public enum Symbol {
         return this.pair;
     }
 
-    public static Symbol getSymbol(String pair) {
+    public static Symbol toSymbol(String pair) {
         for (Symbol symbol : Symbol.values()) {
             if (symbol.getPair().equals(pair)) {
                 return symbol;

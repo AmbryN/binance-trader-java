@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 
 import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.connector.client.impl.spot.Market;
-import com.binance.trader.PrivateConfig;
 import com.binance.trader.entities.Kline;
 import com.binance.trader.enums.Symbol;
 import com.google.gson.Gson;
@@ -16,8 +15,8 @@ import com.google.gson.JsonParser;
 public class KlineService {
     private SpotClientImpl client;
 
-    public KlineService() {
-        this.client =  new SpotClientImpl(PrivateConfig.TESTNET_URL);
+    public KlineService(SpotClientImpl client) {
+        this.client =  client;
     }
 
     public ArrayList<Kline> fetchKlines(Symbol symbol, String period, int nbOfPeriods) {

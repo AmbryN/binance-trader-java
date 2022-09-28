@@ -5,7 +5,7 @@ public class Balance {
     private double free;
     private double locked;
 
-    Balance(String asset, double free, double locked) {
+    public Balance(String asset, double free, double locked) {
         this.asset = asset;
         this.free = free;
         this.locked = locked;

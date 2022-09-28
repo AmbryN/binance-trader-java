@@ -1,8 +1,6 @@
 package com.binance.trader.entities;
 
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,13 +12,18 @@ import com.binance.trader.enums.OrderType;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.enums.TimeInForce;
 import com.binance.trader.intefaces.Strategy;
+import com.binance.trader.services.AccountInfoService;
 import com.binance.trader.services.KlineService;
 import com.binance.trader.services.OrderService;
+import com.binance.trader.services.TickerService;
 import com.binance.trader.utils.Calculus;
-import com.binance.trader.utils.Deserializer;
 
 public class MovingAvgStrategy implements Strategy {
     private SpotClientImpl client;
+    private AccountInfoService accountInfoService;
+    private TickerService tickerService;
+    private OrderService orderService;
+    private KlineService klineService;
     private String name = "MovingAvg";
     private String period;
     private int nbOfPeriods;
@@ -31,6 +34,10 @@ public class MovingAvgStrategy implements Strategy {
 
     public MovingAvgStrategy(String period, int nbOfPeriods) {
         this.client = new SpotClientImpl(PrivateConfig.TESTNET_API_KEY, PrivateConfig.TESTNET_SECRET_KEY, PrivateConfig.TESTNET_URL);
+        this.accountInfoService = new AccountInfoService(client);
+        this.tickerService = new TickerService(client);
+        this.orderService = new OrderService();
+        this.klineService = new KlineService(client);
         this.period = period;
         this.nbOfPeriods = nbOfPeriods;
     }
@@ -38,17 +45,15 @@ public class MovingAvgStrategy implements Strategy {
     @Override
     public void execute(Symbol symbol) {
         
-        OrderService orderService = new OrderService();
-
         while(true) {
             boolean shouldBuy = false;
             boolean shouldSell = false;
 
-            ArrayList<Balance> balances = this.getBalances(symbol);
-            double baseBalance = balances.get(0).getFreeBalance();
-            double quoteBalance = balances.get(1).getFreeBalance();
+            AccountInfo accountInfo = accountInfoService.getAccountInfo();
+            double baseBalance = accountInfo.getBalance(symbol.getBase()).getFreeBalance();
+            double quoteBalance = accountInfo.getBalance(symbol.getQuote()).getFreeBalance();
     
-            double tickerPrice = this.getTicker(symbol);
+            double tickerPrice = tickerService.getTicker(symbol).getPrice();
             double movingAvg = this.calculateMovingAvg(symbol, this.period, this.nbOfPeriods);
             
             System.out.println("Base balance: " + baseBalance + " / Quote balance: " + quoteBalance + " / Ticker " + tickerPrice + " / MAvg " + calculateMovingAvg(symbol, this.period, this.nbOfPeriods) + " / Should buy " + shouldBuy + " / Should sell " + shouldSell);
@@ -90,7 +95,6 @@ public class MovingAvgStrategy implements Strategy {
     }
 
     private double calculateMovingAvg(Symbol symbol, String period, int nbOfPeriods) {        
-        KlineService klineService = new KlineService();
         ArrayList<Kline> klines = klineService.fetchKlines(symbol, period, nbOfPeriods);
         ArrayList<Double> prices = new ArrayList<Double>();
 
@@ -99,30 +103,7 @@ public class MovingAvgStrategy implements Strategy {
         return Calculus.calculateAvg(prices);
     }
 
-    private ArrayList<Balance> getBalances(Symbol symbol) {
-        LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
-        Long timestamp = Instant.now().toEpochMilli();
-        parameters.put("timestamp", timestamp);
-
-        String result = client.createTrade().account(parameters);
-        AccountInfo accountInfo = Deserializer.deserialize(result, AccountInfo.class);
-        
-        ArrayList<Balance> balances = new ArrayList<>();
-        balances.add(accountInfo.getBalance(symbol.getBase()));
-        balances.add(accountInfo.getBalance(symbol.getQuote()));
-        return balances;
-    }
-
-
-    private double getTicker(Symbol symbol) {
-        LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
-        parameters.put("symbol", symbol.getPair());
-
-        String result = client.createMarket().tickerSymbol(parameters);
-        Ticker ticker = Deserializer.deserialize(result, Ticker.class);
-        return ticker.getPrice();
-    }
-
+    @Override
     public String toString() {
         return this.name;
     }

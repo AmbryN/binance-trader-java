@@ -14,7 +14,7 @@ public class AccountInfo {
     private Balance[] balances;
     private String[] permissions;
 
-    AccountInfo(Balance[] balances) {
+    protected AccountInfo(Balance[] balances) {
         this.balances = balances;
     }
 

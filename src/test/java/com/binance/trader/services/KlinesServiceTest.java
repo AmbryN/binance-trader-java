@@ -25,8 +25,6 @@ public class KlinesServiceTest {
     
     @InjectMocks KlineService service;
 
-    final Symbol symbol = Symbol.BTCUSDT;
-
     @Before
     public void setup() {
         MockitoAnnotations.openMocks(this);
@@ -38,7 +36,7 @@ public class KlinesServiceTest {
         when(clientMock.createMarket()).thenReturn(marketMock);
         when(marketMock.klines(any(LinkedHashMap.class))).thenReturn(answer);
 
-        ArrayList<Kline> klines = service.fetchKlines(symbol, "1h", 2);
+        ArrayList<Kline> klines = service.fetchKlines(Symbol.BTCUSDT, "1h", 2);
         Kline expected = new Kline(
             1664213621000L, 
             19034.77000000, 
