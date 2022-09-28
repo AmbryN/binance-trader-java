@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.binance.connector.client.exceptions.BinanceClientException;
 import com.binance.connector.client.exceptions.BinanceConnectorException;
 import com.binance.connector.client.impl.SpotClientImpl;
-import com.binance.trader.entities.Ticker;
+import com.binance.trader.classes.Ticker;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.exceptions.BinanceTraderException;
 import com.binance.trader.utils.Deserializer;

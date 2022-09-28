@@ -2,7 +2,7 @@ package com.binance.trader.services;
 
 import com.binance.connector.client.impl.WebsocketClientImpl;
 import com.binance.trader.PrivateConfig;
-import com.binance.trader.entities.KlinesStream;
+import com.binance.trader.classes.KlinesStream;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.utils.Deserializer;
 

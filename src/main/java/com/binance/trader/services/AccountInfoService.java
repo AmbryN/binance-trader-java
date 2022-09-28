@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.binance.connector.client.exceptions.BinanceClientException;
 import com.binance.connector.client.exceptions.BinanceConnectorException;
 import com.binance.connector.client.impl.SpotClientImpl;
-import com.binance.trader.entities.AccountInfo;
+import com.binance.trader.classes.AccountInfo;
 import com.binance.trader.exceptions.BinanceTraderException;
 import com.binance.trader.utils.Deserializer;
 

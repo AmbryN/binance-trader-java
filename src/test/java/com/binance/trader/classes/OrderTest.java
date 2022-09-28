@@ -1,4 +1,4 @@
-package com.binance.trader.entities;
+package com.binance.trader.classes;
 
 import static org.junit.Assert.assertTrue;
 

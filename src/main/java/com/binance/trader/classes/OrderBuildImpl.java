@@ -1,4 +1,4 @@
-package com.binance.trader.entities;
+package com.binance.trader.classes;
 
 import com.binance.trader.enums.OrderSide;
 import com.binance.trader.enums.OrderType;

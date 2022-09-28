@@ -1,4 +1,4 @@
-package com.binance.trader.entities;
+package com.binance.trader.classes;
 
 import org.junit.Before;
 import org.junit.Test;

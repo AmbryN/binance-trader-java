@@ -11,6 +11,8 @@ Planned features :
 * Set the strategy's variable (eg. oservation period, number of periods) used to execute said strategy
 * Improve User input experience and associated code
 * Set the logging level
+* Log transactions to File and/or Database
+
 ## Usage
 
 The bot is in early development stage: this part will be updated shortly.

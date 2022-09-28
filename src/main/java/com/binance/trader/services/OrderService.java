@@ -9,7 +9,7 @@ import com.binance.connector.client.exceptions.BinanceClientException;
 import com.binance.connector.client.exceptions.BinanceConnectorException;
 import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.trader.PrivateConfig;
-import com.binance.trader.entities.Order;
+import com.binance.trader.classes.Order;
 
 public class OrderService {
     private SpotClientImpl client;

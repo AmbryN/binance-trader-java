@@ -1,4 +1,4 @@
-package com.binance.trader.entities;
+package com.binance.trader.classes;
 
 public class Balance {
     private String asset;

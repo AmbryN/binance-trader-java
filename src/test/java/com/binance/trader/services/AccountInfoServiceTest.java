@@ -18,8 +18,8 @@ import com.binance.connector.client.exceptions.BinanceClientException;
 import com.binance.connector.client.exceptions.BinanceConnectorException;
 import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.connector.client.impl.spot.Trade;
-import com.binance.trader.entities.AccountInfo;
-import com.binance.trader.entities.Balance;
+import com.binance.trader.classes.AccountInfo;
+import com.binance.trader.classes.Balance;
 import com.binance.trader.exceptions.BinanceTraderException;
 
 public class AccountInfoServiceTest {
