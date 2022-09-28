@@ -1,18 +1,18 @@
 package com.binance.trader.entities;
 
 public class AccountInfo {
-    int makerCommission;
-    int takerCommission;
-    int buyerCommission;
-    int sellerCommission;
-    boolean canTrade;
-    boolean canWithdraw;
-    boolean canDeposit;
-    boolean brokered;
-    Long updateTime;
-    String accountType;
-    Balance[] balances;
-    String[] permissions;
+    private int makerCommission;
+    private int takerCommission;
+    private int buyerCommission;
+    private int sellerCommission;
+    private boolean canTrade;
+    private boolean canWithdraw;
+    private boolean canDeposit;
+    private boolean brokered;
+    private Long updateTime;
+    private String accountType;
+    private Balance[] balances;
+    private String[] permissions;
 
     AccountInfo(Balance[] balances) {
         this.balances = balances;
@@ -20,7 +20,7 @@ public class AccountInfo {
 
     public Balance getBalance(String symbol) {
         for (Balance balance : balances) {
-            if (balance.asset.equals(symbol)) {
+            if (balance.getAsset().equals(symbol)) {
                 return balance;
             }
         }

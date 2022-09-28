@@ -3,7 +3,7 @@ package com.binance.trader.enums;
 public enum Symbol {
     BTCUSDT("BTCUSDT");
 
-    String pair;
+    private String pair;
 
     Symbol(String pair) {
         this.pair = pair;

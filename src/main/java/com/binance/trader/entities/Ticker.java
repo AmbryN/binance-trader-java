@@ -1,8 +1,8 @@
 package com.binance.trader.entities;
 
 public class Ticker {
-    String symbol;
-    double price;
+    private String symbol;
+    private double price;
 
     public Ticker(String symbol, double price) {
         this.symbol = symbol;

@@ -14,7 +14,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 public class KlineService {
-    SpotClientImpl client;
+    private SpotClientImpl client;
 
     public KlineService() {
         this.client =  new SpotClientImpl(PrivateConfig.TESTNET_URL);

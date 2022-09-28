@@ -41,8 +41,8 @@ public class MovingAvgStrategy implements Strategy {
             boolean shouldSell = false;
 
             ArrayList<Balance> balances = this.getBalances(symbol);
-            double baseBalance = balances.get(0).free;
-            double quoteBalance = balances.get(1).free;
+            double baseBalance = balances.get(0).getFreeBalance();
+            double quoteBalance = balances.get(1).getFreeBalance();
     
             double tickerPrice = this.getTicker(symbol);
             double movingAvg = this.calculateMovingAvg(symbol, this.period, this.nbOfPeriods);
@@ -94,7 +94,7 @@ public class MovingAvgStrategy implements Strategy {
         ArrayList<Kline> klines = klineService.fetchKlines(symbol, period, nbOfPeriods);
         ArrayList<Double> prices = new ArrayList<Double>();
 
-        klines.forEach((kline) -> prices.add(kline.closePrice));
+        klines.forEach((kline) -> prices.add(kline.getClosePrice()));
         
         return Calculus.calculateAvg(prices);
     }
@@ -120,7 +120,7 @@ public class MovingAvgStrategy implements Strategy {
 
         String result = client.createMarket().tickerSymbol(parameters);
         Ticker ticker = Deserializer.deserialize(result, Ticker.class);
-        return ticker.price;
+        return ticker.getPrice();
     }
 
     public String toString() {

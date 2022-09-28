@@ -3,17 +3,17 @@ package com.binance.trader.entities;
 import java.util.Date;
 
 public class Kline {
-    Long openTime;
-    Double openPrice;
-    Double highPrice;
-    Double lowPrice;
-    Double closePrice;
-    Double volume;
-    Long closeTime;
-    Double quoteVolume;
-    int nbOfTrades;
-    Double takerBuyBaseVolume;
-    Double takerBuyQuoteVolume;
+    private Long openTime;
+    private Double openPrice;
+    private Double highPrice;
+    private Double lowPrice;
+    private Double closePrice;
+    private Double volume;
+    private Long closeTime;
+    private Double quoteVolume;
+    private int nbOfTrades;
+    private Double takerBuyBaseVolume;
+    private Double takerBuyQuoteVolume;
 
     public Kline(
         Long openTime,
@@ -38,6 +38,10 @@ public class Kline {
             this.nbOfTrades = nbOfTrades;
             this.takerBuyBaseVolume = takerBuyBaseVolume;
             this.takerBuyQuoteVolume = takerBuyQuoteVolume;
+    }
+
+    public double getClosePrice() {
+        return this.closePrice;
     }
 
     public String toString() {

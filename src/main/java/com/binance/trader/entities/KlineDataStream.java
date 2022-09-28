@@ -3,22 +3,22 @@ package com.binance.trader.entities;
 import java.util.Date;
 
 public class KlineDataStream {
-    Long t;
-    Long T;
-    String s;
-    String i;
-    int f;
-    int L;
-    Float o;
-    Float c;
-    Float h;
-    Float l;
-    Float v;
-    int n;
-    boolean x;
-    Float q;
-    Float V;
-    Float Q;
+    private Long t;
+    private Long T;
+    private String s;
+    private String i;
+    private int f;
+    private int L;
+    private Float o;
+    private Float c;
+    private Float h;
+    private Float l;
+    private Float v;
+    private int n;
+    private boolean x;
+    private Float q;
+    private Float V;
+    private Float Q;
 
     KlineDataStream() {}
 

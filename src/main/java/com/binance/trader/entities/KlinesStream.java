@@ -3,10 +3,10 @@ package com.binance.trader.entities;
 import java.util.Date;
 
 public class KlinesStream {
-    String e;
-    Long E;
-    String s;
-    KlineDataStream k;
+    private String e;
+    private Long E;
+    private String s;
+    private KlineDataStream k;
 
     KlinesStream() {}
 

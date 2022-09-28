@@ -12,7 +12,7 @@ import com.binance.trader.PrivateConfig;
 import com.binance.trader.entities.Order;
 
 public class OrderService {
-    SpotClientImpl client;
+    private SpotClientImpl client;
 
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
