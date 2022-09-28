@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 
 import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.trader.PrivateConfig;
+import com.binance.trader.enums.OrderSide;
 import com.binance.trader.enums.OrderType;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.enums.TimeInForce;
@@ -50,14 +51,14 @@ public class MovingAvgStrategy implements Strategy {
 
             if (tickerPrice > movingAvg && quoteBalance > MIN_QUOTE_TRANSACTION) {
                 shouldBuy = true;
-                BuyOrderBuilder buyOrderBuilder = new BuyOrderBuilder();
-                buyOrderBuilder.setSymbol(symbol);
-                buyOrderBuilder.setSide();
-                buyOrderBuilder.setType(OrderType.LIMIT);
-                buyOrderBuilder.setTimeInForce(TimeInForce.IOC);
-                buyOrderBuilder.setPrice(tickerPrice);
-                buyOrderBuilder.setQuantity(Math.round(quoteBalance * 0.99 / tickerPrice * 1000000.) / 1000000.);
-                Order order = buyOrderBuilder.getResult();
+                OrderBuildImpl orderBuilder = new OrderBuildImpl();
+                orderBuilder.setSymbol(symbol);
+                orderBuilder.setSide(OrderSide.BUY);
+                orderBuilder.setType(OrderType.LIMIT);
+                orderBuilder.setTimeInForce(TimeInForce.IOC);
+                orderBuilder.setPrice(tickerPrice);
+                orderBuilder.setQuantity(Math.round(quoteBalance * 0.99 / tickerPrice * 1000000.) / 1000000.);
+                Order order = orderBuilder.getResult();
 
                 orderService.sendOrder(order);
             } else {
@@ -66,14 +67,14 @@ public class MovingAvgStrategy implements Strategy {
 
             if (tickerPrice < movingAvg && baseBalance > MIN_BASE_TRANSACTION) {
                 shouldSell = true;
-                SellOrderBuilder sellOrderBuilder = new SellOrderBuilder();
-                sellOrderBuilder.setSymbol(symbol);
-                sellOrderBuilder.setSide();
-                sellOrderBuilder.setType(OrderType.LIMIT);
-                sellOrderBuilder.setTimeInForce(TimeInForce.IOC);
-                sellOrderBuilder.setPrice(tickerPrice);
-                sellOrderBuilder.setQuantity(baseBalance);
-                Order order = sellOrderBuilder.getResult();
+                OrderBuildImpl orderBuilder = new OrderBuildImpl();
+                orderBuilder.setSymbol(symbol);
+                orderBuilder.setSide(OrderSide.SELL);
+                orderBuilder.setType(OrderType.LIMIT);
+                orderBuilder.setTimeInForce(TimeInForce.IOC);
+                orderBuilder.setPrice(tickerPrice);
+                orderBuilder.setQuantity(baseBalance);
+                Order order = orderBuilder.getResult();
 
                 orderService.sendOrder(order);
             } else {

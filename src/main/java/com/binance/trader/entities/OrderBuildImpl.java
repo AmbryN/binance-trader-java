@@ -6,11 +6,11 @@ import com.binance.trader.enums.Symbol;
 import com.binance.trader.enums.TimeInForce;
 import com.binance.trader.intefaces.OrderBuilder;
 
-public class BuyOrderBuilder implements OrderBuilder {
+public class OrderBuildImpl implements OrderBuilder {
 
     Order buyOrder;
 
-    BuyOrderBuilder() {
+    OrderBuildImpl() {
         this.buyOrder = new Order();
     }
 
@@ -30,8 +30,8 @@ public class BuyOrderBuilder implements OrderBuilder {
     }
 
     @Override
-    public void setSide() {
-        this.buyOrder.setSide(OrderSide.BUY);
+    public void setSide(OrderSide side) {
+        this.buyOrder.setSide(side);
     }
 
     @Override
