@@ -3,7 +3,7 @@
 **WORK IN PROGRESS**
 
 It allows :
-* To select a crypto pair to trade from the available pairs (for now, only "BTCUSDT")
+* To select a crypto pair to trade from the available pairs (e.g. "BTCUSDT" or "ETHUSDT")
 * To select a trading strategy from the available list (for now only "Moving Average")
 * To send actual buy and sell orders on Binance (currently being tested on Binance's Testnet)
 
