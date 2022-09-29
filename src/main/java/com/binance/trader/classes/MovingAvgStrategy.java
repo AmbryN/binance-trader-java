@@ -73,7 +73,7 @@ public class MovingAvgStrategy implements Strategy {
     }
 
     private void sendBuyOrder(Symbol symbol, double tickerPrice, double quoteBalance) {
-        double quoteQuantity = Math.floor(quoteBalance / tickerPrice / symbol.MIN_QUOTE_MOVEMENT) * symbol.MIN_QUOTE_MOVEMENT;
+        double baseQuantity = Math.floor(quoteBalance / tickerPrice * symbol.MIN_BASE_MOVEMENT) / symbol.MIN_BASE_MOVEMENT;
 
         OrderBuildImpl orderBuilder = new OrderBuildImpl();
         orderBuilder.reset();
@@ -82,14 +82,14 @@ public class MovingAvgStrategy implements Strategy {
         orderBuilder.setType(OrderType.LIMIT);
         orderBuilder.setTimeInForce(TimeInForce.IOC);
         orderBuilder.setPrice(tickerPrice);
-        orderBuilder.setQuantity(quoteQuantity);
+        orderBuilder.setQuantity(baseQuantity);
         Order order = orderBuilder.getResult();
 
         orderService.sendOrder(order);
     }
 
     private void sendSellOrder(Symbol symbol, double tickerPrice, double baseBalance) {
-        double baseQuantity = Math.floor(baseBalance / symbol.MIN_BASE_MOVEMENT) * symbol.MIN_BASE_MOVEMENT;
+        double baseQuantity = Math.floor(baseBalance * symbol.MIN_BASE_MOVEMENT) / symbol.MIN_BASE_MOVEMENT;
 
         OrderBuildImpl orderBuilder = new OrderBuildImpl();
         orderBuilder.reset();

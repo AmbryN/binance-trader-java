@@ -1,8 +1,8 @@
 package com.binance.trader.enums;
 
 public enum Symbol {
-    BTCUSDT("BTCUSDT", 0.00001, 10, 0.00001, 0.01),
-    ETHUSDT("ETHUSDT", 0.0001, 10, 0.0001, 0.01);
+    BTCUSDT("BTCUSDT", 0.00001, 10, 100000, 100),
+    ETHUSDT("ETHUSDT", 0.0001, 10, 10000, 100);
 
     private final String pair;
 
@@ -16,19 +16,21 @@ public enum Symbol {
     public final double MIN_QUOTE_TRANSACTION;
     /**
      * Defines the minimum increment for the amount of a trade using this base crypto
+     * Given as an int (e.g. 100000 means 0.00001)
      */
-    public final double MIN_BASE_MOVEMENT;
+    public final int MIN_BASE_MOVEMENT;
     /**
      * Defines the minimum increment for the amount of a trade using this quote crypto
+     * Given as an int (e.g. 100 means 0.01)
      */
-    public final double MIN_QUOTE_MOVEMENT;
+    public final int MIN_QUOTE_MOVEMENT;
 
-    Symbol(String pair, double minBaseTransaction, double minQuoteTransaction, double minBaseMouvement, double minQuoteMouvement) {
+    Symbol(String pair, double minBaseTransaction, double minQuoteTransaction, int minBaseMovement, int minQuoteMovement) {
         this.pair = pair;
         this.MIN_BASE_TRANSACTION = minBaseTransaction;
         this.MIN_QUOTE_TRANSACTION = minQuoteTransaction;
-        this.MIN_BASE_MOVEMENT = minBaseMouvement;
-        this.MIN_QUOTE_MOVEMENT = minQuoteMouvement;
+        this.MIN_BASE_MOVEMENT = minBaseMovement;
+        this.MIN_QUOTE_MOVEMENT = minQuoteMovement;
     }
 
     public String getBase() {
