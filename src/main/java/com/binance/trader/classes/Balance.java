@@ -1,9 +1,9 @@
 package com.binance.trader.classes;
 
 public class Balance {
-    private String asset;
-    private double free;
-    private double locked;
+    private final String asset;
+    private final double free;
+    private final double locked;
 
     public Balance(String asset, double free, double locked) {
         this.asset = asset;

@@ -7,10 +7,7 @@ import java.util.ArrayList;
 
 import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.trader.PrivateConfig;
-import com.binance.trader.enums.OrderSide;
-import com.binance.trader.enums.OrderType;
 import com.binance.trader.enums.Symbol;
-import com.binance.trader.enums.TimeInForce;
 import com.binance.trader.intefaces.Strategy;
 import com.binance.trader.services.AccountInfoService;
 import com.binance.trader.services.KlineService;
@@ -19,23 +16,14 @@ import com.binance.trader.services.TickerService;
 import com.binance.trader.utils.Calculus;
 
 public class MovingAvgStrategy implements Strategy {
-    private SpotClientImpl client;
-    private AccountInfoService accountInfoService;
-    private TickerService tickerService;
-    private OrderService orderService;
-    private KlineService klineService;
-    private String name = "MovingAvg";
-    private String period;
-    private int nbOfPeriods;
+    private final SpotClientImpl client;
+    private final String period;
+    private final int nbOfPeriods;
 
     //private static final Logger logger = LoggerFactory.getLogger(MovingAvgStrategy.class);
 
     public MovingAvgStrategy(String period, int nbOfPeriods) {
         this.client = new SpotClientImpl(PrivateConfig.TESTNET_API_KEY, PrivateConfig.TESTNET_SECRET_KEY, PrivateConfig.TESTNET_URL);
-        this.accountInfoService = new AccountInfoService(client);
-        this.tickerService = new TickerService(client);
-        this.orderService = new OrderService();
-        this.klineService = new KlineService(client);
         this.period = period;
         this.nbOfPeriods = nbOfPeriods;
     }
@@ -44,68 +32,40 @@ public class MovingAvgStrategy implements Strategy {
     public void execute(Symbol symbol) {
         
         while(true) {
+            AccountInfoService accountInfoService = new AccountInfoService(client);
             AccountInfo accountInfo = accountInfoService.getAccountInfo();
             double baseBalance = accountInfo.getBalance(symbol.getBase()).getFreeBalance();
             double quoteBalance = accountInfo.getBalance(symbol.getQuote()).getFreeBalance();
-    
+
+            TickerService tickerService = new TickerService(client);
             double tickerPrice = tickerService.getTicker(symbol).getPrice();
             double movingAvg = this.calculateMovingAvg(symbol, this.period, this.nbOfPeriods);
             
             System.out.println("Base balance: " + baseBalance + " / Quote balance: " + quoteBalance + " / Ticker " + tickerPrice +
                                  " / MAvg " + calculateMovingAvg(symbol, this.period, this.nbOfPeriods));
 
+            OrderService orderService = new OrderService();
             if (tickerPrice > movingAvg && quoteBalance > symbol.MIN_QUOTE_TRANSACTION) {
-                this.sendBuyOrder(symbol, tickerPrice, quoteBalance);
-
+                orderService.buy(symbol, tickerPrice, quoteBalance);
             } else if (tickerPrice < movingAvg && baseBalance > symbol.MIN_BASE_TRANSACTION) {
-                this.sendSellOrder(symbol, tickerPrice, baseBalance);
+                orderService.sell(symbol, tickerPrice, baseBalance);
             }
         }
     }
 
-    private double calculateMovingAvg(Symbol symbol, String period, int nbOfPeriods) {        
+    private double calculateMovingAvg(Symbol symbol, String period, int nbOfPeriods) {
+        KlineService klineService = new KlineService(client);
+
         ArrayList<Kline> klines = klineService.fetchKlines(symbol, period, nbOfPeriods);
-        ArrayList<Double> prices = new ArrayList<Double>();
+        ArrayList<Double> prices = new ArrayList<>();
 
         klines.forEach((kline) -> prices.add(kline.getClosePrice()));
         
         return Calculus.calculateAvg(prices);
     }
 
-    private void sendBuyOrder(Symbol symbol, double tickerPrice, double quoteBalance) {
-        double baseQuantity = Math.floor(quoteBalance / tickerPrice * symbol.MIN_BASE_MOVEMENT) / symbol.MIN_BASE_MOVEMENT;
-
-        OrderBuildImpl orderBuilder = new OrderBuildImpl();
-        orderBuilder.reset();
-        orderBuilder.setSymbol(symbol);
-        orderBuilder.setSide(OrderSide.BUY);
-        orderBuilder.setType(OrderType.LIMIT);
-        orderBuilder.setTimeInForce(TimeInForce.IOC);
-        orderBuilder.setPrice(tickerPrice);
-        orderBuilder.setQuantity(baseQuantity);
-        Order order = orderBuilder.getResult();
-
-        orderService.sendOrder(order);
-    }
-
-    private void sendSellOrder(Symbol symbol, double tickerPrice, double baseBalance) {
-        double baseQuantity = Math.floor(baseBalance * symbol.MIN_BASE_MOVEMENT) / symbol.MIN_BASE_MOVEMENT;
-
-        OrderBuildImpl orderBuilder = new OrderBuildImpl();
-        orderBuilder.reset();
-        orderBuilder.setSymbol(symbol);
-        orderBuilder.setSide(OrderSide.SELL);
-        orderBuilder.setType(OrderType.LIMIT);
-        orderBuilder.setTimeInForce(TimeInForce.IOC);
-        orderBuilder.setPrice(tickerPrice);
-        orderBuilder.setQuantity(baseQuantity);
-        Order order = orderBuilder.getResult();
-
-        orderService.sendOrder(order);
-    }
-
     @Override
     public String toString() {
-        return this.name;
+        return "MovingAvg";
     }
 }
