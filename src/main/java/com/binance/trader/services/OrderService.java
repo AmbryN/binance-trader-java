@@ -2,7 +2,7 @@ package com.binance.trader.services;
 
 import java.util.LinkedHashMap;
 
-import com.binance.trader.classes.OrderBuildImpl;
+import com.binance.trader.classes.OrderBuilderImpl;
 import com.binance.trader.enums.OrderSide;
 import com.binance.trader.enums.OrderType;
 import com.binance.trader.enums.Symbol;
@@ -40,7 +40,7 @@ public class OrderService {
     public void buy(Symbol symbol, double tickerPrice, double quoteBalance) {
         double baseQuantity = Math.floor(quoteBalance / tickerPrice * symbol.MIN_BASE_MOVEMENT) / symbol.MIN_BASE_MOVEMENT;
 
-        OrderBuildImpl orderBuilder = new OrderBuildImpl();
+        OrderBuilderImpl orderBuilder = new OrderBuilderImpl();
         orderBuilder.reset();
         orderBuilder.setSymbol(symbol);
         orderBuilder.setSide(OrderSide.BUY);
@@ -56,7 +56,7 @@ public class OrderService {
     public void sell(Symbol symbol, double tickerPrice, double baseBalance) {
         double baseQuantity = Math.floor(baseBalance * symbol.MIN_BASE_MOVEMENT) / symbol.MIN_BASE_MOVEMENT;
 
-        OrderBuildImpl orderBuilder = new OrderBuildImpl();
+        OrderBuilderImpl orderBuilder = new OrderBuilderImpl();
         orderBuilder.reset();
         orderBuilder.setSymbol(symbol);
         orderBuilder.setSide(OrderSide.SELL);

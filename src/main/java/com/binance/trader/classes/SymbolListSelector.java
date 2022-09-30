@@ -9,7 +9,7 @@ public class SymbolListSelector extends ListSelector<Symbol> {
     }
 
     @Override
-    public void showSelector() {
+    protected void showSelector() {
         System.out.println("What symbol do you want to trade? ");
         int index = 0;
         for (Symbol symbol : list) {

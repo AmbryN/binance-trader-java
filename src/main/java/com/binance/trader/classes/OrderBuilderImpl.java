@@ -6,7 +6,7 @@ import com.binance.trader.enums.Symbol;
 import com.binance.trader.enums.TimeInForce;
 import com.binance.trader.intefaces.OrderBuilder;
 
-public class OrderBuildImpl implements OrderBuilder {
+public class OrderBuilderImpl implements OrderBuilder {
 
     private Order order;
 
