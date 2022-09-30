@@ -1,4 +1,4 @@
-name: Test
+name: Tests
 run-name: ${{ github.actor }} push a new commit to main branch
 on: 
   push:
