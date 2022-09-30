@@ -14,7 +14,6 @@ import com.binance.trader.services.KlineService;
 import com.binance.trader.services.OrderService;
 import com.binance.trader.services.TickerService;
 import com.binance.trader.utils.Calculus;
-import io.github.cdimascio.dotenv.Dotenv;
 
 public class MovingAvgStrategy implements Strategy {
     private final SpotClientImpl client;
@@ -24,9 +23,7 @@ public class MovingAvgStrategy implements Strategy {
     //private static final Logger logger = LoggerFactory.getLogger(MovingAvgStrategy.class);
 
     public MovingAvgStrategy(String period, int nbOfPeriods) {
-        Dotenv dotenv = Dotenv.configure().load();
-
-        this.client = new SpotClientImpl(dotenv.get("TESTNET_API_KEY"), dotenv.get("TESTNET_SECRET_KEY"), dotenv.get("TESTNET_URL"));
+        this.client = new SpotClientImpl(System.getenv("TESTNET_API_KEY"), System.getenv("TESTNET_SECRET_KEY"), System.getenv("TESTNET_URL"));
         this.period = period;
         this.nbOfPeriods = nbOfPeriods;
     }
