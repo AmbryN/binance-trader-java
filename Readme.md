@@ -1,6 +1,6 @@
 # Binance Trading Bot (Java)
 
-![Build and Test status](https://github.com/AmbryN/binance-trader-java/actions/workflows/java-ci.yml/badge.svg)
+![Test status](https://github.com/AmbryN/binance-trader-java/actions/workflows/tests.yml/badge.svg)
 
 **WORK IN PROGRESS**
 
