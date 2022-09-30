@@ -7,13 +7,14 @@ import com.binance.trader.enums.OrderSide;
 import com.binance.trader.enums.OrderType;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.enums.TimeInForce;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.binance.connector.client.exceptions.BinanceClientException;
 import com.binance.connector.client.exceptions.BinanceConnectorException;
 import com.binance.connector.client.impl.SpotClientImpl;
-import com.binance.trader.PrivateConfig;
+//import com.binance.trader.PrivateConfig;
 import com.binance.trader.classes.Order;
 
 public class OrderService {
@@ -21,7 +22,8 @@ public class OrderService {
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
     public OrderService() {
-        this.client =  new SpotClientImpl(PrivateConfig.TESTNET_API_KEY, PrivateConfig.TESTNET_SECRET_KEY, PrivateConfig.TESTNET_URL);
+        Dotenv dotenv = Dotenv.configure().load();
+        this.client =  new SpotClientImpl(dotenv.get("TESTNET_API_KEY"), dotenv.get("TESTNET_SECRET_KEY"), dotenv.get("TESTNET_URL"));
     }
 
     public void sendOrder(Order order) {
