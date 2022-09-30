@@ -18,17 +18,10 @@ Planned features :
 
 1) Clone the git repository to your computer 
 2) `cd` to the directory
-3) Create a file named "PrivateConfig.java" in `/src/main/java/com/binance/trader/` containing:
+3) Set following environment variables on your system:
 ```
-package com.binance.trader;
-
-public class PrivateConfig {
-    public static final String TESTNET_URL = "https://testnet.binance.vision";
-    public static final String TESTNET_API_KEY = "YOU_TESTNET_API_KEY";
-    public static final String TESTNET_SECRET_KEY = "YOUR_TESTNET_SECRET_KEY";
-
-    public static final String BINANCE_URL = "https://api.binance.com";
-}
+TESTNET_API_KEY="YOUR_TESTNET_API_KEY"
+TESTNET_SECRET_KEY="YOUR_TESTNET_SECRET_KEY"
 ```
 4) Run `mvn clean install`
 5) Run `mvn exec:java -Dexec.mainClass="com.binance.trader.App`

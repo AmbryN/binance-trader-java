@@ -13,15 +13,14 @@ import org.slf4j.LoggerFactory;
 import com.binance.connector.client.exceptions.BinanceClientException;
 import com.binance.connector.client.exceptions.BinanceConnectorException;
 import com.binance.connector.client.impl.SpotClientImpl;
-//import com.binance.trader.PrivateConfig;
 import com.binance.trader.classes.Order;
 
 public class OrderService {
     private final SpotClientImpl client;
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
-    public OrderService() {
-        this.client =  new SpotClientImpl(System.getenv("TESTNET_API_KEY"), System.getenv("TESTNET_SECRET_KEY"), System.getenv("TESTNET_URL"));
+    public OrderService(SpotClientImpl client) {
+        this.client =  client;
     }
 
     public void sendOrder(Order order) {

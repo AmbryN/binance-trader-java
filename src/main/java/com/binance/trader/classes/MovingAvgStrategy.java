@@ -2,11 +2,7 @@ package com.binance.trader.classes;
 
 import java.util.ArrayList;
 
-// import org.slf4j.Logger;
-// import org.slf4j.LoggerFactory;
-
 import com.binance.connector.client.impl.SpotClientImpl;
-//import com.binance.trader.PrivateConfig;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.intefaces.Strategy;
 import com.binance.trader.services.AccountInfoService;
@@ -19,11 +15,11 @@ public class MovingAvgStrategy implements Strategy {
     private final SpotClientImpl client;
     private final String period;
     private final int nbOfPeriods;
-
-    //private static final Logger logger = LoggerFactory.getLogger(MovingAvgStrategy.class);
+    private static final String TESTNET_URL = "https://testnet.binance.vision";
+    private static final String BINANCE_URL = "https://api.binance.com";
 
     public MovingAvgStrategy(String period, int nbOfPeriods) {
-        this.client = new SpotClientImpl(System.getenv("TESTNET_API_KEY"), System.getenv("TESTNET_SECRET_KEY"), System.getenv("TESTNET_URL"));
+        this.client = new SpotClientImpl(System.getenv("TESTNET_API_KEY"), System.getenv("TESTNET_SECRET_KEY"), TESTNET_URL);
         this.period = period;
         this.nbOfPeriods = nbOfPeriods;
     }
@@ -44,7 +40,7 @@ public class MovingAvgStrategy implements Strategy {
             System.out.println("Base balance: " + baseBalance + " / Quote balance: " + quoteBalance + " / Ticker " + tickerPrice +
                                  " / MAvg " + calculateMovingAvg(symbol, this.period, this.nbOfPeriods));
 
-            OrderService orderService = new OrderService();
+            OrderService orderService = new OrderService(this.client);
             if (tickerPrice > movingAvg && quoteBalance > symbol.MIN_QUOTE_TRANSACTION) {
                 orderService.buy(symbol, tickerPrice, quoteBalance);
             } else if (tickerPrice < movingAvg && baseBalance > symbol.MIN_BASE_TRANSACTION) {
