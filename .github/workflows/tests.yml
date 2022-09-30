@@ -7,9 +7,9 @@ on:
 
 env:
   TESTNET_URL: "https://testnet.binance.vision"
-  TESTNET_API_KEY:  "";
-  TESTNET_SECRET_KEY: "";
-  BINANCE_URL: "https://api.binance.com";
+  TESTNET_API_KEY:  ""
+  TESTNET_SECRET_KEY: ""
+  BINANCE_URL: "https://api.binance.com"
 
 jobs:
   build:
