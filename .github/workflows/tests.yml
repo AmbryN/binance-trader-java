@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-    path-ignore:
-      - ''
 
 env:
   TESTNET_URL: "https://testnet.binance.vision"
