@@ -1,5 +1,7 @@
 # Binance Trading Bot (Java)
 
+![Build and Test status](https://github.com/AmbryN/binance-trader-java/actions/workflows/java-ci.yml/badge.svg)
+
 **WORK IN PROGRESS**
 
 It allows :
