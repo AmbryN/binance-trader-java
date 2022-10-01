@@ -17,7 +17,7 @@ Planned features :
 ## Usage
 
 #### !!! Caution : use this bot at your own risk and expenses !!!
-
+0) Make sure you have JDK 17 or newer and maven installed
 1) Clone the git repository to your computer 
 2) `cd` to the directory
 3) Set following environment variables on your system:
@@ -26,7 +26,7 @@ TESTNET_API_KEY="YOUR_TESTNET_API_KEY"
 TESTNET_SECRET_KEY="YOUR_TESTNET_SECRET_KEY"
 ```
 4) Run `mvn clean install`
-5) Run `mvn exec:java -Dexec.mainClass="com.binance.trader.App`
+5) Run `mvn exec:java -Dexec.mainClass="com.binance.trader.App"`
 
 ## Built With
 
