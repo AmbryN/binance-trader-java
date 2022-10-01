@@ -1,5 +1,9 @@
 package com.binance.trader.services;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 
 import com.binance.trader.classes.OrderBuilderImpl;
@@ -28,6 +32,7 @@ public class OrderService {
         try {
             String result = this.client.createTrade().newOrder(parameters);
             logger.info(result);
+            this.logToFile(result);
         } catch (BinanceConnectorException e) {
             logger.error("fullErrMessage: {}", e.getMessage(), e);
         } catch (BinanceClientException e) {
@@ -66,5 +71,31 @@ public class OrderService {
         Order order = orderBuilder.getResult();
 
         this.sendOrder(order);
+    }
+
+    public void logToFile(String data) {
+        File file = new File("orderLog.txt");
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            System.out.println("Could not create file");
+        }
+        FileWriter fr = null;
+        BufferedWriter br = null;
+        try{
+            fr = new FileWriter(file, true);
+            br = new BufferedWriter(fr);
+            br.write(data);
+            br.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                br.close();
+                fr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
