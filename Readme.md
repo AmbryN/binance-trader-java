@@ -7,14 +7,16 @@
 It allows :
 * To select a crypto pair to trade from the available pairs (e.g. "BTCUSDT" or "ETHUSDT")
 * To select a trading strategy from the available list (for now only "Moving Average")
+* Set the strategy's variable (e.g. observation period, number of periods) used to execute said strategy
 * To send actual buy and sell orders on Binance (currently being tested on Binance's Testnet)
 
 Planned features :
-* Set the strategy's variable (e.g. observation period, number of periods) used to execute said strategy: for now it defaults to "1s" and 25 periods.
 * Allow to set logging level
 * Log transactions to File and/or Database
 
 ## Usage
+
+#### !!! Caution : use this bot at your own risk and expenses !!!
 
 1) Clone the git repository to your computer 
 2) `cd` to the directory

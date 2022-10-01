@@ -1,21 +1,19 @@
 package com.binance.trader.classes;
 
-import com.binance.trader.intefaces.Strategy;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-public class StartSelectorTest {
+public class YesNoSelectorTest {
 
     @Mock StringInput inputMock;
 
-    @InjectMocks StartSelector selector;
+    @InjectMocks YesNoSelector selector;
 
     @Before
     public void setup() {

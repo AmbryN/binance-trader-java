@@ -3,9 +3,7 @@ package com.binance.trader.classes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Scanner;
-
-abstract class YesNoSelector {
+public class YesNoSelector {
     private static final Logger logger = LoggerFactory.getLogger(YesNoSelector.class);
     private StringInput input;
 
@@ -24,5 +22,7 @@ abstract class YesNoSelector {
         logger.error("Please select one of the proposed choices!");
         return -1;
     }
-    protected abstract void showSelector();
+    private void showSelector() {
+        System.out.println("Is this OK for you? [y/n]");
+    };
 }
