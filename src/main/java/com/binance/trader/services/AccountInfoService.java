@@ -3,8 +3,8 @@ package com.binance.trader.services;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ch.qos.logback.classic.Logger;
+import com.binance.trader.classes.singleton.Logging;
 
 import com.binance.connector.client.exceptions.BinanceClientException;
 import com.binance.connector.client.exceptions.BinanceConnectorException;
@@ -16,7 +16,7 @@ import com.binance.trader.utils.Deserializer;
 public class AccountInfoService {
     SpotClientImpl client;
 
-    private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
+    private static final Logger logger = Logging.getInstance();
 
     public AccountInfoService(SpotClientImpl client) {
         this.client = client;

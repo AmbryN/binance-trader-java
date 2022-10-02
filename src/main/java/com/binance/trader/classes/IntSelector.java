@@ -1,10 +1,10 @@
 package com.binance.trader.classes;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ch.qos.logback.classic.Logger;
+import com.binance.trader.classes.singleton.Logging;
 
 public class IntSelector {
-    private static final Logger logger = LoggerFactory.getLogger(IntSelector.class);
+    private static final Logger logger = Logging.getInstance();
     private IntegerInput input;
 
     public IntSelector() {

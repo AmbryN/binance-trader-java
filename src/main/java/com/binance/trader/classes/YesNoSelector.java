@@ -1,10 +1,10 @@
 package com.binance.trader.classes;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ch.qos.logback.classic.Logger;
+import com.binance.trader.classes.singleton.Logging;
 
 public class YesNoSelector {
-    private static final Logger logger = LoggerFactory.getLogger(YesNoSelector.class);
+    private static final Logger logger = Logging.getInstance();
     private StringInput input;
 
     public YesNoSelector() {
@@ -19,7 +19,7 @@ public class YesNoSelector {
         if (userInput.equalsIgnoreCase("n")) {
             return 0;
         }
-        logger.error("Please select one of the proposed choices!");
+        logger.warn("Please select one of the proposed choices!");
         return -1;
     }
     private void showSelector() {

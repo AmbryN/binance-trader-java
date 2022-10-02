@@ -6,13 +6,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 
+import ch.qos.logback.classic.Logger;
+import com.binance.trader.classes.singleton.Logging;
 import com.binance.trader.classes.OrderBuilderImpl;
 import com.binance.trader.enums.OrderSide;
 import com.binance.trader.enums.OrderType;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.enums.TimeInForce;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.binance.connector.client.exceptions.BinanceClientException;
 import com.binance.connector.client.exceptions.BinanceConnectorException;
@@ -21,7 +21,7 @@ import com.binance.trader.classes.Order;
 
 public class OrderService {
     private final SpotClientImpl client;
-    private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
+    private static final Logger logger = Logging.getInstance();
 
     public OrderService(SpotClientImpl client) {
         this.client =  client;

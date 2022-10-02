@@ -1,11 +1,11 @@
 package com.binance.trader.classes;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ch.qos.logback.classic.Logger;
+import com.binance.trader.classes.singleton.Logging;
 
 public class IntegerInput extends Input {
 
-    private static final Logger logger = LoggerFactory.getLogger(IntegerInput.class);
+    private static final Logger logger = Logging.getInstance();
 
     public int getUserInput() {
         String inputAsStr = scanner.nextLine();
@@ -13,7 +13,7 @@ public class IntegerInput extends Input {
         try {
             userInput = Integer.parseInt(inputAsStr);
         } catch (NumberFormatException e) {
-            logger.error("Please enter a valid integer!");
+            logger.warn("Please enter a valid integer!");
         }
         return userInput;
     }

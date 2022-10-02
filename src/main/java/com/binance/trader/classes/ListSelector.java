@@ -1,14 +1,12 @@
 package com.binance.trader.classes;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Scanner;
+import ch.qos.logback.classic.Logger;
+import com.binance.trader.classes.singleton.Logging;
 
 abstract class ListSelector<T> {
     protected T[] list;
     private IntegerInput input;
-    private static final Logger logger = LoggerFactory.getLogger(ListSelector.class);
+    private static final Logger logger = Logging.getInstance();
 
     public ListSelector() {
         this.input = new IntegerInput();
@@ -24,7 +22,7 @@ abstract class ListSelector<T> {
 
     private boolean validateInput(int userChoice) {
         if (userChoice < 0 || userChoice > list.length - 1) {
-            logger.error("Please select one of the proposed choices!");
+            logger.warn("Please select one of the proposed choices!");
             return false;
         } else {
             return true;
