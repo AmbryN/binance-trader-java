@@ -6,6 +6,7 @@ on:
       - main
 
 env:
+  BINANCE_TRADER_ENV: "DEV"
   TESTNET_API_KEY:  ""
   TESTNET_SECRET_KEY: ""
 

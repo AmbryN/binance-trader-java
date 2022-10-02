@@ -23,6 +23,7 @@ Planned features :
 2) `cd` to the directory
 3) Set following environment variables on your system:
 ```
+BINANCE_TRADER_ENV="DEV"
 TESTNET_API_KEY="YOUR_TESTNET_API_KEY"
 TESTNET_SECRET_KEY="YOUR_TESTNET_SECRET_KEY"
 ```
