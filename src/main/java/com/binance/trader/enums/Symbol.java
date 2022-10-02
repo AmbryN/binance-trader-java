@@ -2,7 +2,9 @@ package com.binance.trader.enums;
 
 public enum Symbol {
     BTCUSDT("BTCUSDT", 0.00001, 10, 100000, 100),
-    ETHUSDT("ETHUSDT", 0.0001, 10, 10000, 100);
+    BTCBUSD("BTCBUSD", 0.00001, 10, 100000, 100),
+    ETHUSDT("ETHUSDT", 0.0001, 10, 10000, 100),
+    ETHBUSD("ETHBUSD", 0.0001, 10, 10000, 100);
 
     private final String pair;
 

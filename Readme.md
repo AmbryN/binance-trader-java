@@ -4,20 +4,33 @@
 
 **WORK IN PROGRESS**
 
-It allows :
-* To select a crypto pair to trade from the available pairs (e.g. "BTCUSDT" or "ETHUSDT")
+It allows:
+* To select a crypto pair to trade from the available pairs
 * To select a trading strategy from the available list (for now only "Moving Average")
 * Set the strategy's variable (e.g. observation period, number of periods) used to execute said strategy
 * To send actual buy and sell orders on Binance (currently being tested on Binance's Testnet)
 
-Planned features :
+Planned features:
 * Add strategies (e.g. Exponential MovingAvg etc.)
 * Log transactions to File and/or Database
 * Add Web UI for crypto and strategy selection
 
+Bugs to fix:
+* The bot will sometimes try to send two orders on after each other before the first one has had time 
+to finish
+
+## Available pairs (new ones will be added shortly)
+- BTCUSDT
+- BTCBUSD
+- ETHUSDT
+- ETHBUSD
+
 ## Usage
 
-#### !!! Caution : use this bot at your own risk and expenses !!!
+***!!! Caution : use this bot at your own risk and expenses !!!***
+> Be aware that Binance will take commissions on your trades in either 
+> the quote crypto your using or in BNBs if you've set up your account 
+> to do so.
 0) Make sure you have JDK 17 or newer and maven installed
 1) Clone the git repository to your computer 
 2) `cd` to the directory

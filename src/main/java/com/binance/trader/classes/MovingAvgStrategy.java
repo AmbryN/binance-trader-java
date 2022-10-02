@@ -47,24 +47,33 @@ public class MovingAvgStrategy implements Strategy {
     @Override
     public void execute(Symbol symbol) {
 
-        while(true) {
-            AccountInfoService accountInfoService = new AccountInfoService(client);
-            AccountInfo accountInfo = accountInfoService.getAccountInfo();
-            double baseBalance = accountInfo.getBalance(symbol.getBase()).getFreeBalance();
-            double quoteBalance = accountInfo.getBalance(symbol.getQuote()).getFreeBalance();
+        AccountInfoService accountInfoService = new AccountInfoService(client);
+        AccountInfo accountInfo = accountInfoService.getAccountInfo();
+        double baseBalance = accountInfo.getBalance(symbol.getBase()).getFreeBalance();
+        double quoteBalance = accountInfo.getBalance(symbol.getQuote()).getFreeBalance();
+        boolean hasSendAnOrder = false;
 
+        while(true) {
+            if (hasSendAnOrder) {
+                accountInfo = accountInfoService.getAccountInfo();
+                baseBalance = accountInfo.getBalance(symbol.getBase()).getFreeBalance();
+                quoteBalance = accountInfo.getBalance(symbol.getQuote()).getFreeBalance();
+                hasSendAnOrder = false;
+            }
             TickerService tickerService = new TickerService(client);
             double tickerPrice = tickerService.getTicker(symbol).getPrice();
             double movingAvg = this.calculateMovingAvg(symbol);
-            
+
             System.out.println("Base balance: " + baseBalance + " / Quote balance: " + quoteBalance + " / Ticker " + tickerPrice +
                                  " / MAvg " + movingAvg);
 
             OrderService orderService = new OrderService(this.client);
             if (tickerPrice > movingAvg && quoteBalance > symbol.MIN_QUOTE_TRANSACTION) {
                 orderService.buy(symbol, tickerPrice, quoteBalance);
+                hasSendAnOrder = true;
             } else if (tickerPrice < movingAvg && baseBalance > symbol.MIN_BASE_TRANSACTION) {
                 orderService.sell(symbol, tickerPrice, baseBalance);
+                hasSendAnOrder = true;
             }
         }
     }
