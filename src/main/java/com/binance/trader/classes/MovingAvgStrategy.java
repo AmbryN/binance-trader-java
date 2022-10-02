@@ -21,7 +21,15 @@ public class MovingAvgStrategy implements Strategy {
     private int nbOfPeriods;
 
     public MovingAvgStrategy() {
-        this.client = new SpotClientImpl(System.getenv("TESTNET_API_KEY"), System.getenv("TESTNET_SECRET_KEY"), TESTNET_URL);
+        String url = TESTNET_URL;
+        String apiKey = System.getenv("TESTNET_API_KEY");
+        String secretKey = System.getenv("TESTNET_SECRET_KEY");
+        if (System.getenv("BINANCE_TRADER_ENV").equals("PROD")) {
+            url = BINANCE_URL;
+            apiKey = System.getenv("BINANCE_API_KEY");
+            secretKey = System.getenv("BINANCE_SECRET_KEY");
+        }
+        this.client = new SpotClientImpl(apiKey, secretKey, url);
         this.nbOfPeriods = -1;
     }
 
