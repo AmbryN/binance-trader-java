@@ -11,8 +11,9 @@ It allows :
 * To send actual buy and sell orders on Binance (currently being tested on Binance's Testnet)
 
 Planned features :
-* Allow to set logging level
+* Add strategies (e.g. Exponential MovingAvg etc.)
 * Log transactions to File and/or Database
+* Add Web UI for crypto and strategy selection
 
 ## Usage
 
@@ -35,6 +36,7 @@ TESTNET_SECRET_KEY="YOUR_TESTNET_SECRET_KEY"
 * [Gson](https://github.com/google/gson) - Deserialization
 * [JUnit](https://junit.org/junit4/) - Test Suite
 * [Mockito](https://site.mockito.org/) - Mocking / Stubbing Framework
+* [Logback](https://github.com/qos-ch/logback) - Logging utility
 
 ## Authors
 
