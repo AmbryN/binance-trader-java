@@ -1,5 +1,6 @@
 package com.binance.trader;
 
+import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.trader.classes.StrategyListSelector;
 import com.binance.trader.classes.SymbolListSelector;
 import com.binance.trader.classes.YesNoSelector;
@@ -7,11 +8,24 @@ import com.binance.trader.enums.Symbol;
 import com.binance.trader.intefaces.Strategy;
 
 public class Trader {
+    private static final String TESTNET_URL = "https://testnet.binance.vision";
+    private static final String BINANCE_URL = "https://api.binance.com";
+    private final SpotClientImpl client;
     int start = 0;
     Strategy strategy;
     Symbol symbol;
 
-    public Trader() {}
+    public Trader() {
+        String url = TESTNET_URL;
+        String apiKey = System.getenv("TESTNET_API_KEY");
+        String secretKey = System.getenv("TESTNET_SECRET_KEY");
+        if (System.getenv("BINANCE_TRADER_ENV").equals("PROD")) {
+            url = BINANCE_URL;
+            apiKey = System.getenv("BINANCE_API_KEY");
+            secretKey = System.getenv("BINANCE_SECRET_KEY");
+        }
+        this.client = new SpotClientImpl(apiKey, secretKey, url);
+    }
 
     public void start() {
         while(start == 0) {
@@ -25,7 +39,7 @@ public class Trader {
             while (strategy == null) {
                 strategy = strategySelection();
             }
-            strategy.init();
+            strategy.init(this.client);
 
             start = -1;
             while (start == -1) {

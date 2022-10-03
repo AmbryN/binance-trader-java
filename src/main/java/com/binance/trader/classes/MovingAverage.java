@@ -1,44 +1,34 @@
 package com.binance.trader.classes;
 
-import java.util.ArrayList;
-
 import com.binance.connector.client.impl.SpotClientImpl;
+import com.binance.trader.classes.AccountInfo;
+import com.binance.trader.classes.IntSelector;
+import com.binance.trader.classes.PeriodListSelector;
 import com.binance.trader.enums.Period;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.intefaces.Strategy;
 import com.binance.trader.services.AccountInfoService;
-import com.binance.trader.services.KlineService;
 import com.binance.trader.services.OrderService;
 import com.binance.trader.services.TickerService;
-import com.binance.trader.utils.Calculus;
 
-public class MovingAvgStrategy implements Strategy {
+public abstract class MovingAverage implements Strategy {
+    protected SpotClientImpl client;
+    protected Period period;
+    protected int nbOfPeriods;
 
-    private static final String TESTNET_URL = "https://testnet.binance.vision";
-    private static final String BINANCE_URL = "https://api.binance.com";
-    private final SpotClientImpl client;
-    private Period period;
-    private int nbOfPeriods;
-
-    public MovingAvgStrategy() {
-        String url = TESTNET_URL;
-        String apiKey = System.getenv("TESTNET_API_KEY");
-        String secretKey = System.getenv("TESTNET_SECRET_KEY");
-        if (System.getenv("BINANCE_TRADER_ENV").equals("PROD")) {
-            url = BINANCE_URL;
-            apiKey = System.getenv("BINANCE_API_KEY");
-            secretKey = System.getenv("BINANCE_SECRET_KEY");
-        }
-        this.client = new SpotClientImpl(apiKey, secretKey, url);
+    public MovingAverage() {
+        this.period = null;
         this.nbOfPeriods = -1;
     }
 
-    public void init() {
+    @Override
+    public void init(SpotClientImpl client) {
+        this.client = client;
         while (this.period == null) {
             PeriodListSelector selector = new PeriodListSelector();
             this.period = selector.startSelector();
         }
-        while (this.nbOfPeriods == -1) {
+        while (this.nbOfPeriods < 0) {
             IntSelector selector = new IntSelector();
             this.nbOfPeriods = selector.startSelector();
         }
@@ -65,7 +55,7 @@ public class MovingAvgStrategy implements Strategy {
             double movingAvg = this.calculateMovingAvg(symbol);
 
             System.out.println("Base balance: " + baseBalance + " / Quote balance: " + quoteBalance + " / Ticker " + tickerPrice +
-                                 " / MAvg " + movingAvg);
+                    " / ExpMAvg " + movingAvg);
 
             OrderService orderService = new OrderService(this.client);
             if (tickerPrice > movingAvg && quoteBalance > symbol.MIN_QUOTE_TRANSACTION) {
@@ -78,29 +68,15 @@ public class MovingAvgStrategy implements Strategy {
         }
     }
 
-    @Override
     public Period getPeriod() {
         return this.period;
     }
 
-    @Override
     public int getNbOfPeriods() {
         return this.nbOfPeriods;
     }
 
-    private double calculateMovingAvg(Symbol symbol) {
-        KlineService klineService = new KlineService(client);
+    protected abstract double calculateMovingAvg(Symbol symbol);
 
-        ArrayList<Kline> klines = klineService.fetchKlines(symbol, this.period.asString(), nbOfPeriods);
-        ArrayList<Double> prices = new ArrayList<>();
-
-        klines.forEach((kline) -> prices.add(kline.getClosePrice()));
-        
-        return Calculus.calculateAvg(prices);
-    }
-
-    @Override
-    public String toString() {
-        return "MovingAvg";
-    }
+    public abstract String toString();
 }

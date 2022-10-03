@@ -2,9 +2,9 @@ package com.binance.trader.classes;
 
 import org.junit.Before;
 import org.junit.Test;
-public class MovingAvgStrategyTest {
+public class SMAStrategyTest {
     
-    MovingAvgStrategy strategy;
+    SMAStrategy strategy;
 
     @Before
     public void setup() {

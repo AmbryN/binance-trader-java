@@ -6,12 +6,13 @@
 
 It allows:
 * To select a crypto pair to trade from the available pairs
-* To select a trading strategy from the available list (for now only "Moving Average")
+* To select a trading strategy from the available list
 * Set the strategy's variable (e.g. observation period, number of periods) used to execute said strategy
 * To send actual buy and sell orders on Binance (currently being tested on Binance's Testnet)
 
 Planned features:
-* Add strategies (e.g. Exponential MovingAvg etc.)
+* Allow to trade with a fraction of your quote balance in order to be able
+to use the same quote for multiple bots trading different base cryptos
 * Log transactions to File and/or Database
 * Add Web UI for crypto and strategy selection
 
@@ -24,6 +25,10 @@ to finish
 - BTCBUSD
 - ETHUSDT
 - ETHBUSD
+
+## Available strategies
+- Simple Moving Average (SMA)
+- Exponential Moving Average (EMA)
 
 ## Usage
 

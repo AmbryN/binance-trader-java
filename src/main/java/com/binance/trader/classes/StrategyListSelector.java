@@ -6,7 +6,8 @@ public class StrategyListSelector extends ListSelector<Strategy> {
 
     public StrategyListSelector() {
         this.list = new Strategy[]{
-                new MovingAvgStrategy()
+                new SMAStrategy(),
+                new EMAStrategy(),
         };
     }
 
