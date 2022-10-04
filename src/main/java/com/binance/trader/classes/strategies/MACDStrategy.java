@@ -16,6 +16,7 @@ import com.binance.trader.services.TickerService;
 import com.binance.trader.utils.Calculus;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MACDStrategy implements Strategy {
     protected SpotClientImpl client;
@@ -110,19 +111,19 @@ public class MACDStrategy implements Strategy {
 
         // Compute the short EMA (generally 12) and the long EMA (generally 26) used for the MACD line
         ArrayList<Double> shortEMAS = Calculus.expMovingAvgWithSize(prices.subList(0, recordsToFetch), this.shortNbOfPeriods);
-        ArrayList<Double> longEMAs = Calculus.expMovingAvg(prices.subList(0, recordsToFetch));
+        ArrayList<Double> longEMAs = Calculus.expMovingAvgWithSize(prices.subList(0, recordsToFetch), 26);
 
         // Compute the MACD Line which is the subtraction of the longEMA from the shortEMA
         ArrayList<Double> subtractions = new ArrayList<>();
         int recordsNeededForSignal = this.signalNbOfPeriods * 2 - 1;
         int lastIndexShortEMA = shortEMAS.size() - 1;
         int lastIndexLongEMA = longEMAs.size() - 1;
-        for (int i=0; i < this.signalNbOfPeriods * 2 - 1; i++) {
+        for (int i=1; i <= recordsNeededForSignal; i++) {
             subtractions.add(shortEMAS.get(lastIndexShortEMA - recordsNeededForSignal + i) - longEMAs.get(lastIndexLongEMA - recordsNeededForSignal + i));
         }
 
         // Compute the signal line which is the EMA9 of the MACD line (subtractions)
-        ArrayList<Double> signals = Calculus.expMovingAvg(subtractions);
+        ArrayList<Double> signals = Calculus.expMovingAvgWithSize(subtractions, signalNbOfPeriods);
 
         // Trading logic
         double signal = signals.get(signals.size() - 1);
