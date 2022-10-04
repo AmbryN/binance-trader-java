@@ -29,12 +29,13 @@ to finish
 ## Available strategies
 - Simple Moving Average (SMA)
 - Exponential Moving Average (EMA)
+- Moving Average Convergence Divergence (MACD)
 
 ## Usage
 
 ***!!! Caution : use this bot at your own risk and expenses !!!***
 > Be aware that Binance will take commissions on your trades in either 
-> the quote crypto your using or in BNBs if you've set up your account 
+> the base crypto your trading or in BNBs if you've set up your account 
 > to do so.
 0) Make sure you have JDK 17 or newer and maven installed
 1) Clone the git repository to your computer 
