@@ -1,15 +1,10 @@
-package com.binance.trader.classes;
+package com.binance.trader.classes.strategies;
 
 import java.util.ArrayList;
 
-import com.binance.connector.client.impl.SpotClientImpl;
-import com.binance.trader.enums.Period;
+import com.binance.trader.classes.Kline;
 import com.binance.trader.enums.Symbol;
-import com.binance.trader.intefaces.Strategy;
-import com.binance.trader.services.AccountInfoService;
 import com.binance.trader.services.KlineService;
-import com.binance.trader.services.OrderService;
-import com.binance.trader.services.TickerService;
 import com.binance.trader.utils.Calculus;
 
 public class SMAStrategy extends MovingAverage {
@@ -26,11 +21,11 @@ public class SMAStrategy extends MovingAverage {
 
         klines.forEach((kline) -> prices.add(kline.getClosePrice()));
         
-        return Calculus.calculateAvg(prices);
+        return Calculus.simpleMovingAvg(prices);
     }
 
     @Override
     public String toString() {
-        return "Standard Moving Avg";
+        return "Simple Moving Avg";
     }
 }

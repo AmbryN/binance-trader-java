@@ -1,6 +1,7 @@
-package com.binance.trader.classes;
+package com.binance.trader.classes.selectors;
 
 import ch.qos.logback.classic.Logger;
+import com.binance.trader.classes.inputs.IntegerInput;
 import com.binance.trader.classes.singleton.Logging;
 
 public class IntSelector {
@@ -11,11 +12,11 @@ public class IntSelector {
         this.input = new IntegerInput();
     }
 
-    public int startSelector() {
-        showSelector();
+    public int startSelector(String message) {
+        showSelector(message);
         return input.getUserInput();
     }
-    private void showSelector() {
-        System.out.println("Please enter the number of periods used for computation: ");
+    private void showSelector(String message) {
+        System.out.println("Please enter the number of periods used for computing " + message + ": ");
     };
 }

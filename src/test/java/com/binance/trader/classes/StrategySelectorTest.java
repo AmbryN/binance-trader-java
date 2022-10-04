@@ -1,6 +1,7 @@
 package com.binance.trader.classes;
 
-import com.binance.trader.enums.Symbol;
+import com.binance.trader.classes.inputs.IntegerInput;
+import com.binance.trader.classes.selectors.StrategyListSelector;
 import com.binance.trader.intefaces.Strategy;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,8 +16,10 @@ import static org.mockito.Mockito.when;
 
 public class StrategySelectorTest {
 
-    @Mock IntegerInput inputMock;
-    @InjectMocks StrategyListSelector selector;
+    @Mock
+    IntegerInput inputMock;
+    @InjectMocks
+    StrategyListSelector selector;
 
     @Before
     public void setup() {

@@ -1,9 +1,9 @@
-package com.binance.trader.classes;
+package com.binance.trader.classes.strategies;
 
 import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.trader.classes.AccountInfo;
-import com.binance.trader.classes.IntSelector;
-import com.binance.trader.classes.PeriodListSelector;
+import com.binance.trader.classes.selectors.IntSelector;
+import com.binance.trader.classes.selectors.PeriodListSelector;
 import com.binance.trader.enums.Period;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.intefaces.Strategy;
@@ -30,7 +30,7 @@ public abstract class MovingAverage implements Strategy {
         }
         while (this.nbOfPeriods < 0) {
             IntSelector selector = new IntSelector();
-            this.nbOfPeriods = selector.startSelector();
+            this.nbOfPeriods = selector.startSelector("Moving Average");
         }
     }
 
@@ -68,15 +68,13 @@ public abstract class MovingAverage implements Strategy {
         }
     }
 
-    public Period getPeriod() {
-        return this.period;
-    }
-
-    public int getNbOfPeriods() {
-        return this.nbOfPeriods;
-    }
-
     protected abstract double calculateMovingAvg(Symbol symbol);
 
     public abstract String toString();
+
+    @Override
+    public String describe() {
+        return "Time Period: " + this.period +
+                "\n Number of Periods: " + this.nbOfPeriods;
+    }
 }

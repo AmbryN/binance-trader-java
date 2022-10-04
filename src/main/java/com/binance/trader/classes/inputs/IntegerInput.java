@@ -1,4 +1,4 @@
-package com.binance.trader.classes;
+package com.binance.trader.classes.inputs;
 
 import ch.qos.logback.classic.Logger;
 import com.binance.trader.classes.singleton.Logging;

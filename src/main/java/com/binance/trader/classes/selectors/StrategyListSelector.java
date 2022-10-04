@@ -1,5 +1,8 @@
-package com.binance.trader.classes;
+package com.binance.trader.classes.selectors;
 
+import com.binance.trader.classes.strategies.EMAStrategy;
+import com.binance.trader.classes.strategies.MACDStrategy;
+import com.binance.trader.classes.strategies.SMAStrategy;
 import com.binance.trader.intefaces.Strategy;
 
 public class StrategyListSelector extends ListSelector<Strategy> {
@@ -8,6 +11,7 @@ public class StrategyListSelector extends ListSelector<Strategy> {
         this.list = new Strategy[]{
                 new SMAStrategy(),
                 new EMAStrategy(),
+                new MACDStrategy(),
         };
     }
 

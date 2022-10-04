@@ -4,7 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Calculus {
-    public static double calculateAvg(List<Double> values) {
+    /**
+     * This method takes a list of values and computes
+     * @param values the list of values to compute the SMA from
+     * @return the SMA
+     */
+    public static double simpleMovingAvg(List<Double> values) {
         if (values.size() == 0) {
             return 0.;
         }
@@ -15,38 +20,76 @@ public class Calculus {
         return sum / values.size();
     }
 
-    public static double calculateExpAvg(List<Double> values) {
+    /**
+     * This method takes a list of values and computes the last {emaSize}
+     * values of the EMA.
+     * {emaSize} is the number of periods used to compute the EMA
+     * @param values the list of values to compute the EMA from
+     * @return EMAList the list of the last {emaSize} values
+     */
+    public static ArrayList<Double> expMovingAvg(List<Double> values) {
         if (values.size() == 0) {
-            return 0.;
+            return new ArrayList<Double>();
         }
+        // Find the middle of the list and ceil it which gives the size (nb of periods) of the EMA
         double middle = (double) values.size() / 2.;
-        int emaSize = (int) Math.floor(middle);
+        int emaSize = (int) Math.ceil(middle);
 
+        // Smoothing factor K
         double smoothing = 2 / ( (double) emaSize + 1);
 
-        double firstSMA;
-        if (middle == emaSize) {
-            firstSMA = calculateAvg(values.subList(0, emaSize));
-            return calculateEMA(
-                    values.subList(emaSize, values.size()),
-                    smoothing,
-                    firstSMA);
-        } else {
-            firstSMA = calculateAvg(values.subList(1, emaSize+1));
-            return calculateEMA(
-                    values.subList(emaSize+1, values.size()),
-                    smoothing,
-                    firstSMA);
+        // First EMA is always the SMA of the {emaSize} first values
+        double firstSMA = simpleMovingAvg(values.subList(0, emaSize));
+        ArrayList<Double> EMAList = new ArrayList<>();
+        EMAList.add(firstSMA);
+
+        // Sublist of the values which were not used for the SMA and need to be used for following EMAs
+        List<Double> filteredValues = values.subList(emaSize, values.size());
+
+        // Compute the following EMA from the starting SMA
+        double lastEMA = firstSMA;
+        for (int i=0; i < filteredValues.size(); i++) {
+            EMAList.add(smoothing * (filteredValues.get(i) - lastEMA) + lastEMA);
+            lastEMA = EMAList.get(EMAList.size() -1);
         }
+        return EMAList;
     }
 
-    private static double calculateEMA(List<Double> values, double smoothing, double firstSMA) {
-        ArrayList<Double> EMAList = new ArrayList<>();
-        double lastEMA = firstSMA;
-        for (int i=0; i < values.size(); i++) {
-            EMAList.add(smoothing * (values.get(i) - lastEMA) + lastEMA);
-            lastEMA = EMAList.get(EMAList.size() - 1);
+    /**
+     * This method takes a list of values and returns the last EMA.
+     * @param values the list of values to compute the EMA from
+     * @return last EMA
+     */
+    public static Double lastExpMovingAvg(List<Double> values) {
+        List<Double> expMovingAverages = expMovingAvg(values);
+        if (expMovingAverages.size() == 0) {
+            return 0.0;
         }
-        return EMAList.get(EMAList.size() - 1);
+        return expMovingAverages.get(expMovingAverages.size() - 1);
+    }
+
+    public static ArrayList<Double> expMovingAvgWithSize(List<Double> values, int emaSize) {
+        if (values.size() == 0) {
+            return new ArrayList<Double>();
+        }
+
+        // Smoothing factor K
+        double smoothing = 2 / ( (double) emaSize + 1);
+
+        // First EMA is always the SMA of the {emaSize} first values
+        double firstSMA = simpleMovingAvg(values.subList(0, emaSize));
+        ArrayList<Double> EMAList = new ArrayList<>();
+        EMAList.add(firstSMA);
+
+        // Sublist of the values which were not used for the SMA and need to be used for following EMAs
+        List<Double> filteredValues = values.subList(emaSize, values.size());
+
+        // Compute the following EMA from the starting SMA
+        double lastEMA = firstSMA;
+        for (int i=0; i < filteredValues.size(); i++) {
+            EMAList.add(smoothing * (filteredValues.get(i) - lastEMA) + lastEMA);
+            lastEMA = EMAList.get(EMAList.size() -1);
+        }
+        return EMAList;
     }
 }

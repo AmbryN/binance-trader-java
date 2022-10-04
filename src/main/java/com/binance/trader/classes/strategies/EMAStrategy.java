@@ -1,5 +1,6 @@
-package com.binance.trader.classes;
+package com.binance.trader.classes.strategies;
 
+import com.binance.trader.classes.Kline;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.services.KlineService;
 import com.binance.trader.utils.Calculus;
@@ -16,16 +17,17 @@ public class EMAStrategy extends MovingAverage {
     protected double calculateMovingAvg(Symbol symbol) {
         KlineService klineService = new KlineService(this.client);
 
-        ArrayList<Kline> klines = klineService.fetchKlines(symbol, this.period.asString(), this.nbOfPeriods * 2);
+        ArrayList<Kline> klines = klineService.fetchKlines(symbol, this.period.asString(), this.nbOfPeriods * 2 - 1);
         ArrayList<Double> prices = new ArrayList<>();
 
         klines.forEach((kline) -> prices.add(kline.getClosePrice()));
         
-        return Calculus.calculateExpAvg(prices);
+        ArrayList<Double> EMAsList = Calculus.expMovingAvg(prices);
+        return EMAsList.get(EMAsList.size() -1);
     }
 
     @Override
     public String toString() {
-        return "Exponential Moving Avg";
+        return "Exp Moving Avg";
     }
 }

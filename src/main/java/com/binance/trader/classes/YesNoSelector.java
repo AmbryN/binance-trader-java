@@ -1,6 +1,7 @@
 package com.binance.trader.classes;
 
 import ch.qos.logback.classic.Logger;
+import com.binance.trader.classes.inputs.StringInput;
 import com.binance.trader.classes.singleton.Logging;
 
 public class YesNoSelector {

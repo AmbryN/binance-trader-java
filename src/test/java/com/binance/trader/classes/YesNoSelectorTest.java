@@ -1,5 +1,6 @@
 package com.binance.trader.classes;
 
+import com.binance.trader.classes.inputs.StringInput;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -11,7 +12,8 @@ import static org.mockito.Mockito.when;
 
 public class YesNoSelectorTest {
 
-    @Mock StringInput inputMock;
+    @Mock
+    StringInput inputMock;
 
     @InjectMocks YesNoSelector selector;
 

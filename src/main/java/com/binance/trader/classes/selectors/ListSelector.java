@@ -1,6 +1,7 @@
-package com.binance.trader.classes;
+package com.binance.trader.classes.selectors;
 
 import ch.qos.logback.classic.Logger;
+import com.binance.trader.classes.inputs.IntegerInput;
 import com.binance.trader.classes.singleton.Logging;
 
 abstract class ListSelector<T> {

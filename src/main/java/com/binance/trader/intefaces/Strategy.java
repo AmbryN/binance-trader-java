@@ -6,7 +6,10 @@ import com.binance.trader.enums.Symbol;
 
 public interface Strategy {
     void init(SpotClientImpl client);
+
     void execute(Symbol symbol);
-    Period getPeriod();
-    int getNbOfPeriods();
+
+    String describe();
+
+    String toString();
 }

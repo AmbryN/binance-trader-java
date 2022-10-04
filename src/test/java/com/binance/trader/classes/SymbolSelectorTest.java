@@ -1,5 +1,7 @@
 package com.binance.trader.classes;
 
+import com.binance.trader.classes.inputs.IntegerInput;
+import com.binance.trader.classes.selectors.SymbolListSelector;
 import com.binance.trader.enums.Symbol;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -15,8 +17,10 @@ import static org.mockito.Mockito.when;
 
 public class SymbolSelectorTest {
 
-    @Mock IntegerInput inputMock;
-    @InjectMocks SymbolListSelector selector;
+    @Mock
+    IntegerInput inputMock;
+    @InjectMocks
+    SymbolListSelector selector;
 
     @Before
     public void setup() {

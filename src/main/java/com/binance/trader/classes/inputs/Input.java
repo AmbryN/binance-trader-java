@@ -1,4 +1,4 @@
-package com.binance.trader.classes;
+package com.binance.trader.classes.inputs;
 
 import java.util.Scanner;
 

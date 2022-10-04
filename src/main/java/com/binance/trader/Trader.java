@@ -1,8 +1,8 @@
 package com.binance.trader;
 
 import com.binance.connector.client.impl.SpotClientImpl;
-import com.binance.trader.classes.StrategyListSelector;
-import com.binance.trader.classes.SymbolListSelector;
+import com.binance.trader.classes.selectors.StrategyListSelector;
+import com.binance.trader.classes.selectors.SymbolListSelector;
 import com.binance.trader.classes.YesNoSelector;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.intefaces.Strategy;
@@ -44,8 +44,7 @@ public class Trader {
             start = -1;
             while (start == -1) {
                 System.out.println("=== SUMMARY === \nYou want to trade: \nSymbol: " + symbol +
-                        "\nStrategy: " + strategy + "\nTime period: " + strategy.getPeriod() +
-                        "(" + strategy.getPeriod().asString() + ")\nNumber of periods: " + strategy.getNbOfPeriods());
+                        "\nStrategy: " + strategy + "\n" + strategy.describe());
                 start = shouldStart();
             }
         }
