@@ -21,13 +21,9 @@ public class AccountInfoTest {
 
     @Test
     public void shouldReturnEmptyBalanceIfInexistant() {
-        Balance selectedBalance = new Balance("BTC", 1.0, 0.0);
+        AccountInfo accountInfo = new AccountInfo(new Balance[] {});
 
-        Balance[] balances = new Balance[] {selectedBalance};
-
-        AccountInfo accountInfo = new AccountInfo(balances);
-
-        Balance balance = accountInfo.getBalance("HAHA");
-        assertTrue(balance.equals(new Balance("HAHA", 0.0, 0.0)));
+        Balance balance = accountInfo.getBalance("TEST");
+        assertTrue(balance.equals(new Balance("TEST", 0.0, 0.0)));
     }
 }

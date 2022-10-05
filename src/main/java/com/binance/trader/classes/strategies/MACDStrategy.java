@@ -110,8 +110,8 @@ public class MACDStrategy implements Strategy {
         klines.forEach((kline) -> prices.add(kline.getClosePrice()));
 
         // Compute the short EMA (generally 12) and the long EMA (generally 26) used for the MACD line
-        ArrayList<Double> shortEMAS = Calculus.expMovingAvgWithSize(prices.subList(0, recordsToFetch), this.shortNbOfPeriods);
-        ArrayList<Double> longEMAs = Calculus.expMovingAvgWithSize(prices.subList(0, recordsToFetch), 26);
+        ArrayList<Double> shortEMAS = Calculus.expMovingAvgWithSize(prices, this.shortNbOfPeriods);
+        ArrayList<Double> longEMAs = Calculus.expMovingAvgWithSize(prices, 26);
 
         // Compute the MACD Line which is the subtraction of the longEMA from the shortEMA
         ArrayList<Double> subtractions = new ArrayList<>();
