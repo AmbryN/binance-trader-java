@@ -15,7 +15,6 @@ import com.binance.trader.services.KlineService;
 import com.binance.trader.services.OrderService;
 import com.binance.trader.services.TickerService;
 import com.binance.trader.utils.Calculus;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,7 +84,7 @@ public class MACDStrategy implements Strategy {
         }
     }
 
-    private HashMap<String, Double> getBalances(Symbol symbol) {
+    protected HashMap<String, Double> getBalances(Symbol symbol) {
         AccountInfoService accountInfoService = new AccountInfoService(client);
         AccountInfo accountInfo = accountInfoService.getAccountInfo();
         double baseBalance = accountInfo.getBalance(symbol.getBase()).getFreeBalance();
@@ -97,12 +96,12 @@ public class MACDStrategy implements Strategy {
         return balances;
     }
 
-    private double getTickerPrice(Symbol symbol) {
+    protected double getTickerPrice(Symbol symbol) {
         TickerService tickerService = new TickerService(client);
         return tickerService.getTicker(symbol).getPrice();
     }
 
-    private HashMap<String, ArrayList<Double>> getLines(Symbol symbol) {
+    protected HashMap<String, ArrayList<Double>> getLines(Symbol symbol) {
         // To compute the {size} EMA, you always need {size * 2 - 1} records
         int recordsToFetch = this.longNbOfPeriods + this.signalNbOfPeriods * 2 - 1;
         ArrayList<Double> prices = this.getClosePrices(symbol, recordsToFetch);
@@ -123,7 +122,7 @@ public class MACDStrategy implements Strategy {
         return lines;
     }
 
-    private CrossingDirection computeCrossingDirection(double newSignal, double newMACD, double lastSignal, double lastMACD) {
+    protected CrossingDirection computeCrossingDirection(double newSignal, double newMACD, double lastSignal, double lastMACD) {
         if (newMACD >= newSignal && lastMACD < lastSignal) {
             return CrossingDirection.UP;
         } else if (newMACD <= newSignal && lastMACD > lastSignal) {
@@ -133,7 +132,7 @@ public class MACDStrategy implements Strategy {
         }
     }
 
-    private ArrayList<Double> getMACDLine(ArrayList<Double> shortEMAs, ArrayList<Double> longEMAs) {
+    protected ArrayList<Double> getMACDLine(ArrayList<Double> shortEMAs, ArrayList<Double> longEMAs) {
         ArrayList<Double> MACDLine = new ArrayList<>();
         int recordsNeededForSignal = this.signalNbOfPeriods * 2 - 1;
         int lastIndexShortEMA = shortEMAs.size() - 1;
@@ -144,7 +143,7 @@ public class MACDStrategy implements Strategy {
         return MACDLine;
     }
 
-    private ArrayList<Double> getClosePrices(Symbol symbol, int recordsToFetch) {
+    protected ArrayList<Double> getClosePrices(Symbol symbol, int recordsToFetch) {
         // Fetch the last {recordsToFetch} klines
         KlineService klineService = new KlineService(this.client);
         ArrayList<Kline> klines = klineService.fetchKlines(symbol, this.period.asString(), recordsToFetch);
@@ -155,7 +154,7 @@ public class MACDStrategy implements Strategy {
         return prices;
     }
 
-    private void generateOrder(Symbol symbol, OrderSide side, HashMap<String, Double> balances, double tickerPrice) {
+    protected void generateOrder(Symbol symbol, OrderSide side, HashMap<String, Double> balances, double tickerPrice) {
         OrderService orderService = new OrderService(this.client);
         if (side == OrderSide.BUY) orderService.buy(symbol, tickerPrice, balances.get("quote"));
         else orderService.sell(symbol, tickerPrice, balances.get("base"));

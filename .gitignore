@@ -3,3 +3,4 @@
 logs
 target
 orderLog.txt
+.attach_pid*
