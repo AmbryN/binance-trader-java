@@ -1,5 +1,7 @@
 package com.binance.trader.classes;
 
+import com.binance.trader.enums.Crypto;
+
 public class AccountInfo {
     private int makerCommission;
     private int takerCommission;
@@ -66,12 +68,13 @@ public class AccountInfo {
         return permissions;
     }
 
-    public Balance getBalance(String symbol) {
+    public Balance getBalance(Crypto crypto) {
         for (Balance balance : balances) {
-            if (balance.getAsset().equals(symbol)) {
+            Crypto asset = balance.getAsset();
+            if (asset != null && balance.getAsset().equals(crypto)) {
                 return balance;
             }
         }
-        return new Balance(symbol, 0.0, 0.0);
+        return new Balance(crypto, 0.0, 0.0);
     }
 }

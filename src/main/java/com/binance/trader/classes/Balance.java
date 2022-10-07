@@ -1,11 +1,13 @@
 package com.binance.trader.classes;
 
+import com.binance.trader.enums.Crypto;
+
 public class Balance {
-    private final String asset;
+    private final Crypto asset;
     private final double free;
     private final double locked;
 
-    public Balance(String asset, double free, double locked) {
+    public Balance(Crypto asset, double free, double locked) {
         this.asset = asset;
         this.free = free;
         this.locked = locked;
@@ -15,7 +17,7 @@ public class Balance {
         return this.free;
     }
 
-    public String getAsset() {
+    public Crypto getAsset() {
         return this.asset;
     }
 

@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 
+import com.binance.trader.enums.Crypto;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -54,7 +55,7 @@ public class AccountInfoServiceTest {
                 \"locked\": \"0.00000000\"
               },
               {
-                \"asset\": \"LTC\",
+                \"asset\": \"BUSD\",
                 \"free\": \"4763368.68006011\",
                 \"locked\": \"0.00000000\"
               }
@@ -80,8 +81,8 @@ public class AccountInfoServiceTest {
             assertTrue(accountInfo.getUpdateTime().equals(123456789L));
             assertTrue("SPOT".equals(accountInfo.getAccountType()));
             assertTrue(Arrays.deepEquals(new Balance[]{
-                new Balance("BTC", 4723846.89208129, 0.00000000), 
-                new Balance("LTC", 4763368.68006011, 0.00000000)
+                new Balance(Crypto.BTC, 4723846.89208129, 0.00000000),
+                new Balance(Crypto.BUSD, 4763368.68006011, 0.00000000)
             }, (accountInfo.getBalances())));
             assertTrue(Arrays.deepEquals(new String[]{"SPOT"}, accountInfo.getPermissions()));      
     }

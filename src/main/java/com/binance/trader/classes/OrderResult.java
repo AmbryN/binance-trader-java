@@ -6,7 +6,6 @@ import com.binance.trader.enums.Symbol;
 import com.binance.trader.enums.TimeInForce;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 public class OrderResult {
@@ -16,7 +15,7 @@ public class OrderResult {
         private String clientOrderId;
         private Long transactTime;
         private double price;
-        private double originQty;
+        private double origQty;
         private double executedQty;
         private double cummulativeQuoteQty;
         private String status;
@@ -36,8 +35,8 @@ public class OrderResult {
                 return price;
         }
 
-        public double getOriginQty() {
-                return originQty;
+        public double getOrigQty() {
+                return origQty;
         }
 
         public double getExecutedQty() {
@@ -66,7 +65,7 @@ public class OrderResult {
                         "symbol=" + symbol +
                         ", transactTime=" + Date.from(Instant.ofEpochMilli(transactTime)) +
                         ", price=" + price +
-                        ", originQty=" + originQty +
+                        ", origQty=" + origQty +
                         ", executedQty=" + executedQty +
                         ", status='" + status + '\'' +
                         ", timeInForce=" + timeInForce +
@@ -81,7 +80,7 @@ public class OrderResult {
                         ", side=" + side +
                         ", type=" + type +
                         ", price=" + price +
-                        ", originQty=" + originQty +
+                        ", orignQty=" + origQty +
                         ", executedQty=" + executedQty +
                         ", status='" + status + '\'' +
                         ", timeInForce=" + timeInForce;

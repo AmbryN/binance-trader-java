@@ -2,6 +2,7 @@ package com.binance.trader.classes;
 
 import static org.junit.Assert.assertEquals;
 
+import com.binance.trader.enums.Crypto;
 import org.junit.Test;
 
 
@@ -9,14 +10,14 @@ public class BalanceTest {
     
     @Test
     public void shouldReturnBalance() {
-        Balance balance = new Balance("BTC", 1.0, 0.0);
+        Balance balance = new Balance(Crypto.BTC, 1.0, 0.0);
         double BTCBalance = balance.getFreeBalance();
         assertEquals(1.0, BTCBalance, 0);
     }
 
     @Test
-    public void shouldReturnZeroIfConstrucredWithInvalidParams() {
-        Balance balance = new Balance("BTC", -1.0, 0.0);
+    public void shouldReturnZeroIfConstructedWithInvalidParams() {
+        Balance balance = new Balance(Crypto.BTC, -1.0, 0.0);
         double BTCBalance = balance.getFreeBalance();
         assertEquals(-1.0, BTCBalance, 0);
     }

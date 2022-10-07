@@ -1,12 +1,15 @@
 package com.binance.trader.enums;
 
 public enum Symbol {
-    BTCUSDT("BTCUSDT", 0.00001, 10, 100000, 100),
-    BTCBUSD("BTCBUSD", 0.00001, 10, 100000, 100),
-    ETHUSDT("ETHUSDT", 0.0001, 10, 10000, 100),
-    ETHBUSD("ETHBUSD", 0.0001, 10, 10000, 100);
+    BTCUSDT(Crypto.BTC, Crypto.USDT, 0.00001, 10, 100000, 100),
+    BTCBUSD(Crypto.BTC, Crypto.BUSD, 0.00001, 10, 100000, 100),
+    ETHUSDT(Crypto.ETH, Crypto.USDT, 0.0001, 10, 10000, 100),
+    ETHBUSD(Crypto.ETH, Crypto.BUSD, 0.0001, 10, 10000, 100),
+    LUNAUSDT(Crypto.LUNA, Crypto.USDT,0.01 , 10, 100, 100000),
+    LUNABUSD(Crypto.LUNA, Crypto.BUSD, 0.01 , 10, 100, 100000);
 
-    private final String pair;
+    private final Crypto base;
+    private final Crypto quote;
 
     /**
      * Defines the minimum amount for a trade using this base crypto
@@ -27,24 +30,25 @@ public enum Symbol {
      */
     public final int MIN_QUOTE_MOVEMENT;
 
-    Symbol(String pair, double minBaseTransaction, double minQuoteTransaction, int minBaseMovement, int minQuoteMovement) {
-        this.pair = pair;
+    Symbol(Crypto base, Crypto quote, double minBaseTransaction, double minQuoteTransaction, int minBaseMovement, int minQuoteMovement) {
+        this.base = base;
+        this.quote = quote;
         this.MIN_BASE_TRANSACTION = minBaseTransaction;
         this.MIN_QUOTE_TRANSACTION = minQuoteTransaction;
         this.MIN_BASE_MOVEMENT = minBaseMovement;
         this.MIN_QUOTE_MOVEMENT = minQuoteMovement;
     }
 
-    public String getBase() {
-        return this.pair.substring(0, 3);
+    public Crypto getBase() {
+        return this.base;
     }
 
-    public String getQuote() {
-        return this.pair.substring(3);
+    public Crypto getQuote() {
+        return this.quote;
     }
 
     public String getPair() {
-        return this.pair;
+        return this.base.toString() + this.quote.toString();
     }
 
     public static Symbol toSymbol(String pair) {
