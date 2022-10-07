@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class OrderResult {
         private Symbol symbol;
-        private int orderId;
+        private Long orderId;
         private int orderListId;
         private String clientOrderId;
         private Long transactTime;
