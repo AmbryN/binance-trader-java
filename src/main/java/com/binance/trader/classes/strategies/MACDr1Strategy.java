@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public class MACDr1Strategy extends MACDStrategy implements Strategy {
 
-    private int minSpread = -1;
+    private int minSpread = 0;
 
     @Override
     public void init(SpotClientImpl client) {

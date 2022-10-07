@@ -16,7 +16,7 @@ import com.binance.connector.client.exceptions.BinanceClientException;
 import com.binance.connector.client.exceptions.BinanceConnectorException;
 import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.connector.client.impl.spot.Market;
-import com.binance.trader.classes.Ticker;
+import com.binance.trader.classes.data.Ticker;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.exceptions.BinanceTraderException;
 
@@ -38,7 +38,7 @@ public class TickerServiceTest {
         when(clientMock.createMarket()).thenReturn(marketMock);
         when(marketMock.tickerSymbol(any(LinkedHashMap.class))).thenReturn(answer);
 
-        Ticker expectedTicker = new Ticker("BTCUSDT", 4.00000200);
+        Ticker expectedTicker = new Ticker(Symbol.BTCUSDT, 4.00000200);
         assertTrue(expectedTicker.equals(tickerService.getTicker(Symbol.BTCUSDT)));
     }
 

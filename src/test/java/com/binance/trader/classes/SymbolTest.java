@@ -5,6 +5,7 @@ import com.binance.trader.enums.Symbol;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class SymbolTest {
 
@@ -18,5 +19,15 @@ public class SymbolTest {
     public void shouldReturnCorrectQuote() {
         assertEquals(Crypto.USDT, Symbol.BTCUSDT.getQuote());
         assertEquals(Crypto.BUSD, Symbol.ETHBUSD.getQuote());
+    }
+
+    @Test
+    public void shouldReturnSymbolFromString() {
+        assertEquals(Symbol.BTCUSDT, Symbol.toSymbol("BTCUSDT"));
+    }
+
+    @Test
+    public void shouldReturnNullIfNotFound() {
+        assertNull(Symbol.toSymbol("TEST"));
     }
 }

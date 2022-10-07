@@ -1,6 +1,6 @@
 package com.binance.trader.intefaces;
 
-import com.binance.trader.classes.Order;
+import com.binance.trader.classes.data.Order;
 import com.binance.trader.enums.OrderSide;
 import com.binance.trader.enums.OrderType;
 import com.binance.trader.enums.Symbol;

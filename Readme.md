@@ -17,10 +17,6 @@ to use the same quote for multiple bots trading different base cryptos
 * Log transactions to Database
 * Add UI (Window or Web) for crypto and strategy selection
 
-Bugs to fix:
-* The bot will sometimes try to send two orders on after each other before the first one has had time 
-to finish
-
 ## Available pairs (new ones will be added shortly)
 - BTCUSDT
 - BTCBUSD

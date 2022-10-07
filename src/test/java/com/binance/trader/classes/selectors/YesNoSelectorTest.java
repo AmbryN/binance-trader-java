@@ -1,6 +1,5 @@
 package com.binance.trader.classes.selectors;
 
-import com.binance.trader.classes.YesNoSelector;
 import com.binance.trader.classes.inputs.StringInput;
 import org.junit.Before;
 import org.junit.Test;

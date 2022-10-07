@@ -3,7 +3,7 @@ package com.binance.trader;
 import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.trader.classes.selectors.StrategyListSelector;
 import com.binance.trader.classes.selectors.SymbolListSelector;
-import com.binance.trader.classes.YesNoSelector;
+import com.binance.trader.classes.selectors.YesNoSelector;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.intefaces.Strategy;
 

@@ -1,8 +1,8 @@
 package com.binance.trader.classes.strategies;
 
 import com.binance.connector.client.impl.SpotClientImpl;
-import com.binance.trader.classes.AccountInfo;
-import com.binance.trader.classes.Kline;
+import com.binance.trader.classes.data.AccountInfo;
+import com.binance.trader.classes.data.Kline;
 import com.binance.trader.classes.selectors.IntSelector;
 import com.binance.trader.classes.selectors.PeriodListSelector;
 import com.binance.trader.enums.CrossingDirection;

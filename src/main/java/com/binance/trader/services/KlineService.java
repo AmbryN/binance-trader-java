@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 
 import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.connector.client.impl.spot.Market;
-import com.binance.trader.classes.Kline;
+import com.binance.trader.classes.data.Kline;
 import com.binance.trader.enums.Symbol;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;

@@ -1,9 +1,10 @@
-package com.binance.trader.classes;
+package com.binance.trader.classes.data;
 
 import static org.junit.Assert.assertTrue;
 
 import java.util.LinkedHashMap;
 
+import com.binance.trader.classes.data.Order;
 import org.junit.Before;
 import org.junit.Test;
 

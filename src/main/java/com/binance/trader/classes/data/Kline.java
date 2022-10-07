@@ -1,4 +1,4 @@
-package com.binance.trader.classes;
+package com.binance.trader.classes.data;
 
 import java.util.Date;
 
@@ -40,6 +40,10 @@ public class Kline {
             this.takerBuyQuoteVolume = takerBuyQuoteVolume;
     }
 
+    protected Kline() {}
+    protected Kline(double closePrice) {
+        this.closePrice = closePrice;
+    }
     public double getClosePrice() {
         return this.closePrice;
     }

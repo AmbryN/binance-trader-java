@@ -2,7 +2,7 @@ package com.binance.trader.classes.strategies;
 
 import java.util.ArrayList;
 
-import com.binance.trader.classes.Kline;
+import com.binance.trader.classes.data.Kline;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.services.KlineService;
 import com.binance.trader.utils.Calculus;

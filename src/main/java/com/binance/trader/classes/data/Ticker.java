@@ -1,10 +1,12 @@
-package com.binance.trader.classes;
+package com.binance.trader.classes.data;
+
+import com.binance.trader.enums.Symbol;
 
 public class Ticker {
-    private String symbol; 
+    private Symbol symbol;
     private double price;
 
-    public Ticker(String symbol, double price) {
+    public Ticker(Symbol symbol, double price) {
         this.symbol = symbol;
         this.price = price;
     }
@@ -13,7 +15,7 @@ public class Ticker {
         return this.price;
     }
 
-    public String getSymbol() {
+    public Symbol getSymbol() {
         return this.symbol;
     }
 

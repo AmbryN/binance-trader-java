@@ -8,7 +8,7 @@ import com.binance.trader.classes.singleton.Logging;
 import com.binance.connector.client.exceptions.BinanceClientException;
 import com.binance.connector.client.exceptions.BinanceConnectorException;
 import com.binance.connector.client.impl.SpotClientImpl;
-import com.binance.trader.classes.Ticker;
+import com.binance.trader.classes.data.Ticker;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.exceptions.BinanceTraderException;
 import com.binance.trader.utils.Deserializer;

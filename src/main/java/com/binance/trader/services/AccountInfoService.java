@@ -9,7 +9,7 @@ import com.binance.trader.classes.singleton.Logging;
 import com.binance.connector.client.exceptions.BinanceClientException;
 import com.binance.connector.client.exceptions.BinanceConnectorException;
 import com.binance.connector.client.impl.SpotClientImpl;
-import com.binance.trader.classes.AccountInfo;
+import com.binance.trader.classes.data.AccountInfo;
 import com.binance.trader.exceptions.BinanceTraderException;
 import com.binance.trader.utils.Deserializer;
 

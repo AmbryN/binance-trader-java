@@ -8,7 +8,7 @@ import org.mockito.MockitoAnnotations;
 
 import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.connector.client.impl.spot.Market;
-import com.binance.trader.classes.Kline;
+import com.binance.trader.classes.data.Kline;
 import com.binance.trader.enums.Symbol;
 
 import static org.junit.Assert.assertTrue;

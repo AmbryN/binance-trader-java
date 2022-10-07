@@ -1,5 +1,6 @@
 package com.binance.trader.classes;
 
+import com.binance.trader.classes.data.Order;
 import com.binance.trader.enums.*;
 import com.binance.trader.intefaces.OrderBuilder;
 
