@@ -5,16 +5,17 @@
 **WORK IN PROGRESS**
 
 It allows:
-* To select a crypto pair to trade from the available pairs
-* To select a trading strategy from the available list
-* Set the strategy's variable (e.g. observation period, number of periods) used to execute said strategy
-* To send actual buy and sell orders on Binance (currently being tested on Binance's Testnet)
+* to select a crypto pair to trade from the available pairs
+* to select a trading strategy from the available list
+* to set the strategy's variable (e.g. observation period, number of periods) used to execute said strategy
+* to send actual buy and sell orders on Binance (currently being tested on Binance's Testnet)
+* to log the trades into a file (orderLox.txt) in the project root directory
 
 Planned features:
 * Allow to trade with a fraction of your quote balance in order to be able
 to use the same quote for multiple bots trading different base cryptos
-* Log transactions to File and/or Database
-* Add Web UI for crypto and strategy selection
+* Log transactions to Database
+* Add UI (Window or Web) for crypto and strategy selection
 
 Bugs to fix:
 * The bot will sometimes try to send two orders on after each other before the first one has had time 
@@ -30,6 +31,8 @@ to finish
 - Simple Moving Average (SMA)
 - Exponential Moving Average (EMA)
 - Moving Average Convergence Divergence (MACD)
+- Moving Average Convergence Divergence - Refined 1 (MACDr1): this strategy is based on the MACD but 
+with a user definable spread variable between the MACD line and the signal line that triggers buy and sell
 
 ## Usage
 
@@ -37,7 +40,7 @@ to finish
 > Be aware that Binance will take commissions on your trades in either 
 > the base crypto your trading or in BNBs if you've set up your account 
 > to do so.
-0) Make sure you have JDK 17 or newer and maven installed
+0) Make sure you have JDK 17 (or newer) and maven installed
 1) Clone the git repository to your computer 
 2) `cd` to the directory
 3) Set following environment variables on your system:
