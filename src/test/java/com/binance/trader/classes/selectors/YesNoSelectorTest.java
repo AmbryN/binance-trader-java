@@ -1,5 +1,6 @@
-package com.binance.trader.classes;
+package com.binance.trader.classes.selectors;
 
+import com.binance.trader.classes.YesNoSelector;
 import com.binance.trader.classes.inputs.StringInput;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +16,8 @@ public class YesNoSelectorTest {
     @Mock
     StringInput inputMock;
 
-    @InjectMocks YesNoSelector selector;
+    @InjectMocks
+    YesNoSelector selector;
 
     @Before
     public void setup() {

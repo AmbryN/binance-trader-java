@@ -1,25 +1,26 @@
-package com.binance.trader.classes;
+package com.binance.trader.classes.selectors;
 
 import com.binance.trader.classes.inputs.IntegerInput;
-import com.binance.trader.classes.selectors.StrategyListSelector;
-import com.binance.trader.intefaces.Strategy;
+import com.binance.trader.classes.selectors.SymbolListSelector;
+import com.binance.trader.enums.Symbol;
+
+import static org.hamcrest.CoreMatchers.is;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
-public class StrategySelectorTest {
+public class SymbolSelectorTest {
 
     @Mock
     IntegerInput inputMock;
     @InjectMocks
-    StrategyListSelector selector;
+    SymbolListSelector selector;
 
     @Before
     public void setup() {
@@ -27,9 +28,9 @@ public class StrategySelectorTest {
     }
 
     @Test
-    public void shouldReturnValidStrategyWhenInputIsCorrect() {
-        when(inputMock.getUserInput()).thenReturn(0);
-        assertThat(selector.startSelector(), is(Strategy.class));
+    public void shouldReturnValidSymbolWhenInputIsCorrect() {
+        when(inputMock.getUserInput()).thenReturn(1);
+        assertThat(selector.startSelector(), is(Symbol.class));
     }
 
     @Test
