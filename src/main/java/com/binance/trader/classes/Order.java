@@ -2,10 +2,7 @@ package com.binance.trader.classes;
 
 import java.util.LinkedHashMap;
 
-import com.binance.trader.enums.OrderSide;
-import com.binance.trader.enums.OrderType;
-import com.binance.trader.enums.Symbol;
-import com.binance.trader.enums.TimeInForce;
+import com.binance.trader.enums.*;
 
 public class Order {
     private Symbol symbol; 	
@@ -15,6 +12,8 @@ public class Order {
     private Double price;
     private Double quantity;
     private Double quoteOrderQty;
+
+    private OrderResponseType newOrderRespType;
 
     public Order() {}
 
@@ -40,6 +39,9 @@ public class Order {
         }
         if (this.quoteOrderQty != null) {
             parameters.put("quoteOrderQty", this.quoteOrderQty.toString());
+        }
+        if (this.newOrderRespType != null) {
+            parameters.put("newOrderRespType", this.newOrderRespType.toString());
         }
 
         return parameters;
@@ -71,5 +73,9 @@ public class Order {
 
     public void setType(OrderType type) {
         this.type = type;
+    }
+
+    public void setNewOrderRespType(OrderResponseType newOrderRespType) {
+        this.newOrderRespType = newOrderRespType;
     }
 }

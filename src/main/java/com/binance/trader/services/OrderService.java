@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 
 import ch.qos.logback.classic.Logger;
+import com.binance.trader.enums.OrderResponseType;
+import com.binance.trader.classes.OrderResult;
 import com.binance.trader.classes.singleton.Logging;
 import com.binance.trader.classes.OrderBuilderImpl;
 import com.binance.trader.enums.OrderSide;
@@ -18,6 +20,7 @@ import com.binance.connector.client.exceptions.BinanceClientException;
 import com.binance.connector.client.exceptions.BinanceConnectorException;
 import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.trader.classes.Order;
+import com.binance.trader.utils.Deserializer;
 
 public class OrderService {
     private final SpotClientImpl client;
@@ -32,7 +35,8 @@ public class OrderService {
         try {
             String result = this.client.createTrade().newOrder(parameters);
             logger.info(result);
-            this.logToFile(result);
+            OrderResult resultObject = Deserializer.deserialize(result, OrderResult.class);
+            this.logToFile(resultObject.toLog());
         } catch (BinanceConnectorException e) {
             logger.error("fullErrMessage: {}", e.getMessage(), e);
         } catch (BinanceClientException e) {
@@ -52,6 +56,7 @@ public class OrderService {
         orderBuilder.setTimeInForce(TimeInForce.IOC);
         orderBuilder.setPrice(tickerPrice);
         orderBuilder.setQuantity(baseQuantity);
+        orderBuilder.setNewOrderRespType(OrderResponseType.RESULT);
         Order order = orderBuilder.getResult();
 
         this.sendOrder(order);
@@ -68,6 +73,7 @@ public class OrderService {
         orderBuilder.setTimeInForce(TimeInForce.IOC);
         orderBuilder.setPrice(tickerPrice);
         orderBuilder.setQuantity(baseQuantity);
+        orderBuilder.setNewOrderRespType(OrderResponseType.RESULT);
         Order order = orderBuilder.getResult();
 
         this.sendOrder(order);

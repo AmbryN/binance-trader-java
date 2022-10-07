@@ -1,9 +1,6 @@
 package com.binance.trader.classes;
 
-import com.binance.trader.enums.OrderSide;
-import com.binance.trader.enums.OrderType;
-import com.binance.trader.enums.Symbol;
-import com.binance.trader.enums.TimeInForce;
+import com.binance.trader.enums.*;
 import com.binance.trader.intefaces.OrderBuilder;
 
 public class OrderBuilderImpl implements OrderBuilder {
@@ -50,8 +47,12 @@ public class OrderBuilderImpl implements OrderBuilder {
         this.order.setType(type);
     }
 
+    public void setNewOrderRespType(OrderResponseType newOrderRespType) {
+        this.order.setNewOrderRespType(newOrderRespType);
+    }
+
     public Order getResult() {
         return this.order;
     }
-    
+
 }
