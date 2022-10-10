@@ -1,7 +1,6 @@
 package com.binance.trader.classes.selectors;
 
-import com.binance.trader.classes.inputs.IntegerInput;
-import com.binance.trader.classes.selectors.SymbolListSelector;
+import com.binance.trader.classes.inputs.NumberInput;
 import com.binance.trader.enums.Symbol;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -18,7 +17,7 @@ import static org.mockito.Mockito.when;
 public class SymbolSelectorTest {
 
     @Mock
-    IntegerInput inputMock;
+    NumberInput inputMock;
     @InjectMocks
     SymbolListSelector selector;
 
@@ -29,13 +28,13 @@ public class SymbolSelectorTest {
 
     @Test
     public void shouldReturnValidSymbolWhenInputIsCorrect() {
-        when(inputMock.getUserInput()).thenReturn(1);
+        when(inputMock.getUserInt()).thenReturn(1);
         assertThat(selector.startSelector(), is(Symbol.class));
     }
 
     @Test
     public void shoudReturnNullIfInvalidInput() {
-        when(inputMock.getUserInput()).thenReturn(-1);
+        when(inputMock.getUserInt()).thenReturn(-1);
         assertNull(selector.startSelector());
     }
 }

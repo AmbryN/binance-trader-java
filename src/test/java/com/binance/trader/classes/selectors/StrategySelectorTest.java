@@ -1,7 +1,6 @@
 package com.binance.trader.classes.selectors;
 
-import com.binance.trader.classes.inputs.IntegerInput;
-import com.binance.trader.classes.selectors.StrategyListSelector;
+import com.binance.trader.classes.inputs.NumberInput;
 import com.binance.trader.intefaces.Strategy;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +16,7 @@ import static org.mockito.Mockito.when;
 public class StrategySelectorTest {
 
     @Mock
-    IntegerInput inputMock;
+    NumberInput inputMock;
     @InjectMocks
     StrategyListSelector selector;
 
@@ -28,13 +27,13 @@ public class StrategySelectorTest {
 
     @Test
     public void shouldReturnValidStrategyWhenInputIsCorrect() {
-        when(inputMock.getUserInput()).thenReturn(0);
+        when(inputMock.getUserInt()).thenReturn(0);
         assertThat(selector.startSelector(), is(Strategy.class));
     }
 
     @Test
     public void shoudReturnNullIfInvalidInput() {
-        when(inputMock.getUserInput()).thenReturn(-1);
+        when(inputMock.getUserInt()).thenReturn(-1);
         assertNull(selector.startSelector());
     }
 }

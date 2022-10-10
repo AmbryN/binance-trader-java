@@ -1,6 +1,6 @@
 package com.binance.trader.classes.selectors;
 
-import com.binance.trader.classes.inputs.IntegerInput;
+import com.binance.trader.classes.inputs.NumberInput;
 import com.binance.trader.enums.Period;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 
 public class PeriodSelectorTest {
     @Mock
-    IntegerInput inputMock;
+    NumberInput inputMock;
     @InjectMocks
     PeriodListSelector selector;
 
@@ -26,13 +26,13 @@ public class PeriodSelectorTest {
 
     @Test
     public void shouldReturnValidStrategyWhenInputIsCorrect() {
-        when(inputMock.getUserInput()).thenReturn(0);
+        when(inputMock.getUserInt()).thenReturn(0);
         assertThat(selector.startSelector(), is(Period.class));
     }
 
     @Test
     public void shoudReturnNullIfInvalidInput() {
-        when(inputMock.getUserInput()).thenReturn(-1);
+        when(inputMock.getUserInt()).thenReturn(-1);
         assertNull(selector.startSelector());
     }
 }

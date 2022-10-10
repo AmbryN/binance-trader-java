@@ -18,7 +18,7 @@ public class MACDr1Strategy extends MACDStrategy implements Strategy {
         super.init(client);
         while (this.minSpread < 0) {
             DoubleSelector selector = new DoubleSelector();
-            this.minSpread = selector.startSelector("Min Spread before Buy occurs (as int: e.g. 5 for 0.05): ");
+            this.minSpread = selector.startSelector("Min Spread before Buy occurs (as double: e.g. 2.5 for 0.025): ");
         }
     }
     @Override

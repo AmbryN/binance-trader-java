@@ -1,21 +1,21 @@
 package com.binance.trader.classes.selectors;
 
 import ch.qos.logback.classic.Logger;
-import com.binance.trader.classes.inputs.IntegerInput;
+import com.binance.trader.classes.inputs.NumberInput;
 import com.binance.trader.classes.singleton.Logging;
 
 abstract class ListSelector<T> {
     protected T[] list;
-    private IntegerInput input;
+    private NumberInput input;
     private static final Logger logger = Logging.getInstance();
 
     public ListSelector() {
-        this.input = new IntegerInput();
+        this.input = new NumberInput();
     }
     public T startSelector() {
         showSelector();
         System.out.println("Selection: ");
-        int userInput = input.getUserInput();
+        int userInput = input.getUserInt();
         if (validateInput(userInput)) return list[userInput];
         return null;
     }

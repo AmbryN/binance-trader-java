@@ -10,10 +10,10 @@ import org.mockito.MockitoAnnotations;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-public class IntSelectorTest {
+public class DoubleSelectorTest {
     @Mock NumberInput input;
 
-    @InjectMocks IntSelector selector;
+    @InjectMocks DoubleSelector selector;
 
     @Before
     public void setup() {
@@ -22,13 +22,13 @@ public class IntSelectorTest {
 
     @Test
     public void shouldReturnAnIntegerIfValid() {
-        when(input.getUserInt()).thenReturn(2);
-        assertEquals(2, selector.startSelector("test"));
+        when(input.getUserDouble()).thenReturn(2.0);
+        assertEquals(2.0, selector.startSelector("test"), 0.1);
     }
 
     @Test
     public void shouldReturnMinusOneIfInvalid() {
-        when(input.getUserInt()).thenReturn(-1);
-        assertEquals(-1, selector.startSelector("test"));
+        when(input.getUserDouble()).thenReturn(-1.);
+        assertEquals(-1., selector.startSelector("test"), 0);
     }
 }
