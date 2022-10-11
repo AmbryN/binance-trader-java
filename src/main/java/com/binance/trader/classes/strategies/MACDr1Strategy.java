@@ -55,7 +55,7 @@ public class MACDr1Strategy extends MACDStrategy implements Strategy {
         return newMACD > newSignal && (Math.abs(newMACD - newSignal) / ticker) * 100 > minSpread / 100.;
     }
     protected boolean isDownCross(double newSignal, double newMACD, double ticker) {
-        return (newMACD > newSignal && (Math.abs(newMACD - newSignal) / ticker) * 100 < (minSpread / 100.) * 0.75) || newMACD < newSignal;
+        return (newMACD > newSignal && (Math.abs(newMACD - newSignal) / ticker) * 100 < (minSpread / 100.) * 0.8) || newMACD < newSignal;
     }
 
     @Override
