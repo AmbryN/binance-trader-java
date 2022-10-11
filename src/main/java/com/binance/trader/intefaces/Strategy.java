@@ -12,6 +12,8 @@ import java.util.HashMap;
 public interface Strategy {
     StrategyResult execute(Symbol symbol, HashMap<String, Double> balances, double tickerPrice);
 
+    void init(SpotClientImpl client);
+
     String describe();
 
     String toString();

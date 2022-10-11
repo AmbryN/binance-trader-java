@@ -45,7 +45,7 @@ public class SMAStrategyTest {
         HashMap<String, Double> balances = new HashMap<>();
         balances.put("quote", 100.);
 
-        SMAStrategy strategy = new SMAStrategy(clientMock);
+        SMAStrategy strategy = new SMAStrategy();
         SMAStrategy strategySpy = Mockito.spy(strategy);
         Mockito.doReturn(prices).when(strategySpy).getClosePrices(Symbol.BTCUSDT, 10);
 

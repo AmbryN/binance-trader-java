@@ -22,7 +22,9 @@ public abstract class MovingAverage implements Strategy {
     protected Period period;
     protected int nbOfPeriods;
 
-    protected MovingAverage(SpotClientImpl client) {
+    protected MovingAverage() {}
+
+    public void init(SpotClientImpl client) {
         this.client = client;
         this.period = new PeriodListSelector().startSelector();
         this.nbOfPeriods = new IntSelector().startSelector("Moving Average");

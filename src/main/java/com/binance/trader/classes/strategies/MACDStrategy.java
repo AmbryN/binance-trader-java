@@ -13,16 +13,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MACDStrategy implements Strategy {
-    protected final SpotClientImpl client;
-    protected final Period period;
-    protected final int shortNbOfPeriods;
-    protected final int longNbOfPeriods;
-    protected final int signalNbOfPeriods;
+    protected SpotClientImpl client;
+    protected Period period;
+    protected int shortNbOfPeriods;
+    protected int longNbOfPeriods;
+    protected int signalNbOfPeriods;
 
-    public MACDStrategy(SpotClientImpl client) {
+    public MACDStrategy() {}
+
+    public void init(SpotClientImpl client) {
         this.client = client;
         this.period = new PeriodListSelector().startSelector();
-
         IntSelector selector = new IntSelector();
         this.shortNbOfPeriods = selector.startSelector("Short EMA");
         this.longNbOfPeriods = selector.startSelector("Long EMA");

@@ -11,8 +11,8 @@ import java.util.ArrayList;
 
 public class EMAStrategy extends MovingAverage {
 
-    public EMAStrategy(SpotClientImpl client) {
-        super(client);
+    public EMAStrategy() {
+        super();
     }
 
     @Override

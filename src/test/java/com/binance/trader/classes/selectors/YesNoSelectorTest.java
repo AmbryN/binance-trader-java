@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 public class YesNoSelectorTest {
@@ -26,18 +26,12 @@ public class YesNoSelectorTest {
     @Test
     public void shouldReturnOneWhenInputIsYes() {
         when(inputMock.getUserInput()).thenReturn("y");
-        assertEquals(selector.startSelector(), 1);
+        assertTrue(selector.startSelector());
     }
 
     @Test
     public void shouldReturnZeroWhenInputIsNo() {
         when(inputMock.getUserInput()).thenReturn("n");
-        assertEquals(selector.startSelector(), 0);
-    }
-
-    @Test
-    public void shoudReturnMinusOneIfInvalidInput() {
-        when(inputMock.getUserInput()).thenReturn("test");
-        assertEquals(selector.startSelector(), -1);
+        assertFalse(selector.startSelector());
     }
 }

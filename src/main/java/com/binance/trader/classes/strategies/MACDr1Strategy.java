@@ -11,10 +11,14 @@ import java.util.HashMap;
 
 public class MACDr1Strategy extends MACDStrategy implements Strategy {
 
-    private final double minSpread;
+    private double minSpread;
 
-    public MACDr1Strategy(SpotClientImpl client) {
-        super(client);
+    public MACDr1Strategy() {
+        super();
+    }
+
+    public void init(SpotClientImpl client) {
+        super.init(client);
         this.minSpread = new DoubleSelector().startSelector("Min Spread before Buy occurs (as double: e.g. 2.5 for 0.025): ");
     }
 

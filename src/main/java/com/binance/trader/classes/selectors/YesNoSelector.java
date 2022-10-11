@@ -11,17 +11,14 @@ public class YesNoSelector {
     public YesNoSelector() {
         this.input = new StringInput();
     }
-    public int startSelector() {
+    public boolean startSelector() {
         showSelector();
         String userInput = input.getUserInput();
-        if (userInput.equalsIgnoreCase("y")) {
-            return 1;
+        while (!userInput.equalsIgnoreCase("y") && !userInput.equalsIgnoreCase("n")) {
+            logger.warn("Please select one of the proposed choices!");
+            userInput = input.getUserInput();
         }
-        if (userInput.equalsIgnoreCase("n")) {
-            return 0;
-        }
-        logger.warn("Please select one of the proposed choices!");
-        return -1;
+        return userInput.equalsIgnoreCase("y");
     }
     private void showSelector() {
         System.out.println("Is this OK for you? [y/n]");

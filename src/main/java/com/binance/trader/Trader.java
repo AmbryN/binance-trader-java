@@ -18,7 +18,7 @@ public class Trader {
     private static final String TESTNET_URL = "https://testnet.binance.vision";
     private static final String BINANCE_URL = "https://api.binance.com";
     private final SpotClientImpl client;
-    int start = 0;
+    boolean start = false;
     Strategy strategy;
     Symbol symbol;
 
@@ -35,7 +35,7 @@ public class Trader {
     }
 
     public void start() {
-        while(start == 0) {
+        while(!start) {
             symbol = null;
             strategy = null;
 
@@ -46,14 +46,13 @@ public class Trader {
             while (strategy == null) {
                 strategy = strategySelection();
             }
+            strategy.init(this.client);
 
-            start = -1;
-            while (start == -1) {
-                System.out.println("=== SUMMARY === \nYou want to trade: \nSymbol: " +
-                        symbol + "\nStrategy: " + strategy + "\n" + strategy.describe());
-                start = shouldStart();
-            }
+            System.out.println("=== SUMMARY === \nYou want to trade: \nSymbol: " +
+                    symbol + "\nStrategy: " + strategy + "\n" + strategy.describe());
+            start = shouldStart();
         }
+
         HashMap<String, Double> balances = this.getBalances(symbol);
         while(true) {
             double tickerPrice = this.getTickerPrice(symbol);
@@ -76,9 +75,8 @@ public class Trader {
      * him to accept or decline them
      * @return if the user wants to start or not
      */
-    private int shouldStart() {
-        YesNoSelector selector = new YesNoSelector();
-        return selector.startSelector();
+    private boolean shouldStart() {
+        return new YesNoSelector().startSelector();
     }
 
     /**
@@ -87,8 +85,7 @@ public class Trader {
      * @return the selected Symbol the user wants to trade
      */
     private Symbol symbolSelection() {
-        SymbolListSelector selector = new SymbolListSelector();
-        return selector.startSelector();
+        return new SymbolListSelector().startSelector();
     }
 
     /**
@@ -97,24 +94,7 @@ public class Trader {
      * @return the select Strategy the user wants to use
      */
     private Strategy strategySelection() {
-        StrategyListSelector selector = new StrategyListSelector();
-        Strategy chosenStrategy = null;
-        AvailableStrategy strategy = selector.startSelector();
-        switch (strategy) {
-            case SimpleMovingAvg:
-                chosenStrategy = new SMAStrategy(this.client);
-                break;
-            case ExpMovingAvg:
-                chosenStrategy = new EMAStrategy(this.client);
-                break;
-            case MACD:
-                chosenStrategy = new MACDStrategy(this.client);
-                break;
-            case MACRr1:
-                chosenStrategy = new MACDr1Strategy(this.client);
-                break;
-        }
-        return chosenStrategy;
+        return new StrategyListSelector().startSelector();
     }
 
     protected HashMap<String, Double> getBalances(Symbol symbol) {
