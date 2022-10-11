@@ -31,10 +31,4 @@ public class SymbolSelectorTest {
         when(inputMock.getUserInt()).thenReturn(1);
         assertThat(selector.startSelector(), is(Symbol.class));
     }
-
-    @Test
-    public void shoudReturnNullIfInvalidInput() {
-        when(inputMock.getUserInt()).thenReturn(-1);
-        assertNull(selector.startSelector());
-    }
 }

@@ -82,7 +82,7 @@ public class CalculusTest {
         expected.add(8.333333);
         expected.add(9.666666);
         expected.add(12.333333);
-        ArrayList<Double> result = Calculus.expMovingAvgWithSize(values, 3);
+        ArrayList<Double> result = Calculus.expMovingAvgesWithSize(values, 3);
         for (int i=0; i<expected.size(); i++) {
             assertEquals(expected.get(i), result.get(i), 0.000001);
         }

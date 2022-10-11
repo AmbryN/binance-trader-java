@@ -1,6 +1,7 @@
 package com.binance.trader.classes.selectors;
 
 import com.binance.trader.classes.inputs.NumberInput;
+import com.binance.trader.enums.AvailableStrategy;
 import com.binance.trader.intefaces.Strategy;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,12 +29,6 @@ public class StrategySelectorTest {
     @Test
     public void shouldReturnValidStrategyWhenInputIsCorrect() {
         when(inputMock.getUserInt()).thenReturn(0);
-        assertThat(selector.startSelector(), is(Strategy.class));
-    }
-
-    @Test
-    public void shoudReturnNullIfInvalidInput() {
-        when(inputMock.getUserInt()).thenReturn(-1);
-        assertNull(selector.startSelector());
+        assertThat(selector.startSelector(), is(AvailableStrategy.class));
     }
 }

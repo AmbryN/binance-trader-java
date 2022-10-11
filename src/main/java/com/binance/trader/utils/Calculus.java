@@ -68,7 +68,7 @@ public class Calculus {
         return expMovingAverages.get(expMovingAverages.size() - 1);
     }
 
-    public static ArrayList<Double> expMovingAvgWithSize(List<Double> values, int emaSize) {
+    public static ArrayList<Double> expMovingAvgesWithSize(List<Double> values, int emaSize) {
         if (values.size() == 0) {
             return new ArrayList<Double>();
         }

@@ -1,4 +1,4 @@
-package com.binance.trader.classes;
+package com.binance.trader.classes.enums;
 
 import com.binance.trader.enums.Crypto;
 import com.binance.trader.enums.Symbol;

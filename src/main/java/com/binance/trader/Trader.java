@@ -1,11 +1,18 @@
 package com.binance.trader;
 
 import com.binance.connector.client.impl.SpotClientImpl;
-import com.binance.trader.classes.selectors.StrategyListSelector;
-import com.binance.trader.classes.selectors.SymbolListSelector;
-import com.binance.trader.classes.selectors.YesNoSelector;
+import com.binance.trader.classes.data.AccountInfo;
+import com.binance.trader.classes.selectors.*;
+import com.binance.trader.classes.strategies.*;
+import com.binance.trader.enums.AvailableStrategy;
+import com.binance.trader.enums.StrategyResult;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.intefaces.Strategy;
+import com.binance.trader.services.AccountInfoService;
+import com.binance.trader.services.OrderService;
+import com.binance.trader.services.TickerService;
+
+import java.util.HashMap;
 
 public class Trader {
     private static final String TESTNET_URL = "https://testnet.binance.vision";
@@ -39,16 +46,28 @@ public class Trader {
             while (strategy == null) {
                 strategy = strategySelection();
             }
-            strategy.init(this.client);
 
             start = -1;
             while (start == -1) {
-                System.out.println("=== SUMMARY === \nYou want to trade: \nSymbol: " + symbol +
-                        "\nStrategy: " + strategy + "\n" + strategy.describe());
+                System.out.println("=== SUMMARY === \nYou want to trade: \nSymbol: " +
+                        symbol + "\nStrategy: " + strategy + "\n" + strategy.describe());
                 start = shouldStart();
             }
         }
-        strategy.execute(symbol);
+        HashMap<String, Double> balances = this.getBalances(symbol);
+        while(true) {
+            double tickerPrice = this.getTickerPrice(symbol);
+            StrategyResult result = strategy.execute(symbol, balances, tickerPrice);
+
+            OrderService orderService = new OrderService(this.client);
+            if (result == StrategyResult.BUY) {
+                orderService.buy(symbol, tickerPrice, balances.get("quote"));
+                balances = this.getBalances(symbol);
+            } else if (result == StrategyResult.SELL) {
+                orderService.sell(symbol, tickerPrice, balances.get("base"));
+                balances = this.getBalances(symbol);
+            }
+        }
     }
 
     /**
@@ -79,6 +98,39 @@ public class Trader {
      */
     private Strategy strategySelection() {
         StrategyListSelector selector = new StrategyListSelector();
-        return selector.startSelector();
+        Strategy chosenStrategy = null;
+        AvailableStrategy strategy = selector.startSelector();
+        switch (strategy) {
+            case SimpleMovingAvg:
+                chosenStrategy = new SMAStrategy(this.client);
+                break;
+            case ExpMovingAvg:
+                chosenStrategy = new EMAStrategy(this.client);
+                break;
+            case MACD:
+                chosenStrategy = new MACDStrategy(this.client);
+                break;
+            case MACRr1:
+                chosenStrategy = new MACDr1Strategy(this.client);
+                break;
+        }
+        return chosenStrategy;
+    }
+
+    protected HashMap<String, Double> getBalances(Symbol symbol) {
+        AccountInfoService accountInfoService = new AccountInfoService(client);
+        AccountInfo accountInfo = accountInfoService.getAccountInfo();
+        double baseBalance = accountInfo.getBalance(symbol.getBase()).getFreeBalance();
+        double quoteBalance = accountInfo.getBalance(symbol.getQuote()).getFreeBalance();
+
+        HashMap<String, Double> balances = new HashMap<>();
+        balances.put("base", baseBalance);
+        balances.put("quote", quoteBalance);
+        return balances;
+    }
+
+    protected double getTickerPrice(Symbol symbol) {
+        TickerService tickerService = new TickerService(client);
+        return tickerService.getTicker(symbol).getPrice();
     }
 }

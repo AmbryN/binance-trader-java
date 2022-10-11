@@ -2,26 +2,22 @@ package com.binance.trader.classes.strategies;
 
 import java.util.ArrayList;
 
+import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.trader.classes.data.Kline;
+import com.binance.trader.enums.Period;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.services.KlineService;
 import com.binance.trader.utils.Calculus;
 
 public class SMAStrategy extends MovingAverage {
 
-    public SMAStrategy() {
-        super();
+    public SMAStrategy(SpotClientImpl client) {
+        super(client);
     }
 
     protected double calculateMovingAvg(Symbol symbol) {
-        KlineService klineService = new KlineService(this.client);
-
-        ArrayList<Kline> klines = klineService.fetchKlines(symbol, this.period.asString(), this.nbOfPeriods);
-        ArrayList<Double> prices = new ArrayList<>();
-
-        klines.forEach((kline) -> prices.add(kline.getClosePrice()));
-        
-        return Calculus.simpleMovingAvg(prices);
+        ArrayList<Double> closePrices = this.getClosePrices(symbol, this.nbOfPeriods);
+        return Calculus.simpleMovingAvg(closePrices);
     }
 
     @Override

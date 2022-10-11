@@ -1,28 +1,23 @@
 package com.binance.trader.classes.selectors;
 
-import com.binance.trader.classes.strategies.EMAStrategy;
-import com.binance.trader.classes.strategies.MACDStrategy;
-import com.binance.trader.classes.strategies.MACDr1Strategy;
-import com.binance.trader.classes.strategies.SMAStrategy;
-import com.binance.trader.intefaces.Strategy;
+import com.binance.trader.enums.AvailableStrategy;
 
-public class StrategyListSelector extends ListSelector<Strategy> {
+public class StrategyListSelector extends ListSelector<AvailableStrategy> {
 
     public StrategyListSelector() {
-        this.list = new Strategy[]{
-                new SMAStrategy(),
-                new EMAStrategy(),
-                new MACDStrategy(),
-                new MACDr1Strategy()
-        };
+        this.list = AvailableStrategy.values();
     }
 
     @Override
     protected void showSelector() {
         System.out.println("What strategy do you want to use? ");
-
-        for (int i = 0; i < list.length; i++) {
-            System.out.println(i +") " + list[i]);
+        int index = 0;
+        for (AvailableStrategy strategy : list) {
+            System.out.println(index + ") " + strategy.name());
+            index++;
         }
+//        for (int i = 0; i < list.length; i++) {
+//            System.out.println(i +") " + list[i]);
+//        }
     }
 }

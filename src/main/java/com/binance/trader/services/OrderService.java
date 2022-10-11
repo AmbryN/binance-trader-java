@@ -10,7 +10,6 @@ import ch.qos.logback.classic.Logger;
 import com.binance.trader.enums.OrderResponseType;
 import com.binance.trader.classes.data.OrderResult;
 import com.binance.trader.classes.singleton.Logging;
-import com.binance.trader.classes.OrderBuilderImpl;
 import com.binance.trader.enums.OrderSide;
 import com.binance.trader.enums.OrderType;
 import com.binance.trader.enums.Symbol;
@@ -48,16 +47,14 @@ public class OrderService {
     public void buy(Symbol symbol, double tickerPrice, double quoteBalance) {
         double baseQuantity = Math.floor(quoteBalance / tickerPrice * symbol.MIN_BASE_MOVEMENT) / symbol.MIN_BASE_MOVEMENT;
 
-        OrderBuilderImpl orderBuilder = new OrderBuilderImpl();
-        orderBuilder.reset();
-        orderBuilder.setSymbol(symbol);
-        orderBuilder.setSide(OrderSide.BUY);
-        orderBuilder.setType(OrderType.LIMIT);
-        orderBuilder.setTimeInForce(TimeInForce.IOC);
-        orderBuilder.setPrice(tickerPrice);
-        orderBuilder.setQuantity(baseQuantity);
-        orderBuilder.setNewOrderRespType(OrderResponseType.RESULT);
-        Order order = orderBuilder.getResult();
+        Order order = new Order();
+        order.setSymbol(symbol);
+        order.setSide(OrderSide.BUY);
+        order.setType(OrderType.LIMIT);
+        order.setTimeInForce(TimeInForce.IOC);
+        order.setPrice(tickerPrice);
+        order.setQuantity(baseQuantity);
+        order.setNewOrderRespType(OrderResponseType.RESULT);
 
         this.sendOrder(order);
     }
@@ -65,16 +62,14 @@ public class OrderService {
     public void sell(Symbol symbol, double tickerPrice, double baseBalance) {
         double baseQuantity = Math.floor(baseBalance * symbol.MIN_BASE_MOVEMENT) / symbol.MIN_BASE_MOVEMENT;
 
-        OrderBuilderImpl orderBuilder = new OrderBuilderImpl();
-        orderBuilder.reset();
-        orderBuilder.setSymbol(symbol);
-        orderBuilder.setSide(OrderSide.SELL);
-        orderBuilder.setType(OrderType.LIMIT);
-        orderBuilder.setTimeInForce(TimeInForce.IOC);
-        orderBuilder.setPrice(tickerPrice);
-        orderBuilder.setQuantity(baseQuantity);
-        orderBuilder.setNewOrderRespType(OrderResponseType.RESULT);
-        Order order = orderBuilder.getResult();
+        Order order = new Order();
+        order.setSymbol(symbol);
+        order.setSide(OrderSide.SELL);
+        order.setType(OrderType.LIMIT);
+        order.setTimeInForce(TimeInForce.IOC);
+        order.setPrice(tickerPrice);
+        order.setQuantity(baseQuantity);
+        order.setNewOrderRespType(OrderResponseType.RESULT);
 
         this.sendOrder(order);
     }

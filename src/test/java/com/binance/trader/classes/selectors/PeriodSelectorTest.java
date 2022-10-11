@@ -29,10 +29,4 @@ public class PeriodSelectorTest {
         when(inputMock.getUserInt()).thenReturn(0);
         assertThat(selector.startSelector(), is(Period.class));
     }
-
-    @Test
-    public void shoudReturnNullIfInvalidInput() {
-        when(inputMock.getUserInt()).thenReturn(-1);
-        assertNull(selector.startSelector());
-    }
 }

@@ -16,8 +16,10 @@ abstract class ListSelector<T> {
         showSelector();
         System.out.println("Selection: ");
         int userInput = input.getUserInt();
-        if (validateInput(userInput)) return list[userInput];
-        return null;
+        while(!validateInput(userInput)) {
+            userInput = input.getUserInt();
+        }
+        return list[userInput];
     }
     protected abstract void showSelector();
 
