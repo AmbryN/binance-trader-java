@@ -13,7 +13,7 @@ public class AccountInfo {
     private boolean brokered;
     private Long updateTime;
     private String accountType;
-    private Balance[] balances;
+    private final Balance[] balances;
     private String[] permissions;
 
     protected AccountInfo(Balance[] balances) {

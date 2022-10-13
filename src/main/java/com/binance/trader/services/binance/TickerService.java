@@ -1,9 +1,9 @@
-package com.binance.trader.services;
+package com.binance.trader.services.binance;
 
 import java.util.LinkedHashMap;
 
 import ch.qos.logback.classic.Logger;
-import com.binance.trader.classes.singleton.Logging;
+import com.binance.trader.utils.Logging;
 
 import com.binance.connector.client.exceptions.BinanceClientException;
 import com.binance.connector.client.exceptions.BinanceConnectorException;

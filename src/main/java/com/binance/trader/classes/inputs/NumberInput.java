@@ -1,7 +1,7 @@
 package com.binance.trader.classes.inputs;
 
 import ch.qos.logback.classic.Logger;
-import com.binance.trader.classes.singleton.Logging;
+import com.binance.trader.utils.Logging;
 
 public class NumberInput extends Input {
 

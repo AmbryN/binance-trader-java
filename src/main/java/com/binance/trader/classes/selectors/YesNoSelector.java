@@ -2,7 +2,7 @@ package com.binance.trader.classes.selectors;
 
 import ch.qos.logback.classic.Logger;
 import com.binance.trader.classes.inputs.StringInput;
-import com.binance.trader.classes.singleton.Logging;
+import com.binance.trader.utils.Logging;
 
 public class YesNoSelector {
     private static final Logger logger = Logging.getInstance();
@@ -22,5 +22,5 @@ public class YesNoSelector {
     }
     private void showSelector() {
         System.out.println("Is this OK for you? [y/n]");
-    };
+    }
 }

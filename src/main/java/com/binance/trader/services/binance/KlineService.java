@@ -1,4 +1,4 @@
-package com.binance.trader.services;
+package com.binance.trader.services.binance;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -13,7 +13,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 public class KlineService {
-    private SpotClientImpl client;
+    private final SpotClientImpl client;
 
     public KlineService(SpotClientImpl client) {
         this.client =  client;

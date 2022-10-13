@@ -1,4 +1,4 @@
-package com.binance.trader.services;
+package com.binance.trader.services.binance;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import ch.qos.logback.classic.Logger;
 import com.binance.trader.enums.OrderResponseType;
 import com.binance.trader.classes.data.OrderResult;
-import com.binance.trader.classes.singleton.Logging;
+import com.binance.trader.utils.Logging;
 import com.binance.trader.enums.OrderSide;
 import com.binance.trader.enums.OrderType;
 import com.binance.trader.enums.Symbol;

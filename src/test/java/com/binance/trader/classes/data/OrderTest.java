@@ -1,10 +1,10 @@
 package com.binance.trader.classes.data;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.LinkedHashMap;
 
-import com.binance.trader.classes.data.Order;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,13 +38,13 @@ public class OrderTest {
         parameters.put("symbol", "BTCUSDT");
         parameters.put("price", "2.0");
 
-        assertTrue(parameters.equals(order.asParams()));
+        assertEquals(parameters, order.asParams());
     }
 
     @Test
     public void shouldReturnEmptyLinkedHashMapIfNoPropertiesSet() {
         LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
 
-        assertTrue(parameters.equals(order.asParams()));
+        assertEquals(parameters, order.asParams());
     }
 }

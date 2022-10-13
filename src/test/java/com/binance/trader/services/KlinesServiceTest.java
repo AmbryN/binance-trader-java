@@ -1,5 +1,6 @@
 package com.binance.trader.services;
 
+import com.binance.trader.services.binance.KlineService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -23,7 +24,8 @@ public class KlinesServiceTest {
     @Mock SpotClientImpl clientMock;
     @Mock Market marketMock;
     
-    @InjectMocks KlineService service;
+    @InjectMocks
+    KlineService service;
 
     @Before
     public void setup() {

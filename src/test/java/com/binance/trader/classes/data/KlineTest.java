@@ -16,8 +16,8 @@ public class KlineTest {
     public void shouldReturnFalseIfOfDifferentTypeOrNull() {
         Kline kline = new Kline();
         Object object = new Object();
-        assertFalse(kline.equals(object));
-        assertFalse(kline.equals(null));
+        assertNotEquals(kline, object);
+        assertNotEquals(null, kline);
     }
 
     @Test

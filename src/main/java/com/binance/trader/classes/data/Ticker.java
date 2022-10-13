@@ -3,8 +3,8 @@ package com.binance.trader.classes.data;
 import com.binance.trader.enums.Symbol;
 
 public class Ticker {
-    private Symbol symbol;
-    private double price;
+    private final Symbol symbol;
+    private final double price;
 
     public Ticker(Symbol symbol, double price) {
         this.symbol = symbol;

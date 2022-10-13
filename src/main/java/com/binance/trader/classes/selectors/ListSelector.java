@@ -2,7 +2,7 @@ package com.binance.trader.classes.selectors;
 
 import ch.qos.logback.classic.Logger;
 import com.binance.trader.classes.inputs.NumberInput;
-import com.binance.trader.classes.singleton.Logging;
+import com.binance.trader.utils.Logging;
 
 abstract class ListSelector<T> {
     protected T[] list;

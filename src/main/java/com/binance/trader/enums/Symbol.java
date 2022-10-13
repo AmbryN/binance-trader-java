@@ -1,5 +1,8 @@
 package com.binance.trader.enums;
 
+/**
+ * Pair of crypto defined by its Base crypto and its Quote crypto which can be traded on Binance
+ */
 public enum Symbol {
     BTCUSDT(Crypto.BTC, Crypto.USDT, 0.00001, 10, 100000, 100),
     BTCBUSD(Crypto.BTC, Crypto.BUSD, 0.00001, 10, 100000, 100),

@@ -3,9 +3,11 @@ package com.binance.trader.classes.data;
 import java.util.LinkedHashMap;
 
 import com.binance.trader.enums.*;
+import com.binance.trader.enums.OrderResponseType;
+import com.binance.trader.enums.Symbol;
 
 public class Order {
-    private Symbol symbol; 	
+    private Symbol symbol;
     private OrderSide side; 	
     private OrderType type;
     private TimeInForce timeInForce;

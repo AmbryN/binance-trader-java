@@ -2,7 +2,7 @@ package com.binance.trader.classes.selectors;
 
 import ch.qos.logback.classic.Logger;
 import com.binance.trader.classes.inputs.NumberInput;
-import com.binance.trader.classes.singleton.Logging;
+import com.binance.trader.utils.Logging;
 
 public class IntSelector {
     private static final Logger logger = Logging.getInstance();
@@ -18,5 +18,5 @@ public class IntSelector {
     }
     private void showSelector(String message) {
         System.out.println("Please enter the number for computing " + message + ": ");
-    };
+    }
 }

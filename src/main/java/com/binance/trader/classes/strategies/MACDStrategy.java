@@ -1,19 +1,18 @@
 package com.binance.trader.classes.strategies;
 
-import com.binance.connector.client.impl.SpotClientImpl;
-import com.binance.trader.classes.data.Kline;
 import com.binance.trader.classes.selectors.IntSelector;
 import com.binance.trader.classes.selectors.PeriodListSelector;
 import com.binance.trader.enums.*;
+import com.binance.trader.enums.Symbol;
+import com.binance.trader.intefaces.Exchange;
 import com.binance.trader.intefaces.Strategy;
-import com.binance.trader.services.KlineService;
 import com.binance.trader.utils.Calculus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MACDStrategy implements Strategy {
-    protected SpotClientImpl client;
+    protected Exchange exchange;
     protected Period period;
     protected int shortNbOfPeriods;
     protected int longNbOfPeriods;
@@ -21,8 +20,8 @@ public class MACDStrategy implements Strategy {
 
     public MACDStrategy() {}
 
-    public void init(SpotClientImpl client) {
-        this.client = client;
+    public void init(Exchange exchange) {
+        this.exchange = exchange;
         this.period = new PeriodListSelector().startSelector();
         IntSelector selector = new IntSelector();
         this.shortNbOfPeriods = selector.startSelector("Short EMA");
@@ -60,7 +59,7 @@ public class MACDStrategy implements Strategy {
     protected HashMap<String, ArrayList<Double>> getMacdAndSignalLines(Symbol symbol) {
         // To compute the {size} EMA, you always need {size * 2 - 1} records
         int recordsToFetch = this.longNbOfPeriods + this.signalNbOfPeriods * 2 - 1;
-        ArrayList<Double> prices = this.getClosePrices(symbol, recordsToFetch);
+        ArrayList<Double> prices = exchange.getClosePrices(symbol, period.asString(), recordsToFetch);
 
         // Compute the short EMA (generally 12) and the long EMA (generally 26) used for the MACD line
         ArrayList<Double> shortEMAS = Calculus.expMovingAvgesWithSize(prices, this.shortNbOfPeriods);
@@ -76,17 +75,6 @@ public class MACDStrategy implements Strategy {
         lines.put("macd", MACDLine);
         lines.put("signal", signalLine);
         return lines;
-    }
-
-    protected ArrayList<Double> getClosePrices(Symbol symbol, int recordsToFetch) {
-        // Fetch the last {recordsToFetch} klines
-        KlineService klineService = new KlineService(this.client);
-        ArrayList<Kline> klines = klineService.fetchKlines(symbol, this.period.asString(), recordsToFetch);
-
-        // Filter the data to only keep closing prices
-        ArrayList<Double> prices = new ArrayList<>();
-        klines.forEach((kline) -> prices.add(kline.getClosePrice()));
-        return prices;
     }
 
     protected ArrayList<Double> computeMACDLine(ArrayList<Double> shortEMAs, ArrayList<Double> longEMAs) {

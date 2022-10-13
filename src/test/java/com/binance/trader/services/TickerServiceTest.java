@@ -1,11 +1,13 @@
 package com.binance.trader.services;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.util.LinkedHashMap;
 
+import com.binance.trader.services.binance.TickerService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -25,7 +27,8 @@ public class TickerServiceTest {
     @Mock SpotClientImpl clientMock;
     @Mock Market marketMock;
 
-    @InjectMocks TickerService tickerService;
+    @InjectMocks
+    TickerService tickerService;
 
     @Before
     public void setup() {
@@ -39,7 +42,7 @@ public class TickerServiceTest {
         when(marketMock.tickerSymbol(any(LinkedHashMap.class))).thenReturn(answer);
 
         Ticker expectedTicker = new Ticker(Symbol.BTCUSDT, 4.00000200);
-        assertTrue(expectedTicker.equals(tickerService.getTicker(Symbol.BTCUSDT)));
+        assertEquals(expectedTicker, tickerService.getTicker(Symbol.BTCUSDT));
     }
 
     @Test(expected = BinanceTraderException.class)

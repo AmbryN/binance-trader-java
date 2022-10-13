@@ -1,4 +1,4 @@
-package com.binance.trader.classes.singleton;
+package com.binance.trader.utils;
 
 import com.binance.trader.App;
 import org.slf4j.LoggerFactory;
@@ -8,7 +8,7 @@ public class Logging {
     private static Logger instance;
 
     private Logging() {
-        this.instance = (Logger) LoggerFactory.getLogger(App.class);
+        instance = (Logger) LoggerFactory.getLogger(App.class);
     }
 
     public static ch.qos.logback.classic.Logger getInstance() {

@@ -1,12 +1,12 @@
-package com.binance.trader.services;
+package com.binance.trader.services.binance;
 
 import com.binance.connector.client.impl.WebsocketClientImpl;
-import com.binance.trader.classes.KlinesStream;
+import com.binance.trader.classes.data.KlinesStream;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.utils.Deserializer;
 
 public class KlinesStreamService {
-    private WebsocketClientImpl client;
+    private final WebsocketClientImpl client;
     private static final String TESTNET_URL = "https://testnet.binance.vision";
     private static final String BINANCE_URL = "https://api.binance.com";
 

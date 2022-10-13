@@ -1,7 +1,6 @@
 package com.binance.trader.services;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -9,6 +8,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 
 import com.binance.trader.enums.Crypto;
+import com.binance.trader.services.binance.AccountInfoService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -27,7 +27,8 @@ public class AccountInfoServiceTest {
     @Mock SpotClientImpl clientMock;
     @Mock Trade tradeMock;
 
-    @InjectMocks AccountInfoService accountInfoService;
+    @InjectMocks
+    AccountInfoService accountInfoService;
 
     @Before
     public void setup() {
@@ -38,30 +39,30 @@ public class AccountInfoServiceTest {
     public void shouldReturnTheAccountInfo() {
         String message = """
             {
-            \"makerCommission\": 15,
-            \"takerCommission\": 15,
-            \"buyerCommission\": 0,
-            \"sellerCommission\": 0,
-            \"canTrade\": true,
-            \"canWithdraw\": true,
-            \"canDeposit\": true,
-            \"brokered\": false,
-            \"updateTime\": 123456789,
-            \"accountType\": \"SPOT\",
-            \"balances\": [
+            "makerCommission": 15,
+            "takerCommission": 15,
+            "buyerCommission": 0,
+            "sellerCommission": 0,
+            "canTrade": true,
+            "canWithdraw": true,
+            "canDeposit": true,
+            "brokered": false,
+            "updateTime": 123456789,
+            "accountType": "SPOT",
+            "balances": [
               {
-                \"asset\": \"BTC\",
-                \"free\": \"4723846.89208129\",
-                \"locked\": \"0.00000000\"
+                "asset": "BTC",
+                "free": "4723846.89208129",
+                "locked": "0.00000000"
               },
               {
-                \"asset\": \"BUSD\",
-                \"free\": \"4763368.68006011\",
-                \"locked\": \"0.00000000\"
+                "asset": "BUSD",
+                "free": "4763368.68006011",
+                "locked": "0.00000000"
               }
             ],
-            \"permissions\": [
-              \"SPOT\"
+            "permissions": [
+              "SPOT"
             ]
           }
           """;
@@ -74,12 +75,12 @@ public class AccountInfoServiceTest {
             assertEquals(15, accountInfo.getTakerCommission());
             assertEquals(0, accountInfo.getBuyerCommission());
             assertEquals(0, accountInfo.getSellerCommission());
-            assertEquals(true, accountInfo.isCanTrade());
-            assertEquals(true, accountInfo.isCanWithdraw());
-            assertEquals(true, accountInfo.isCanDeposit());
-            assertEquals(false, accountInfo.isBrokered());
-            assertTrue(accountInfo.getUpdateTime().equals(123456789L));
-            assertTrue("SPOT".equals(accountInfo.getAccountType()));
+        assertTrue(accountInfo.isCanTrade());
+        assertTrue(accountInfo.isCanWithdraw());
+        assertTrue(accountInfo.isCanDeposit());
+        assertFalse(accountInfo.isBrokered());
+        assertEquals(123456789L, (long) accountInfo.getUpdateTime());
+        assertEquals("SPOT", accountInfo.getAccountType());
             assertTrue(Arrays.deepEquals(new Balance[]{
                 new Balance(Crypto.BTC, 4723846.89208129, 0.00000000),
                 new Balance(Crypto.BUSD, 4763368.68006011, 0.00000000)

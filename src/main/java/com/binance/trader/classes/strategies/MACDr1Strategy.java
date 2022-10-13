@@ -1,9 +1,9 @@
 package com.binance.trader.classes.strategies;
 
-import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.trader.classes.selectors.DoubleSelector;
 import com.binance.trader.enums.StrategyResult;
 import com.binance.trader.enums.Symbol;
+import com.binance.trader.intefaces.Exchange;
 import com.binance.trader.intefaces.Strategy;
 
 import java.util.ArrayList;
@@ -17,8 +17,8 @@ public class MACDr1Strategy extends MACDStrategy implements Strategy {
         super();
     }
 
-    public void init(SpotClientImpl client) {
-        super.init(client);
+    public void init(Exchange exchange) {
+        super.init(exchange);
         this.minSpread = new DoubleSelector().startSelector("Min Spread before Buy occurs (as double: e.g. 2.5 for 0.025): ");
     }
 
