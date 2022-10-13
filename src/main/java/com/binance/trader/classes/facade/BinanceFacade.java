@@ -17,7 +17,7 @@ import java.util.HashMap;
  * Facade class for Binance exchange which handles
  * all the connections and work for client the application
  */
-class BinanceFacade implements Exchange {
+public class BinanceFacade implements Exchange {
     private final static String TESTNET_URL = "https://testnet.binance.vision";
     private final static String BINANCE_URL = "https://api.binance.com";
     private SpotClientImpl client;
