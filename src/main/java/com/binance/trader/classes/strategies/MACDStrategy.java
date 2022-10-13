@@ -20,6 +20,18 @@ public class MACDStrategy implements Strategy {
 
     public MACDStrategy() {}
 
+    public void setShortNbOfPeriods(int shortNbOfPeriods) {
+        this.shortNbOfPeriods = shortNbOfPeriods;
+    }
+
+    public void setLongNbOfPeriods(int longNbOfPeriods) {
+        this.longNbOfPeriods = longNbOfPeriods;
+    }
+
+    public void setSignalNbOfPeriods(int signalNbOfPeriods) {
+        this.signalNbOfPeriods = signalNbOfPeriods;
+    }
+
     public void init(Exchange exchange) {
         this.exchange = exchange;
         this.period = new PeriodListSelector().startSelector();
@@ -58,7 +70,7 @@ public class MACDStrategy implements Strategy {
 
     protected HashMap<String, ArrayList<Double>> getMacdAndSignalLines(Symbol symbol) {
         // To compute the {size} EMA, you always need {size * 2 - 1} records
-        int recordsToFetch = this.longNbOfPeriods + this.signalNbOfPeriods * 2 - 1;
+        int recordsToFetch = this.longNbOfPeriods + this.signalNbOfPeriods * 2 - 2;
         ArrayList<Double> prices = exchange.getClosePrices(symbol, period.asString(), recordsToFetch);
 
         // Compute the short EMA (generally 12) and the long EMA (generally 26) used for the MACD line
@@ -108,5 +120,9 @@ public class MACDStrategy implements Strategy {
     @Override
     public String toString() {
         return "Moving Average Convergence Divergence";
+    }
+
+    protected void setPeriod(Period period) {
+        this.period = period;
     }
 }

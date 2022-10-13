@@ -37,12 +37,13 @@ public abstract class MovingAverage implements Strategy {
                 "\nTicker " + tickerPrice +
                 "\nExpMAvg " + movingAvg);
 
+        StrategyResult result = StrategyResult.NONE;
         if (tickerPrice > movingAvg && balances.get("quote") > symbol.MIN_QUOTE_TRANSACTION) {
-            return StrategyResult.BUY;
+            result = StrategyResult.BUY;
         } else if (tickerPrice < movingAvg && balances.get("base") > symbol.MIN_BASE_TRANSACTION) {
-            return StrategyResult.SELL;
+            result = StrategyResult.SELL;
         }
-        return StrategyResult.NONE;
+        return result;
     }
 
     protected abstract double calculateMovingAvg(Symbol symbol);
