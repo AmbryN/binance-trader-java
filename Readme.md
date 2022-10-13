@@ -17,11 +17,17 @@ to use the same quote for multiple bots trading different base cryptos
 * Log transactions to Database
 * Add UI (Window or Web) for crypto and strategy selection
 
+Planned bug fixes:
+* If the bot fails to obtain information from the exchange, for instance because the
+internet connection dropped, it should try again instead of crashing
+
 ## Available pairs (new ones will be added shortly)
 - BTCUSDT
 - BTCBUSD
 - ETHUSDT
 - ETHBUSD
+- LUNAUSDT
+- LUNABUSD
 
 ## Available strategies
 - Simple Moving Average (SMA)
