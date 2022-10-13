@@ -14,7 +14,7 @@ import com.binance.trader.services.binance.TickerService
  * Facade class for Binance exchange which handles
  * all the connections and work for client the application
  */
-class BinanceFacade : Exchange {
+public class BinanceFacade : Exchange {
     private val client: SpotClientImpl
 
     init {
