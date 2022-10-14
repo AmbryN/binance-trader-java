@@ -3,7 +3,7 @@ package com.binance.trader.classes.strategies;
 import com.binance.trader.enums.Period;
 import com.binance.trader.enums.StrategyResult;
 import com.binance.trader.enums.Symbol;
-import com.binance.trader.intefaces.Exchange;
+import com.binance.trader.interfaces.Exchange;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;

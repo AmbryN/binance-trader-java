@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.LinkedHashMap;
 
 import ch.qos.logback.classic.Logger;
+import com.binance.connector.client.exceptions.BinanceServerException;
 import com.binance.trader.utils.Logging;
 
 import com.binance.connector.client.exceptions.BinanceClientException;
@@ -22,22 +23,23 @@ public class AccountInfoService {
         this.client = client;
     }
 
+    /**
+     * Queries Binance's API to get the Account Info of the user
+     * @throws BinanceConnectorException lets it through to be caught by the
+     * FallibleBinanceAction interface to log it and retry connection
+     * @throws BinanceClientException  lets it through to be caught by the
+     * FallibleBinanceAction interface to log it and let the program crash
+     * @throws BinanceServerException lets it through to be caught by the
+     * FallibleBinanceAction interface to log it and retry connection
+     * @return AccountInfo of the user
+     */
     public AccountInfo getAccountInfo() {
         LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
         Long timestamp = Instant.now().toEpochMilli();
         parameters.put("timestamp", timestamp);
 
-        try {
-            String result = client.createTrade().account(parameters);
-            AccountInfo accountInfo = Deserializer.deserialize(result, AccountInfo.class);
-            return accountInfo;
-        } catch (BinanceConnectorException e) {
-            logger.error("fullErrMessage: {}", e.getMessage(), e);
-            throw new BinanceTraderException("AccountInfoService->Malformed request: " + e.getMessage());
-        } catch (BinanceClientException e) {
-            logger.error("fullErrMessage: {} \nerrMessage: {} \nerrCode: {} \nHTTPStatusCode: {}", 
-            e.getMessage(), e.getErrMsg(), e.getErrorCode(), e.getHttpStatusCode(), e);
-            throw new BinanceTraderException("AccountInfoService->HTTP request error: " + e.getMessage());
-        }
+        String result;
+        result = client.createTrade().account(parameters);
+        return Deserializer.deserialize(result, AccountInfo.class);
     }
 }

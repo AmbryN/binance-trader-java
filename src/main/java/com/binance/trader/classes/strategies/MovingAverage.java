@@ -5,8 +5,8 @@ import com.binance.trader.classes.selectors.PeriodListSelector;
 import com.binance.trader.enums.Period;
 import com.binance.trader.enums.StrategyResult;
 import com.binance.trader.enums.Symbol;
-import com.binance.trader.intefaces.Exchange;
-import com.binance.trader.intefaces.Strategy;
+import com.binance.trader.interfaces.Exchange;
+import com.binance.trader.interfaces.Strategy;
 
 import java.util.ArrayList;
 import java.util.HashMap;

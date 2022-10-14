@@ -1,4 +1,4 @@
-package com.binance.trader.intefaces;
+package com.binance.trader.interfaces;
 
 import com.binance.trader.enums.StrategyResult;
 import com.binance.trader.enums.Symbol;

@@ -4,7 +4,7 @@ import com.binance.trader.classes.strategies.EMAStrategy;
 import com.binance.trader.classes.strategies.MACDStrategy;
 import com.binance.trader.classes.strategies.MACDr1Strategy;
 import com.binance.trader.classes.strategies.SMAStrategy;
-import com.binance.trader.intefaces.Strategy;
+import com.binance.trader.interfaces.Strategy;
 
 public class StrategyListSelector extends ListSelector<Strategy> {
 

@@ -4,8 +4,8 @@ import com.binance.trader.classes.selectors.IntSelector;
 import com.binance.trader.classes.selectors.PeriodListSelector;
 import com.binance.trader.enums.*;
 import com.binance.trader.enums.Symbol;
-import com.binance.trader.intefaces.Exchange;
-import com.binance.trader.intefaces.Strategy;
+import com.binance.trader.interfaces.Exchange;
+import com.binance.trader.interfaces.Strategy;
 import com.binance.trader.utils.Calculus;
 
 import java.util.ArrayList;

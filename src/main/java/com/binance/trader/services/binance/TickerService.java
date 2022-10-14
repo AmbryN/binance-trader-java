@@ -3,6 +3,7 @@ package com.binance.trader.services.binance;
 import java.util.LinkedHashMap;
 
 import ch.qos.logback.classic.Logger;
+import com.binance.connector.client.exceptions.BinanceServerException;
 import com.binance.trader.utils.Logging;
 
 import com.binance.connector.client.exceptions.BinanceClientException;
@@ -22,21 +23,23 @@ public class TickerService {
         this.client = client;
     }
 
+    /**
+     * Queries Binance's API to get the current Ticker price for symbol
+     * @param symbol crypto pair for which the Ticker is queried
+     * @throws BinanceConnectorException lets it through to be caught by the
+     * FallibleBinanceAction interface to log it and retry connection
+     * @throws BinanceClientException  lets it through to be caught by the
+     * FallibleBinanceAction interface to log it and let the program crash
+     * @throws BinanceServerException lets it through to be caught by the
+     * FallibleBinanceAction interface to log it and retry connection
+     * @return Ticker of the symbol
+     */
     public Ticker getTicker(Symbol symbol) {
         LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
         parameters.put("symbol", symbol.getPair());
 
-        try {
-            String result = client.createMarket().tickerSymbol(parameters);
-            Ticker ticker = Deserializer.deserialize(result, Ticker.class);
-            return ticker;
-        } catch (BinanceConnectorException e) {
-            logger.error("fullErrMessage: {}", e.getMessage(), e);
-            throw new BinanceTraderException("TickerService->Malformed request: " + e.getMessage());
-        } catch (BinanceClientException e) {
-            logger.error("fullErrMessage: {} \nerrMessage: {} \nerrCode: {} \nHTTPStatusCode: {}", 
-            e.getMessage(), e.getErrMsg(), e.getErrorCode(), e.getHttpStatusCode(), e);
-            throw new BinanceTraderException("TickerService->HTTP Request error: " + e.getMessage());
-        }
-    }        
+        String result;
+        result = client.createMarket().tickerSymbol(parameters);
+        return Deserializer.deserialize(result, Ticker.class);
+    }
 }

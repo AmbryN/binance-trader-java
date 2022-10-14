@@ -1,9 +1,10 @@
-package com.binance.trader.intefaces;
+package com.binance.trader.interfaces;
 
 import com.binance.trader.enums.Symbol;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 
 /**
  * Defines the method an Exchange facade needs to implement in order
