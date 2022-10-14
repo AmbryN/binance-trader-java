@@ -34,7 +34,7 @@ public class BinanceFacade implements Exchange {
         url = TESTNET_URL;
         apiKey = System.getenv("TESTNET_API_KEY");
         secretKey = System.getenv("TESTNET_SECRET_KEY");
-        if (System.getenv("BINANCE_TRADER_ENV") == "PROD") {
+        if (System.getenv("BINANCE_TRADER_ENV").equals("PROD")) {
             url = BINANCE_URL;
             apiKey = System.getenv("BINANCE_API_KEY");
             secretKey = System.getenv("BINANCE_SECRET_KEY");
