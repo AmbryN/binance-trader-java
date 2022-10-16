@@ -4,14 +4,13 @@ import com.binance.trader.enums.Symbol;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Optional;
 
 /**
  * Defines the method an Exchange facade needs to implement in order
  * to be used by the client application
  */
 public interface Exchange {
-    HashMap<String, Double> getBalances(Symbol symbol);
+    HashMap<String, Double> getBaseAndQuoteBalances(Symbol symbol);
     Double getTickerPrice(Symbol symbol);
 
     ArrayList<Double> getClosePrices(Symbol symbol, String period, int nbOfRecordsToFetch);

@@ -25,26 +25,14 @@ public class Try {
      * @return Optional<T> Optional of the T object returned by the action
      */
     public static <T> Optional<T> toGet(FallibleAction<T> action) {
-        int tries = 0;
-        while (tries < 5) {
-            try {
-                return Optional.ofNullable(action.result());
-            } catch (BinanceConnectorException | BinanceServerException e) {
-                logger.error("Could not get from Binance: {}", e.getMessage(), e);
-                if (tries < 5) {
-                    logger.warn("Trying again [{}/5]", tries + 1);
-                    tries++;
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException i) {
-                        logger.error("An error occurred while waiting: " + i);
-                    }
-                }
-            } catch (BinanceClientException e) {
-                logger.error("fullErrMessage: {} \nerrMessage: {} \nerrCode: {} \nHTTPStatusCode: {}",
-                        e.getMessage(), e.getErrMsg(), e.getErrorCode(), e.getHttpStatusCode(), e);
-                throw e;
-            }
+        try {
+            return Optional.ofNullable(action.result());
+        } catch (BinanceConnectorException | BinanceServerException e) {
+            logger.error("Could not get from Binance: {}", e.getMessage(), e);
+        } catch (BinanceClientException e) {
+            logger.error("fullErrMessage: {} \nerrMessage: {} \nerrCode: {} \nHTTPStatusCode: {}",
+                    e.getMessage(), e.getErrMsg(), e.getErrorCode(), e.getHttpStatusCode(), e);
+            throw e;
         }
         return Optional.empty();
     }

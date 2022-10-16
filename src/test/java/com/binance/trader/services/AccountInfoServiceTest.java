@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 
 import com.binance.trader.enums.Crypto;
-import com.binance.trader.services.binance.AccountInfoService;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -88,21 +87,4 @@ public class AccountInfoServiceTest {
             }, (accountInfo.getBalances())));
             assertTrue(Arrays.deepEquals(new String[]{"SPOT"}, accountInfo.getPermissions()));      
     }
-
-    @Ignore //TODO Rework the test after refactoring of error handling
-    @Test(expected = BinanceTraderException.class)
-    public void shouldThrowExceptionIfConnectorException() {
-        when(clientMock.createTrade()).thenReturn(tradeMock);
-        when(tradeMock.account(any(LinkedHashMap.class))).thenThrow(BinanceConnectorException.class);
-        accountInfoService.getAccountInfo();
-    }
-
-    @Ignore //TODO Rework the test after refactoring of error handling
-    @Test(expected = BinanceTraderException.class)
-    public void shouldThrowExceptionIfClintException() {
-        when(clientMock.createTrade()).thenReturn(tradeMock);
-        when(tradeMock.account(any(LinkedHashMap.class))).thenThrow(BinanceClientException.class);
-        accountInfoService.getAccountInfo();
-    }
-
 }

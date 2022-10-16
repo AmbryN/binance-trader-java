@@ -1,6 +1,5 @@
 package com.binance.trader.services;
 
-import com.binance.trader.services.binance.KlineService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;

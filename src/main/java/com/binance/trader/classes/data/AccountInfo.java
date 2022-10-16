@@ -1,6 +1,9 @@
 package com.binance.trader.classes.data;
 
 import com.binance.trader.enums.Crypto;
+import com.binance.trader.enums.Symbol;
+
+import java.util.HashMap;
 
 public class AccountInfo {
     private int makerCommission;
@@ -76,5 +79,15 @@ public class AccountInfo {
             }
         }
         return new Balance(crypto, 0.0, 0.0);
+    }
+
+    public HashMap<String, Double> getBaseAndQuoteBalancesFor(Symbol symbol) {
+        HashMap<String, Double> balances = new HashMap<>();
+        Balance baseBalance = this.getBalance(symbol.getBase());
+        Balance quoteBalance = this.getBalance(symbol.getQuote());
+
+        balances.put("base", baseBalance.getFreeBalance());
+        balances.put("quote", quoteBalance.getFreeBalance());
+        return balances;
     }
 }

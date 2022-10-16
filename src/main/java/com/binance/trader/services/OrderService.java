@@ -1,4 +1,4 @@
-package com.binance.trader.services.binance;
+package com.binance.trader.services;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -6,10 +6,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 
-import ch.qos.logback.classic.Logger;
+import com.binance.connector.client.exceptions.BinanceServerException;
 import com.binance.trader.enums.OrderResponseType;
 import com.binance.trader.classes.data.OrderResult;
-import com.binance.trader.utils.Logging;
 import com.binance.trader.enums.OrderSide;
 import com.binance.trader.enums.OrderType;
 import com.binance.trader.enums.Symbol;
@@ -23,28 +22,12 @@ import com.binance.trader.utils.Deserializer;
 
 public class OrderService {
     private final SpotClientImpl client;
-    private static final Logger logger = Logging.getInstance();
 
     public OrderService(SpotClientImpl client) {
         this.client =  client;
     }
 
-    public void sendOrder(Order order) {
-        LinkedHashMap<String, Object> parameters = order.asParams();
-        try {
-            String result = this.client.createTrade().newOrder(parameters);
-            logger.info(result);
-            OrderResult resultObject = Deserializer.deserialize(result, OrderResult.class);
-            this.logToFile(resultObject.toLog());
-        } catch (BinanceConnectorException e) {
-            logger.error("fullErrMessage: {}", e.getMessage(), e);
-        } catch (BinanceClientException e) {
-            logger.error("fullErrMessage: {} \nerrMessage: {} \nerrCode: {} \nHTTPStatusCode: {}", 
-            e.getMessage(), e.getErrMsg(), e.getErrorCode(), e.getHttpStatusCode(), e);
-        }
-    }
-
-    public void buy(Symbol symbol, double tickerPrice, double quoteBalance) {
+    public void buy(Symbol symbol, double tickerPrice, double quoteBalance) throws BinanceConnectorException, BinanceClientException, BinanceServerException {
         double baseQuantity = Math.floor(quoteBalance / tickerPrice * symbol.MIN_BASE_MOVEMENT) / symbol.MIN_BASE_MOVEMENT;
 
         Order order = new Order();
@@ -59,7 +42,7 @@ public class OrderService {
         this.sendOrder(order);
     }
 
-    public void sell(Symbol symbol, double tickerPrice, double baseBalance) {
+    public void sell(Symbol symbol, double tickerPrice, double baseBalance) throws BinanceConnectorException, BinanceClientException, BinanceServerException {
         double baseQuantity = Math.floor(baseBalance * symbol.MIN_BASE_MOVEMENT) / symbol.MIN_BASE_MOVEMENT;
 
         Order order = new Order();
@@ -74,7 +57,14 @@ public class OrderService {
         this.sendOrder(order);
     }
 
-    public void logToFile(String data) {
+    private void sendOrder(Order order) throws BinanceConnectorException, BinanceClientException, BinanceServerException{
+        LinkedHashMap<String, Object> parameters = order.asParams();
+        String result = this.client.createTrade().newOrder(parameters);
+        OrderResult resultObject = Deserializer.deserialize(result, OrderResult.class);
+        this.logToFile(resultObject.toLog());
+    }
+
+    private void logToFile(String data) {
         File file = new File("orderLog.txt");
         try {
             file.createNewFile();

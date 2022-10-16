@@ -3,14 +3,16 @@ package com.binance.trader.classes.facade;
 import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.trader.classes.data.AccountInfo;
 import com.binance.trader.classes.data.Kline;
+import com.binance.trader.classes.data.Ticker;
 import com.binance.trader.classes.handlers.Try;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.exceptions.BinanceTraderException;
 import com.binance.trader.interfaces.Exchange;
-import com.binance.trader.services.binance.AccountInfoService;
-import com.binance.trader.services.binance.KlineService;
-import com.binance.trader.services.binance.OrderService;
-import com.binance.trader.services.binance.TickerService;
+import com.binance.trader.services.AccountInfoService;
+import com.binance.trader.services.KlineService;
+import com.binance.trader.services.OrderService;
+import com.binance.trader.services.TickerService;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +28,10 @@ public class BinanceFacade implements Exchange {
     private final static String BINANCE_URL = "https://api.binance.com";
 
     private SpotClientImpl client;
+    private AccountInfoService accountInfoService;
+    private TickerService tickerService;
+    private OrderService orderService;
+    private KlineService klineService;
     private String url;
     private String apiKey;
     private String secretKey;
@@ -40,29 +46,23 @@ public class BinanceFacade implements Exchange {
             secretKey = System.getenv("BINANCE_SECRET_KEY");
         }
         client = new SpotClientImpl(apiKey, secretKey, url);
+        accountInfoService = new AccountInfoService(client);
+        tickerService = new TickerService(client);
+        orderService = new OrderService(client);
+        klineService = new KlineService(client);
     }
 
     /**
      * Gets the balances for the symbol from the exchange.
-     * @param symbol symbol to exchange
-     * @return current balances of the user
-     * @throws BinanceTraderException if balances could not be gotten from the exchange
      */
-    public HashMap<String, Double> getBalances(Symbol symbol) {
+    public HashMap<String, Double> getBaseAndQuoteBalances(Symbol symbol) throws BinanceTraderException {
         Optional<AccountInfo> optionalAccountInfo =
-                Try.toGet(() -> new AccountInfoService(client).getAccountInfo());
+                Try.toGet(() -> accountInfoService.getAccountInfo());
         if (optionalAccountInfo.isPresent()) {
-            HashMap<String, Double> balances = new HashMap<>();
             AccountInfo accountInfo = optionalAccountInfo.get();
-            Double baseBalance = accountInfo.getBalance(symbol.getBase()).getFreeBalance();
-            Double quoteBalance = accountInfo.getBalance(symbol.getQuote()).getFreeBalance();
-
-            balances.put("base", baseBalance);
-            balances.put("quote", quoteBalance);
-            return balances;
-        } else {
-            throw new BinanceTraderException("Could not get Balances from the exchange");
+            return accountInfo.getBaseAndQuoteBalancesFor(symbol);
         }
+        throw new BinanceTraderException("Could not get Balances from the exchange");
     }
 
     /**
@@ -72,10 +72,10 @@ public class BinanceFacade implements Exchange {
      * @throws BinanceTraderException if price could not be gotten from the exchange
      */
     public Double getTickerPrice(Symbol symbol) {
-        Optional<Double> optionalTicker =
-                Try.toGet(() -> new TickerService(client).getTicker(symbol).getPrice());
+        Optional<Ticker> optionalTicker =
+                Try.toGet(() -> tickerService.getTicker(symbol));
         if (optionalTicker.isPresent()) {
-            return optionalTicker.get();
+            return optionalTicker.get().getPrice();
         } else {
             throw new BinanceTraderException("Could not get Ticker from the exchange");
         }
@@ -91,15 +91,19 @@ public class BinanceFacade implements Exchange {
      * @throws BinanceTraderException if prices could not be gotten from the exchange
      */
     public ArrayList<Double> getClosePrices(Symbol symbol, String period, int nbOfRecordsToFetch) {
-        Optional<ArrayList<Kline>> optionalKlines = Try.toGet(() -> new KlineService(client).fetchKlines(symbol, period, nbOfRecordsToFetch));
+        Optional<ArrayList<Kline>> optionalKlines = Try.toGet(() -> klineService.fetchKlines(symbol, period, nbOfRecordsToFetch));
         if (optionalKlines.isPresent()) {
             ArrayList<Kline> klines = optionalKlines.get();
-            ArrayList<Double> closePrices = new ArrayList<>();
-            klines.forEach(kline -> closePrices.add(kline.getClosePrice()));
-            return closePrices;
-        } else {
-            throw new BinanceTraderException("Could not get Close Prices from the exchange");
+            return getClosesPricesFrom(klines);
         }
+        throw new BinanceTraderException("Could not get Close Prices from the exchange");
+    }
+
+    @NotNull
+    private static ArrayList<Double> getClosesPricesFrom(ArrayList<Kline> klines) {
+        ArrayList<Double> closePrices = new ArrayList<>();
+        klines.forEach(kline -> closePrices.add(kline.getClosePrice()));
+        return closePrices;
     }
 
     /**
@@ -111,7 +115,7 @@ public class BinanceFacade implements Exchange {
      */
     public void buy(Symbol symbol, double tickerPrice, double quoteBalance) {
         Try.toRun(()
-                -> new OrderService(client).buy(symbol,tickerPrice, quoteBalance));
+                -> orderService.buy(symbol,tickerPrice, quoteBalance));
     }
 
     /**
@@ -123,6 +127,6 @@ public class BinanceFacade implements Exchange {
      */
     public void sell(Symbol symbol, double tickerPrice, double baseBalance) {
         Try.toRun(()
-                -> new OrderService(client).sell(symbol,tickerPrice, baseBalance));
+                -> orderService.sell(symbol,tickerPrice, baseBalance));
     }
 }

@@ -1,4 +1,4 @@
-package com.binance.trader.services.binance;
+package com.binance.trader.services;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
