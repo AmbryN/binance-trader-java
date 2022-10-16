@@ -9,19 +9,15 @@ It allows:
 * to select a trading strategy from the available list
 * to set the strategy's variable (e.g. observation period, number of periods) used to execute said strategy
 * to send actual buy and sell orders on Binance (currently being tested on Binance's Testnet)
-* to log the trades into a file (orderLox.txt) in the project root directory
+* to log the trades into a file (orderLog.txt) in the project root directory
 
 Planned features:
 * Allow to trade with a fraction of your quote balance in order to be able
-to use the same quote for multiple bots trading different base cryptos
+to use the same quote crypto for multiple bots trading different base cryptos
+* Add UI for crypto and strategy selection
 * Log transactions to Database
-* Add UI (Window or Web) for crypto and strategy selection
 
-Planned bug fixes:
-* If the bot fails to obtain information from the exchange, for instance because the
-internet connection dropped, it should try again instead of crashing
-
-## Available pairs (new ones will be added shortly)
+## Available pairs
 - BTCUSDT
 - BTCBUSD
 - ETHUSDT
@@ -34,7 +30,8 @@ internet connection dropped, it should try again instead of crashing
 - Exponential Moving Average (EMA)
 - Moving Average Convergence Divergence (MACD)
 - Moving Average Convergence Divergence - Refined 1 (MACDr1): this strategy is based on the MACD but 
-with a user definable spread variable between the MACD line and the signal line that triggers buy and sell
+with a user definable spread (in %) between the MACD line and the signal line that triggers buy and sell 
+`(MACD - Signal) / CurrentPrice * 100 (> or <) spread`
 
 ## Usage
 
@@ -53,6 +50,15 @@ TESTNET_SECRET_KEY="YOUR_TESTNET_SECRET_KEY"
 ```
 4) Run `mvn clean install`
 5) Run `mvn exec:java -Dexec.mainClass="com.binance.trader.App"`
+
+## Errors
+
+The bot consumes `BinanceConnectorException` and `BinanceServerException` thrown by the Binance Connector when getting
+or sending data to the exchange: when they occur, the bot tries to reconnect 5 times before throwing a 
+`BinanceTraderException`.
+
+`BinanceClientException` thrown by the Connector are logged and re-thrown by the bot because they are 
+unsolvable without human interaction.
 
 ## Built With
 
