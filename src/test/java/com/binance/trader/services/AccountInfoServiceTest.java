@@ -9,19 +9,15 @@ import java.util.LinkedHashMap;
 
 import com.binance.trader.enums.Crypto;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.binance.connector.client.exceptions.BinanceClientException;
-import com.binance.connector.client.exceptions.BinanceConnectorException;
 import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.connector.client.impl.spot.Trade;
 import com.binance.trader.classes.data.AccountInfo;
 import com.binance.trader.classes.data.Balance;
-import com.binance.trader.exceptions.BinanceTraderException;
 
 public class AccountInfoServiceTest {
     @Mock SpotClientImpl clientMock;

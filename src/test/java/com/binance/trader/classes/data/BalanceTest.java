@@ -2,7 +2,6 @@ package com.binance.trader.classes.data;
 
 import static org.junit.Assert.assertEquals;
 
-import com.binance.trader.classes.data.Balance;
 import com.binance.trader.enums.Crypto;
 import org.junit.Test;
 

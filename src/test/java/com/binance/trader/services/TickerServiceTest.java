@@ -1,26 +1,21 @@
 package com.binance.trader.services;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.util.LinkedHashMap;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.binance.connector.client.exceptions.BinanceClientException;
-import com.binance.connector.client.exceptions.BinanceConnectorException;
 import com.binance.connector.client.impl.SpotClientImpl;
 import com.binance.connector.client.impl.spot.Market;
 import com.binance.trader.classes.data.Ticker;
 import com.binance.trader.enums.Symbol;
-import com.binance.trader.exceptions.BinanceTraderException;
 
 public class TickerServiceTest {
     

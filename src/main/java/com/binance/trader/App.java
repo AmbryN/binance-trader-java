@@ -2,7 +2,6 @@ package com.binance.trader;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
-import com.binance.trader.exceptions.BinanceTraderException;
 import com.binance.trader.utils.Logging;
 
 public class App

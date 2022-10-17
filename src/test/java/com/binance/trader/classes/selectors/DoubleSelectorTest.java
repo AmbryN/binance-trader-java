@@ -2,7 +2,6 @@ package com.binance.trader.classes.selectors;
 
 import com.binance.trader.classes.inputs.NumberInput;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
