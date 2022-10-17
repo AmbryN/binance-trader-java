@@ -24,16 +24,16 @@ public class Order {
         if (this.symbol != null) {
             parameters.put("symbol", this.symbol.getPair());
         }
-        if (this.symbol != null) {
+        if (this.side != null) {
             parameters.put("side", this.side.toString());
         }
-        if (this.symbol != null) {
+        if (this.type != null) {
             parameters.put("type", this.type.toString());
         }
-        if (this.symbol != null) {
+        if (this.timeInForce != null) {
             parameters.put("timeInForce", this.timeInForce.toString());
         }
-        if (this.symbol != null) {
+        if (this.price != null) {
             parameters.put("price", this.price.toString());
         }
         if (this.quantity != null) {
