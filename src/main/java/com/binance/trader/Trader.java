@@ -53,9 +53,9 @@ public class Trader {
                     double tickerPrice = exchange.getTickerPrice(symbol);
                     StrategyResult result = strategy.execute(symbol, balances, tickerPrice);
 
-                    if (result == StrategyResult.BUY) {
+                    if (result == StrategyResult.BUY && balances.get("quote") > symbol.MIN_QUOTE_TRANSACTION) {
                         exchange.buy(symbol, tickerPrice, balances.get("quote"));
-                    } else if (result == StrategyResult.SELL) {
+                    } else if (result == StrategyResult.SELL && balances.get("base") > symbol.MIN_BASE_TRANSACTION) {
                         exchange.sell(symbol, tickerPrice, balances.get("base"));
                     }
                     tries = 0;
