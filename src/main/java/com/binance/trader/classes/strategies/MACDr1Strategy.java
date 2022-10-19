@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public class MACDr1Strategy extends MACDStrategy implements Strategy {
 
-    private double minSpread;
+    protected double minSpread;
 
     public MACDr1Strategy() {
         super();
