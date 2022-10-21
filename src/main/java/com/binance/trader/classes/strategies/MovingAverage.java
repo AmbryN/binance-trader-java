@@ -27,6 +27,7 @@ public abstract class MovingAverage implements Strategy {
     protected void setPeriod(Period period) {
         this.period = period;
     }
+    protected void setNbOfPeriods(int nbOfPeriods) { this.nbOfPeriods = nbOfPeriods; }
 
     @Override
     public StrategyResult execute(Symbol symbol, HashMap<String, Double> balances, double tickerPrice) {

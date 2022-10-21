@@ -11,10 +11,13 @@ import java.util.HashMap;
 
 public class MACDr2Strategy extends MACDr1Strategy implements Strategy {
 
+    private boolean shouldBuy;
     public MACDr2Strategy() {
         super();
+        shouldBuy = false;
     }
-    private boolean isConsistentUpCross(double newSignal, double newMACD, double ticker) {
+
+    protected boolean isConsistentUpCross(double newSignal, double newMACD, double ticker) {
         return newMACD < 0
                 && newMACD > newSignal
                 && (Math.abs(newMACD - newSignal) / ticker) * 100 > this.minSpread / 100.;

@@ -33,6 +33,7 @@ public class EMAStrategyTest {
         Double[] prices = prepareListOfPricesWithExpAverage16_237();
         HashMap<String, Double> balances = prepareBalances();
         strategy.setPeriod(Period.FiveMinutes);
+        strategy.setNbOfPeriods(5);
 
         when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
         StrategyResult result = strategy.execute(Symbol.BTCUSDT, balances, 16.5);

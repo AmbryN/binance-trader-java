@@ -37,13 +37,17 @@ public class CalculusTest {
                 10.0,
         };
         // EMA 3 : smoothing 2 / (n+1) = 0.5 and first SMA = 6.333333333, then 6.6666666, then 8.333333
-        assertEquals(8.333, Calculus.lastExpMovingAvg(values), 0.001);
+        Double[] emas = Calculus.expMovingAvgesWithSize(values, 3);
+        double lastEMA = emas[emas.length -1];
+        assertEquals(8.333, lastEMA, 0.001);
     }
 
     @Test
     public void expAvgShouldReturnZeroWhenEmpty() {
         Double[] values = new Double[] {};
-        assertEquals(0, Calculus.lastExpMovingAvg(values), 0);
+        Double[] emas = Calculus.expMovingAvgesWithSize(values, 3);
+        double lastEMA = emas[emas.length -1];
+        assertEquals(0, lastEMA, 0);
     }
 
     @Test
@@ -60,7 +64,7 @@ public class CalculusTest {
         expected.add(6.333333);
         expected.add(6.666666);
         expected.add(8.333333);
-        Double[] result = Calculus.expMovingAvg(values);
+        Double[] result = Calculus.expMovingAvgesWithSize(values, 3);
         for(int i=0; i<expected.size(); i++) {
             assertEquals(expected.get(i), result[i], 0.000001);
         }

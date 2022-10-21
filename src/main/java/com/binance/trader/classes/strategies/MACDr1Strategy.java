@@ -40,15 +40,15 @@ public class MACDr1Strategy extends MACDStrategy implements Strategy {
                 "\nSignal " + newSignal +
                 "\nMACD " + newMACD);
 
-        if (consistentUpCross && balances.get("quote") > symbol.MIN_QUOTE_TRANSACTION) {
+        if (consistentUpCross) {
             return StrategyResult.BUY;
-        } else if (downCross && balances.get("base") > symbol.MIN_BASE_TRANSACTION) {
+        } else if (downCross) {
             return StrategyResult.SELL;
         }
         return StrategyResult.NONE;
     }
 
-    private boolean isConsistentUpCross(double newSignal, double newMACD, double ticker) {
+    protected boolean isConsistentUpCross(double newSignal, double newMACD, double ticker) {
         return newMACD > newSignal && (Math.abs(newMACD - newSignal) / ticker) * 100 > minSpread / 100.;
     }
     private boolean isDownCross(double newSignal, double newMACD, double ticker) {

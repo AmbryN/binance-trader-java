@@ -15,7 +15,6 @@ import java.util.HashMap;
 
 public class Trader implements Runnable {
     private final static int MAX_RECONNECT_TRIES = 5;
-    private final static Logger logger = Logging.getInstance();
     private final Exchange exchange;
     private Strategy strategy;
     private Symbol symbol;

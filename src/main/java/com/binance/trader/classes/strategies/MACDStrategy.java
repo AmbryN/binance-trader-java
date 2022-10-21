@@ -20,15 +20,15 @@ public class MACDStrategy implements Strategy {
 
     public MACDStrategy() {}
 
-    public void setShortNbOfPeriods(int shortNbOfPeriods) {
+    protected void setShortNbOfPeriods(int shortNbOfPeriods) {
         this.shortNbOfPeriods = shortNbOfPeriods;
     }
 
-    public void setLongNbOfPeriods(int longNbOfPeriods) {
+    protected void setLongNbOfPeriods(int longNbOfPeriods) {
         this.longNbOfPeriods = longNbOfPeriods;
     }
 
-    public void setSignalNbOfPeriods(int signalNbOfPeriods) {
+    protected void setSignalNbOfPeriods(int signalNbOfPeriods) {
         this.signalNbOfPeriods = signalNbOfPeriods;
     }
 
@@ -60,16 +60,19 @@ public class MACDStrategy implements Strategy {
                 "\nSignal " + newSignal +
                 "\nMACD " + newMACD);
 
-        if (crossing == CrossingDirection.UP && balances.get("quote") > symbol.MIN_QUOTE_TRANSACTION) {
+        if (crossing == CrossingDirection.UP) {
             return StrategyResult.BUY;
-        } else if (crossing == CrossingDirection.DOWN && balances.get("base") > symbol.MIN_BASE_TRANSACTION) {
+        } else if (crossing == CrossingDirection.DOWN) {
             return StrategyResult.SELL;
         }
         return StrategyResult.NONE;
     }
 
     protected HashMap<String, Double[]> getMacdAndSignalLines(Symbol symbol) {
-        // To compute the {size} EMA, you always need {size * 2 - 1} records
+        // To compute the {size} EMA, you always need {size * 2 - 1} records,
+        // but here you need to calculate 3 EMAs (short, long and signal),
+        // so you need at least the {long EMA size + signal EMA size * 2 - 2} to
+        // compute the short one and get enough long values to calculate the signal.
         int recordsToFetch = this.longNbOfPeriods + this.signalNbOfPeriods * 2 - 2;
         Double[] prices = exchange.getClosePrices(symbol, period.asString(), recordsToFetch);
 
