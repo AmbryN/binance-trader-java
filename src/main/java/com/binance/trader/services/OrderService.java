@@ -28,7 +28,19 @@ public class OrderService {
     }
 
     public void buy(Symbol symbol, double tickerPrice, double quoteBalance) throws BinanceConnectorException, BinanceClientException, BinanceServerException {
-        double baseQuantity = Math.floor(quoteBalance / tickerPrice * symbol.MIN_BASE_MOVEMENT) / symbol.MIN_BASE_MOVEMENT;
+        //Order order = buildLimitBuyOrder(quoteBalance, symbol, tickerPrice);
+        Order order = buildMarketBuyOrder(quoteBalance, symbol);
+        this.sendOrder(order);
+    }
+
+    public void sell(Symbol symbol, double tickerPrice, double baseBalance) throws BinanceConnectorException, BinanceClientException, BinanceServerException {
+        // Order order = buildLimitSellOrder(baseBalance, symbol, tickerPrice);
+        Order order = buildMarkerSellOrder(baseBalance, symbol);
+        this.sendOrder(order);
+    }
+
+    private Order buildLimitBuyOrder(double quoteBalance, Symbol symbol, double tickerPrice) {
+        double baseQuantity = Math.floor(quoteBalance * symbol.MIN_BASE_MOVEMENT) / symbol.MIN_BASE_MOVEMENT;
 
         Order order = new Order();
         order.setSymbol(symbol);
@@ -38,24 +50,42 @@ public class OrderService {
         order.setPrice(tickerPrice);
         order.setQuantity(baseQuantity);
         order.setNewOrderRespType(OrderResponseType.RESULT);
-
-        this.sendOrder(order);
+        return order;
     }
 
-    public void sell(Symbol symbol, double tickerPrice, double baseBalance) throws BinanceConnectorException, BinanceClientException, BinanceServerException {
-        double baseQuantity = Math.floor(baseBalance * symbol.MIN_BASE_MOVEMENT) / symbol.MIN_BASE_MOVEMENT;
-
+    private Order buildLimitSellOrder(double baseBalance, Symbol symbol, double tickerPrice) {
         Order order = new Order();
         order.setSymbol(symbol);
         order.setSide(OrderSide.SELL);
         order.setType(OrderType.LIMIT);
         order.setTimeInForce(TimeInForce.IOC);
         order.setPrice(tickerPrice);
-        order.setQuantity(baseQuantity);
+        order.setQuantity(baseBalance);
         order.setNewOrderRespType(OrderResponseType.RESULT);
-
-        this.sendOrder(order);
+        return order;
     }
+
+    private Order buildMarketBuyOrder(double quoteBalance, Symbol symbol) {
+        Order order = new Order();
+        order.setSymbol(symbol);
+        order.setSide(OrderSide.BUY);
+        order.setType(OrderType.MARKET);
+        order.setQuoteOrderQty(quoteBalance);
+        order.setNewOrderRespType(OrderResponseType.FULL);
+        return order;
+    }
+
+    private Order buildMarkerSellOrder(double baseBalance, Symbol symbol) {
+        Order order = new Order();
+        order.setSymbol(symbol);
+        order.setSide(OrderSide.SELL);
+        order.setType(OrderType.MARKET);
+        order.setQuantity(baseBalance);
+        order.setNewOrderRespType(OrderResponseType.FULL);
+        return order;
+    }
+
+
 
     private void sendOrder(Order order) throws BinanceConnectorException, BinanceClientException, BinanceServerException{
         LinkedHashMap<String, Object> parameters = order.asParams();
