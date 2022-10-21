@@ -28,7 +28,7 @@ public class SMAStrategyTest {
 
     @Test
     public void shouldBuyIfPriceHigherThanMovingAvg() {
-        ArrayList<Double> prices = prepareListOfPricesWithAverage14_95();
+        Double[] prices = prepareListOfPricesWithAverage14_95();
         HashMap<String, Double> balances = prepareBalances();
         strategy.setPeriod(Period.FiveMinutes);
 
@@ -40,7 +40,7 @@ public class SMAStrategyTest {
 
     @Test
     public void shouldSellIfPriceLowerThanMovingAvg() {
-        ArrayList<Double> prices = prepareListOfPricesWithAverage14_95();
+        Double[] prices = prepareListOfPricesWithAverage14_95();
         HashMap<String, Double> balances = prepareBalances();
         strategy.setPeriod(Period.FiveMinutes);
 
@@ -50,19 +50,19 @@ public class SMAStrategyTest {
         assertEquals(StrategyResult.SELL, result);
     }
 
-    public ArrayList<Double> prepareListOfPricesWithAverage14_95() {
-        ArrayList<Double> prices = new ArrayList<>();
-        prices.add(10.0);
-        prices.add(11.0);
-        prices.add(12.5);
-        prices.add(15.);
-        prices.add(15.);
-        prices.add(16.);
-        prices.add(16.);
-        prices.add(17.);
-        prices.add(18.);
-        prices.add(19.);
-        return prices;
+    public Double[] prepareListOfPricesWithAverage14_95() {
+        return new Double[]{
+            10.0,
+            11.0,
+            12.5,
+            15.,
+            15.,
+            16.,
+            16.,
+            17.,
+            18.,
+            19.,
+        };
     }
 
     public HashMap<String, Double> prepareBalances() {

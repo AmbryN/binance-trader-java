@@ -13,7 +13,7 @@ public interface Exchange {
     HashMap<String, Double> getBaseAndQuoteBalances(Symbol symbol);
     Double getTickerPrice(Symbol symbol);
 
-    ArrayList<Double> getClosePrices(Symbol symbol, String period, int nbOfRecordsToFetch);
+    Double[] getClosePrices(Symbol symbol, String period, int nbOfRecordsToFetch);
 
     void buy(Symbol symbol, double tickerPrice, double quoteBalance);
     void sell(Symbol symbol, double tickerPrice, double baseBalance);

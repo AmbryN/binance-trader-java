@@ -19,7 +19,7 @@ public class KlineService {
         this.client =  client;
     }
 
-    public ArrayList<Kline> fetchKlines(Symbol symbol, String period, int nbOfPeriods) {
+    public Kline[] fetchKlines(Symbol symbol, String period, int nbOfPeriods) {
         LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
         parameters.put("symbol", symbol.getPair());
         parameters.put("interval", period);
@@ -58,6 +58,6 @@ public class KlineService {
                 takerBuyQuoteVolume
             ));                
         }
-        return klines;
+        return klines.toArray(Kline[]::new);
     }
 }

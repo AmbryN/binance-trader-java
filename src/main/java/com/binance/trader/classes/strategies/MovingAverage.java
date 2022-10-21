@@ -48,7 +48,7 @@ public abstract class MovingAverage implements Strategy {
 
     protected abstract double calculateMovingAvg(Symbol symbol);
 
-    protected ArrayList<Double> getClosePrices(Symbol symbol, String periodAsStr, int nbOfRecordsToFetch) {
+    protected Double[] getClosePrices(Symbol symbol, String periodAsStr, int nbOfRecordsToFetch) {
         return exchange.getClosePrices(symbol, periodAsStr, nbOfRecordsToFetch);
     }
 

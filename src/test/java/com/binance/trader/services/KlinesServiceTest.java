@@ -37,7 +37,7 @@ public class KlinesServiceTest {
         when(clientMock.createMarket()).thenReturn(marketMock);
         when(marketMock.klines(any(LinkedHashMap.class))).thenReturn(answer);
 
-        ArrayList<Kline> klines = service.fetchKlines(Symbol.BTCUSDT, "1h", 1);
+        Kline[] klines = service.fetchKlines(Symbol.BTCUSDT, "1h", 1);
         Kline expected = new Kline(
             1664213621000L, 
             19034.77000000, 
@@ -51,7 +51,7 @@ public class KlinesServiceTest {
             0.00000000,
             0.00000000
             );
-        boolean test = klines.get(0).equals(expected);
+        boolean test = klines[0].equals(expected);
         assertTrue(test);
     }
 }

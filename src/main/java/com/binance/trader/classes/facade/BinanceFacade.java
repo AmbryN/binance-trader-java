@@ -15,14 +15,15 @@ import com.binance.trader.services.TickerService;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Facade class for Binance exchange which handles
  * all the connections and work for client the application
  */
-// TODO : Test the Facade !
 public class BinanceFacade implements Exchange {
     private final static String TESTNET_URL = "https://testnet.binance.vision";
     private final static String BINANCE_URL = "https://api.binance.com";
@@ -90,20 +91,17 @@ public class BinanceFacade implements Exchange {
      * @return closePrice list of prices
      * @throws BinanceTraderException if prices could not be gotten from the exchange
      */
-    public ArrayList<Double> getClosePrices(Symbol symbol, String period, int nbOfRecordsToFetch) {
-        Optional<ArrayList<Kline>> optionalKlines = Try.toGet(() -> klineService.fetchKlines(symbol, period, nbOfRecordsToFetch));
+    public Double[] getClosePrices(Symbol symbol, String period, int nbOfRecordsToFetch) {
+        Optional<Kline[]> optionalKlines = Try.toGet(() -> klineService.fetchKlines(symbol, period, nbOfRecordsToFetch));
         if (optionalKlines.isPresent()) {
-            ArrayList<Kline> klines = optionalKlines.get();
+            Kline[] klines = optionalKlines.get();
             return getClosesPricesFrom(klines);
         }
         throw new BinanceTraderException("Could not get Close Prices from the exchange");
     }
 
-    @NotNull
-    private static ArrayList<Double> getClosesPricesFrom(ArrayList<Kline> klines) {
-        ArrayList<Double> closePrices = new ArrayList<>();
-        klines.forEach(kline -> closePrices.add(kline.getClosePrice()));
-        return closePrices;
+    private Double[] getClosesPricesFrom(Kline[] klines) {
+        return Arrays.stream(klines).map(Kline::getClosePrice).toArray(Double[]::new);
     }
 
     /**
@@ -114,7 +112,7 @@ public class BinanceFacade implements Exchange {
      * @param quoteBalance amount to buy
      */
     public void buy(Symbol symbol, double tickerPrice, double quoteBalance) {
-        Try.toRun(()
+        Try.toRunBinance(()
                 -> orderService.buy(symbol,tickerPrice, quoteBalance));
     }
 
@@ -126,7 +124,7 @@ public class BinanceFacade implements Exchange {
      * @param baseBalance amount to sell
      */
     public void sell(Symbol symbol, double tickerPrice, double baseBalance) {
-        Try.toRun(()
+        Try.toRunBinance(()
                 -> orderService.sell(symbol,tickerPrice, baseBalance));
     }
 }

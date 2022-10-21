@@ -30,7 +30,7 @@ public class EMAStrategyTest {
 
     @Test
     public void shouldBuyIfPriceHigherThanExpMovingAvg() {
-        ArrayList<Double> prices = prepareListOfPricesWithExpAverage16_237();
+        Double[] prices = prepareListOfPricesWithExpAverage16_237();
         HashMap<String, Double> balances = prepareBalances();
         strategy.setPeriod(Period.FiveMinutes);
 
@@ -42,7 +42,7 @@ public class EMAStrategyTest {
 
     @Test
     public void shouldSellIfPriceLowerThanExpMovingAvg() {
-        ArrayList<Double> prices = prepareListOfPricesWithExpAverage16_237();
+        Double[] prices = prepareListOfPricesWithExpAverage16_237();
         HashMap<String, Double> balances = prepareBalances();
         strategy.setPeriod(Period.FiveMinutes);
 
@@ -52,18 +52,18 @@ public class EMAStrategyTest {
         assertEquals(StrategyResult.SELL, result);
     }
 
-    public ArrayList<Double> prepareListOfPricesWithExpAverage16_237() {
-        ArrayList<Double> prices = new ArrayList<>();
-        prices.add(10.0);
-        prices.add(11.0);
-        prices.add(12.5);
-        prices.add(15.);
-        prices.add(15.);
-        prices.add(16.);
-        prices.add(16.);
-        prices.add(17.);
-        prices.add(18.);
-        return prices;
+    public Double[] prepareListOfPricesWithExpAverage16_237() {
+        return new Double[]{
+                10.0,
+                11.0,
+                12.5,
+                15.,
+                15.,
+                16.,
+                16.,
+                17.,
+                18.,
+        };
     }
 
     public HashMap<String, Double> prepareBalances() {

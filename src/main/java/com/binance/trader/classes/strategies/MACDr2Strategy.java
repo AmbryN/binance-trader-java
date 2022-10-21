@@ -14,7 +14,6 @@ public class MACDr2Strategy extends MACDr1Strategy implements Strategy {
     public MACDr2Strategy() {
         super();
     }
-
     private boolean isConsistentUpCross(double newSignal, double newMACD, double ticker) {
         return newMACD < 0
                 && newMACD > newSignal

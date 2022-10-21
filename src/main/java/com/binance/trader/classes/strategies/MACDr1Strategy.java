@@ -24,11 +24,11 @@ public class MACDr1Strategy extends MACDStrategy implements Strategy {
 
     @Override
     public StrategyResult execute(Symbol symbol, HashMap<String, Double> balances, double tickerPrice) {
-        HashMap<String, ArrayList<Double>> lines = this.getMacdAndSignalLines(symbol);
-        ArrayList<Double> MACDLine = lines.get("macd");
-        ArrayList<Double> signalLine = lines.get("signal");
-        double newMACD = MACDLine.get(MACDLine.size() - 1);
-        double newSignal = signalLine.get(signalLine.size() - 1);
+        HashMap<String, Double[]> lines = this.getMacdAndSignalLines(symbol);
+        Double[] MACDLine = lines.get("macd");
+        Double[] signalLine = lines.get("signal");
+        double newMACD = MACDLine[MACDLine.length - 1];
+        double newSignal = signalLine[signalLine.length - 1];
 
         boolean consistentUpCross = this.isConsistentUpCross(newSignal, newMACD, tickerPrice);
         boolean downCross = this.isDownCross(newSignal, newMACD, tickerPrice);

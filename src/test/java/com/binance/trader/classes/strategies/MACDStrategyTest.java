@@ -37,7 +37,7 @@ public class MACDStrategyTest {
 
     @Test
     public void shouldDoNothingIfMACDUnderSignal() {
-        ArrayList<Double> prices = prepareListOfPricesForDoingNothing();
+        Double[] prices = prepareListOfPricesForDoingNothing();
         when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
         StrategyResult result = strategy.execute(Symbol.BTCUSDT, balances, 1500.);
 
@@ -47,7 +47,7 @@ public class MACDStrategyTest {
     @Test
     public void shouldBuyIfMACDCrossingUpSignal() {
         HashMap<String, Double> balances = prepareBalances();
-        ArrayList<Double> prices = prepareListOfPricesForBuying();
+        Double[] prices = prepareListOfPricesForBuying();
         when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
         StrategyResult result = strategy.execute(Symbol.BTCUSDT, balances, 1500.);
 
@@ -57,15 +57,15 @@ public class MACDStrategyTest {
     @Test
     public void shouldSellIfMACDCrossingDownSignal() {
         HashMap<String, Double> balances = prepareBalances();
-        ArrayList<Double> prices = prepareListOfPricesForSelling();
+        Double[] prices = prepareListOfPricesForSelling();
         when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
         StrategyResult result = strategy.execute(Symbol.BTCUSDT, balances, 1500.);
 
         assertEquals(StrategyResult.SELL, result);
     }
 
-    private ArrayList<Double> prepareListOfPricesForDoingNothing() {
-        Double[] pricesArray = new Double[] {
+    private Double[] prepareListOfPricesForDoingNothing() {
+       return new Double[] {
                 1326.09,
                 1317.81,
                 1317.96,
@@ -109,11 +109,10 @@ public class MACDStrategyTest {
                 1343.9,
                 1346.1,
         };
-        return new ArrayList<>(List.of(pricesArray));
     }
 
-    private ArrayList<Double> prepareListOfPricesForBuying() {
-        Double[] pricesArray = new Double[] {
+    private Double[] prepareListOfPricesForBuying() {
+        return new Double[] {
                 1326.09,
                 1317.81,
                 1317.96,
@@ -157,11 +156,10 @@ public class MACDStrategyTest {
                 1380.0,
                 1390.0,
         };
-        return new ArrayList<>(List.of(pricesArray));
     }
 
-    private ArrayList<Double> prepareListOfPricesForSelling() {
-        Double[] pricesArray = new Double[] {
+    private Double[] prepareListOfPricesForSelling() {
+        return new Double[] {
                 1326.09,
                 1317.81,
                 1317.96,
@@ -205,7 +203,6 @@ public class MACDStrategyTest {
                 1390.0,
                 1370.0
         };
-        return new ArrayList<>(List.of(pricesArray));
     }
 
     public HashMap<String, Double> prepareBalances() {

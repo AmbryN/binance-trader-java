@@ -13,9 +13,9 @@ public class EMAStrategy extends MovingAverage {
 
     @Override
     protected double calculateMovingAvg(Symbol symbol) {
-        ArrayList<Double> closePrices = this.getClosePrices(symbol, period.asString(), this.nbOfPeriods * 2 - 1);
-        ArrayList<Double> emaList = Calculus.expMovingAvg(closePrices);
-        return emaList.get(emaList.size() -1);
+        Double[] closePrices = this.getClosePrices(symbol, period.asString(), this.nbOfPeriods * 2 - 1);
+        Double[] emaList = Calculus.expMovingAvg(closePrices);
+        return emaList[(emaList.length -1)];
     }
 
     @Override

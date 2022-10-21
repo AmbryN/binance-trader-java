@@ -1,6 +1,7 @@
 package com.binance.trader.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Calculus {
@@ -9,15 +10,15 @@ public class Calculus {
      * @param values the list of values to compute the SMA from
      * @return the SMA
      */
-    public static double simpleMovingAvg(List<Double> values) {
-        if (values.size() == 0) {
+    public static double simpleMovingAvg(Double[] values) {
+        if (values.length == 0) {
             return 0.;
         }
         double sum = 0;
         for (double value : values) {
             sum += value;
         }
-        return sum / values.size();
+        return sum / values.length;
     }
 
     /**
@@ -27,32 +28,32 @@ public class Calculus {
      * @param values the list of values to compute the EMA from
      * @return EMAList the list of the last {emaSize} values
      */
-    public static ArrayList<Double> expMovingAvg(List<Double> values) {
-        if (values.size() == 0) {
-            return new ArrayList<Double>();
+    public static Double[] expMovingAvg(Double[] values) {
+        if (values.length == 0) {
+            return new Double[] {};
         }
         // Find the middle of the list and ceil it which gives the size (nb of periods) of the EMA
-        double middle = (double) values.size() / 2.;
+        double middle = (double) values.length / 2.;
         int emaSize = (int) Math.ceil(middle);
 
         // Smoothing factor K
         double smoothing = 2 / ( (double) emaSize + 1);
 
         // First EMA is always the SMA of the {emaSize} first values
-        double firstSMA = simpleMovingAvg(values.subList(0, emaSize));
+        double firstSMA = simpleMovingAvg(Arrays.copyOfRange(values, 0, emaSize));
         ArrayList<Double> EMAList = new ArrayList<>();
         EMAList.add(firstSMA);
 
         // Sublist of the values which were not used for the SMA and need to be used for following EMAs
-        List<Double> filteredValues = values.subList(emaSize, values.size());
+        Double[] filteredValues = Arrays.copyOfRange(values, emaSize, values.length);
 
         // Compute the following EMA from the starting SMA
         double lastEMA = firstSMA;
-        for (int i=0; i < filteredValues.size(); i++) {
-            EMAList.add(smoothing * (filteredValues.get(i) - lastEMA) + lastEMA);
+        for (int i=0; i < filteredValues.length; i++) {
+            EMAList.add(smoothing * (filteredValues[i] - lastEMA) + lastEMA);
             lastEMA = EMAList.get(EMAList.size() -1);
         }
-        return EMAList;
+        return EMAList.toArray(Double[]::new);
     }
 
     /**
@@ -60,36 +61,36 @@ public class Calculus {
      * @param values the list of values to compute the EMA from
      * @return last EMA
      */
-    public static Double lastExpMovingAvg(List<Double> values) {
-        List<Double> expMovingAverages = expMovingAvg(values);
-        if (expMovingAverages.size() == 0) {
+    public static Double lastExpMovingAvg(Double[] values) {
+        Double[] expMovingAverages = expMovingAvg(values);
+        if (expMovingAverages.length == 0) {
             return 0.0;
         }
-        return expMovingAverages.get(expMovingAverages.size() - 1);
+        return expMovingAverages[expMovingAverages.length - 1];
     }
 
-    public static ArrayList<Double> expMovingAvgesWithSize(List<Double> values, int emaSize) {
-        if (values.size() == 0) {
-            return new ArrayList<Double>();
+    public static Double[] expMovingAvgesWithSize(Double[] values, int emaSize) {
+        if (values.length == 0) {
+            return new Double[0];
         }
 
         // Smoothing factor K
         double smoothing = 2 / ( (double) emaSize + 1);
 
         // First EMA is always the SMA of the {emaSize} first values
-        double firstSMA = simpleMovingAvg(values.subList(0, emaSize));
+        double firstSMA = simpleMovingAvg(Arrays.copyOfRange(values, 0, emaSize));
         ArrayList<Double> EMAList = new ArrayList<>();
         EMAList.add(firstSMA);
 
         // Sublist of the values which were not used for the SMA and need to be used for following EMAs
-        List<Double> filteredValues = values.subList(emaSize, values.size());
+        Double[] filteredValues = Arrays.copyOfRange(values, emaSize, values.length);
 
         // Compute the following EMA from the starting SMA
         double lastEMA = firstSMA;
-        for (int i=0; i < filteredValues.size(); i++) {
-            EMAList.add(smoothing * (filteredValues.get(i) - lastEMA) + lastEMA);
+        for (int i=0; i < filteredValues.length; i++) {
+            EMAList.add(smoothing * (filteredValues[i] - lastEMA) + lastEMA);
             lastEMA = EMAList.get(EMAList.size() -1);
         }
-        return EMAList;
+        return EMAList.toArray(new Double[0]);
     }
 }

@@ -43,13 +43,13 @@ public class MACDStrategy implements Strategy {
 
     @Override
     public StrategyResult execute(Symbol symbol, HashMap<String, Double> balances, double tickerPrice) {
-        HashMap<String, ArrayList<Double>> lines = this.getMacdAndSignalLines(symbol);
-        ArrayList<Double> MACDLine = lines.get("macd");
-        ArrayList<Double> signalLine = lines.get("signal");
-        double newMACD = MACDLine.get(MACDLine.size() - 1);
-        double lastMACD = MACDLine.get(MACDLine.size() - 2);
-        double newSignal = signalLine.get(signalLine.size() - 1);
-        double lastSignal = signalLine.get(signalLine.size() - 2);
+        HashMap<String, Double[]> lines = this.getMacdAndSignalLines(symbol);
+        Double[] MACDLine = lines.get("macd");
+        Double[] signalLine = lines.get("signal");
+        double newMACD = MACDLine[MACDLine.length - 1];
+        double lastMACD = MACDLine[MACDLine.length - 2];
+        double newSignal = signalLine[signalLine.length - 1];
+        double lastSignal = signalLine[signalLine.length - 2];
 
         CrossingDirection crossing = this.computeCrossingDirection(newSignal, newMACD, lastSignal, lastMACD);
 
@@ -68,36 +68,36 @@ public class MACDStrategy implements Strategy {
         return StrategyResult.NONE;
     }
 
-    protected HashMap<String, ArrayList<Double>> getMacdAndSignalLines(Symbol symbol) {
+    protected HashMap<String, Double[]> getMacdAndSignalLines(Symbol symbol) {
         // To compute the {size} EMA, you always need {size * 2 - 1} records
         int recordsToFetch = this.longNbOfPeriods + this.signalNbOfPeriods * 2 - 2;
-        ArrayList<Double> prices = exchange.getClosePrices(symbol, period.asString(), recordsToFetch);
+        Double[] prices = exchange.getClosePrices(symbol, period.asString(), recordsToFetch);
 
         // Compute the short EMA (generally 12) and the long EMA (generally 26) used for the MACD line
-        ArrayList<Double> shortEMAS = Calculus.expMovingAvgesWithSize(prices, this.shortNbOfPeriods);
-        ArrayList<Double> longEMAs = Calculus.expMovingAvgesWithSize(prices, this.longNbOfPeriods);
+        Double[] shortEMAS = Calculus.expMovingAvgesWithSize(prices, this.shortNbOfPeriods);
+        Double[] longEMAs = Calculus.expMovingAvgesWithSize(prices, this.longNbOfPeriods);
 
         // Compute the MACD Line which is the subtraction of the longEMA from the shortEMA
-        ArrayList<Double> MACDLine = this.computeMACDLine(shortEMAS, longEMAs);
+        Double[] MACDLine = this.computeMACDLine(shortEMAS, longEMAs);
 
         // Compute the signal line which is the EMA9 of the MACD line (subtractions)
-        ArrayList<Double> signalLine = Calculus.expMovingAvgesWithSize(MACDLine, signalNbOfPeriods);
+        Double[] signalLine = Calculus.expMovingAvgesWithSize(MACDLine, signalNbOfPeriods);
 
-        HashMap<String, ArrayList<Double>> lines = new HashMap<>();
+        HashMap<String, Double[]> lines = new HashMap<>();
         lines.put("macd", MACDLine);
         lines.put("signal", signalLine);
         return lines;
     }
 
-    protected ArrayList<Double> computeMACDLine(ArrayList<Double> shortEMAs, ArrayList<Double> longEMAs) {
+    protected Double[] computeMACDLine(Double[] shortEMAs, Double[] longEMAs) {
         ArrayList<Double> MACDLine = new ArrayList<>();
         int recordsNeededForSignal = this.signalNbOfPeriods * 2 - 1;
-        int lastIndexShortEMA = shortEMAs.size() - 1;
-        int lastIndexLongEMA = longEMAs.size() - 1;
+        int lastIndexShortEMA = shortEMAs.length - 1;
+        int lastIndexLongEMA = longEMAs.length - 1;
         for (int i=1; i <= recordsNeededForSignal; i++) {
-            MACDLine.add(shortEMAs.get(lastIndexShortEMA - recordsNeededForSignal + i) - longEMAs.get(lastIndexLongEMA - recordsNeededForSignal + i));
+            MACDLine.add(shortEMAs[lastIndexShortEMA - recordsNeededForSignal + i] - longEMAs[lastIndexLongEMA - recordsNeededForSignal + i]);
         }
-        return MACDLine;
+        return MACDLine.toArray(Double[]::new);
     }
     private CrossingDirection computeCrossingDirection(double newSignal, double newMACD, double lastSignal, double lastMACD) {
         if (newMACD >= newSignal && lastMACD < lastSignal) {
