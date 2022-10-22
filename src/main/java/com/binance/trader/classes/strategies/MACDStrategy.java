@@ -12,13 +12,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MACDStrategy implements Strategy {
-    protected Exchange exchange;
-    protected Period period;
-    protected int shortNbOfPeriods;
-    protected int longNbOfPeriods;
-    protected int signalNbOfPeriods;
+    private Exchange exchange;
+    private Period period;
+    private int shortNbOfPeriods;
+    private int longNbOfPeriods;
+    private int signalNbOfPeriods;
+    private Double[] MACDLine;
+    private Double[] signalLine;
+    protected CrossingDirection crossingDirection;
 
     public MACDStrategy() {}
+
+    protected void setPeriod(Period period) { this.period = period; }
 
     protected void setShortNbOfPeriods(int shortNbOfPeriods) {
         this.shortNbOfPeriods = shortNbOfPeriods;
@@ -32,6 +37,22 @@ public class MACDStrategy implements Strategy {
         this.signalNbOfPeriods = signalNbOfPeriods;
     }
 
+    protected double getCurrentMACD() {
+        return this.MACDLine[this.MACDLine.length -1];
+    }
+
+    protected double getCurrentSignal() {
+        return this.signalLine[this.signalLine.length -1];
+    }
+
+    protected double getLastMACD() {
+        return this.MACDLine[this.MACDLine.length -2];
+    }
+
+    protected double getLastSignal() {
+        return this.signalLine[this.signalLine.length -2];
+    }
+
     public void init(Exchange exchange) {
         this.exchange = exchange;
         this.period = new PeriodListSelector().startSelector();
@@ -43,32 +64,26 @@ public class MACDStrategy implements Strategy {
 
     @Override
     public StrategyResult execute(Symbol symbol, HashMap<String, Double> balances, double tickerPrice) {
-        HashMap<String, Double[]> lines = this.getMacdAndSignalLines(symbol);
-        Double[] MACDLine = lines.get("macd");
-        Double[] signalLine = lines.get("signal");
-        double newMACD = MACDLine[MACDLine.length - 1];
-        double lastMACD = MACDLine[MACDLine.length - 2];
-        double newSignal = signalLine[signalLine.length - 1];
-        double lastSignal = signalLine[signalLine.length - 2];
-
-        CrossingDirection crossing = this.computeCrossingDirection(newSignal, newMACD, lastSignal, lastMACD);
-
-        System.out.println("Base balance: " + balances.get("base") +
-                "\nQuote balance: " + balances.get("quote") +
-                "\nTicker " + tickerPrice +
-                "\nCrossing " + crossing +
-                "\nSignal " + newSignal +
-                "\nMACD " + newMACD);
-
-        if (crossing == CrossingDirection.UP) {
-            return StrategyResult.BUY;
-        } else if (crossing == CrossingDirection.DOWN) {
-            return StrategyResult.SELL;
-        }
-        return StrategyResult.NONE;
+        return buyDecision(symbol, balances, tickerPrice);
     }
 
-    protected HashMap<String, Double[]> getMacdAndSignalLines(Symbol symbol) {
+    protected StrategyResult buyDecision(Symbol symbol, HashMap<String, Double> balances, double tickerPrice) {
+        computeParams(symbol, balances, tickerPrice);
+        printCurrentStatus(balances, tickerPrice);
+        if (crossingDirection == CrossingDirection.UP) {
+            return StrategyResult.BUY;
+        } else if (crossingDirection == CrossingDirection.DOWN) {
+            return StrategyResult.SELL;
+        }
+        return StrategyResult.HOLD;
+    }
+
+    protected void computeParams(Symbol symbol, HashMap<String, Double> balances, double tickerPrice) {
+        getMacdAndSignalLines(symbol);
+        computeCrossingDirection();
+    }
+
+    protected void getMacdAndSignalLines(Symbol symbol) {
         // To compute the {size} EMA, you always need {size * 2 - 1} records,
         // but here you need to calculate 3 EMAs (short, long and signal),
         // so you need at least the {long EMA size + signal EMA size * 2 - 2} to
@@ -81,15 +96,10 @@ public class MACDStrategy implements Strategy {
         Double[] longEMAs = Calculus.expMovingAvgesWithSize(prices, this.longNbOfPeriods);
 
         // Compute the MACD Line which is the subtraction of the longEMA from the shortEMA
-        Double[] MACDLine = this.computeMACDLine(shortEMAS, longEMAs);
+        this.MACDLine = this.computeMACDLine(shortEMAS, longEMAs);
 
         // Compute the signal line which is the EMA9 of the MACD line (subtractions)
-        Double[] signalLine = Calculus.expMovingAvgesWithSize(MACDLine, signalNbOfPeriods);
-
-        HashMap<String, Double[]> lines = new HashMap<>();
-        lines.put("macd", MACDLine);
-        lines.put("signal", signalLine);
-        return lines;
+        this.signalLine = Calculus.expMovingAvgesWithSize(MACDLine, signalNbOfPeriods);
     }
 
     protected Double[] computeMACDLine(Double[] shortEMAs, Double[] longEMAs) {
@@ -102,14 +112,32 @@ public class MACDStrategy implements Strategy {
         }
         return MACDLine.toArray(Double[]::new);
     }
-    private CrossingDirection computeCrossingDirection(double newSignal, double newMACD, double lastSignal, double lastMACD) {
-        if (newMACD >= newSignal && lastMACD < lastSignal) {
-            return CrossingDirection.UP;
-        } else if (newMACD <= newSignal && lastMACD > lastSignal) {
-            return CrossingDirection.DOWN;
-        } else {
-            return CrossingDirection.NONE;
+    protected void computeCrossingDirection() {
+        double currentMACD = getCurrentMACD();
+        double lastMACD = getLastMACD();
+        double currentSignal = getCurrentSignal();
+        double lastSignal = getLastSignal();
+
+        CrossingDirection crossingDirection = CrossingDirection.NONE;
+        if (currentMACD > currentSignal && lastMACD < lastSignal) {
+            crossingDirection = CrossingDirection.UP;
+        } else if (currentMACD < currentSignal && lastMACD > lastSignal) {
+            crossingDirection = CrossingDirection.DOWN;
         }
+        this.crossingDirection = crossingDirection;
+    }
+
+    protected void printCurrentStatus(HashMap<String, Double> balances, double tickerPrice) {
+        System.out.println(currentStatus(balances, tickerPrice));
+    }
+
+    protected String currentStatus(HashMap<String, Double> balances, double tickerPrice) {
+        return "Base balance: " + balances.get("base") +
+                "\nQuote balance: " + balances.get("quote") +
+                "\nTicker " + tickerPrice +
+                "\nCrossing " + crossingDirection +
+                "\nMACD " + getCurrentMACD() +
+                "\nSignal " + getCurrentSignal();
     }
 
     @Override
@@ -123,9 +151,5 @@ public class MACDStrategy implements Strategy {
     @Override
     public String toString() {
         return "Moving Average Convergence Divergence";
-    }
-
-    protected void setPeriod(Period period) {
-        this.period = period;
     }
 }

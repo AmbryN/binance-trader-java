@@ -1,58 +1,68 @@
 package com.binance.trader.classes.strategies;
 
 import com.binance.trader.classes.selectors.DoubleSelector;
+import com.binance.trader.enums.CrossingDirection;
 import com.binance.trader.enums.StrategyResult;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.interfaces.Exchange;
 import com.binance.trader.interfaces.Strategy;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MACDr1Strategy extends MACDStrategy implements Strategy {
 
     protected double minSpread;
+    protected boolean isOverSpread;
+    protected boolean isUnderSpread;
 
     public MACDr1Strategy() {
         super();
     }
 
+    @Override
     public void init(Exchange exchange) {
         super.init(exchange);
         this.minSpread = new DoubleSelector().startSelector("Min Spread before Buy occurs (as double: e.g. 2.5 for 0.025): ");
     }
 
     @Override
-    public StrategyResult execute(Symbol symbol, HashMap<String, Double> balances, double tickerPrice) {
-        HashMap<String, Double[]> lines = this.getMacdAndSignalLines(symbol);
-        Double[] MACDLine = lines.get("macd");
-        Double[] signalLine = lines.get("signal");
-        double newMACD = MACDLine[MACDLine.length - 1];
-        double newSignal = signalLine[signalLine.length - 1];
-
-        boolean consistentUpCross = this.isConsistentUpCross(newSignal, newMACD, tickerPrice);
-        boolean downCross = this.isDownCross(newSignal, newMACD, tickerPrice);
-        System.out.println("Base balance: " + balances.get("base") +
-                "\nQuote balance: " + balances.get("quote") +
-                "\nTicker " + tickerPrice +
-                "\nConsistent UP " + consistentUpCross +
-                "\nDown " + downCross +
-                "\nSignal " + newSignal +
-                "\nMACD " + newMACD);
-
-        if (consistentUpCross) {
+    protected StrategyResult buyDecision(Symbol symbol, HashMap<String, Double> balances, double tickerPrice) {
+        computeParams(symbol, balances, tickerPrice);
+        printCurrentStatus(balances, tickerPrice);
+        if (crossingDirection == CrossingDirection.UP && isOverSpread) {
             return StrategyResult.BUY;
-        } else if (downCross) {
+        } else if (crossingDirection == CrossingDirection.DOWN && isUnderSpread) {
             return StrategyResult.SELL;
         }
-        return StrategyResult.NONE;
+        return StrategyResult.HOLD;
     }
 
-    protected boolean isConsistentUpCross(double newSignal, double newMACD, double ticker) {
-        return newMACD > newSignal && (Math.abs(newMACD - newSignal) / ticker) * 100 > minSpread / 100.;
+    @Override
+    protected void computeParams(Symbol symbol, HashMap<String, Double> balances, double tickerPrice) {
+        getMacdAndSignalLines(symbol);
+        computeCrossingDirection();
+        isOverSpread(tickerPrice);
+        isUnderSpread(tickerPrice);
     }
-    private boolean isDownCross(double newSignal, double newMACD, double ticker) {
-        return (newMACD > newSignal && (Math.abs(newMACD - newSignal) / ticker) * 100 < (minSpread / 100.) * 0.8) || newMACD < newSignal;
+
+    protected void isOverSpread(double tickerPrice) {
+        double currentMACD = getCurrentMACD();
+        double currentSignal = getCurrentSignal();
+        this.isOverSpread = ((currentMACD - currentSignal) / tickerPrice) * 100 > minSpread / 100.;
+    }
+
+    protected void isUnderSpread(double tickerPrice) {
+        double currentMACD = getCurrentMACD();
+        double currentSignal = getCurrentSignal();
+        this.isUnderSpread = ((currentMACD - currentSignal) / tickerPrice) * 100 < (minSpread / 100.) * 0.8;
+    }
+
+    @Override
+    protected String currentStatus(HashMap<String, Double> balances, double tickerPrice) {
+        return super.currentStatus(balances, tickerPrice) +
+                "\nOver Spread " + isOverSpread +
+                "\nUnder Spread " + isUnderSpread;
+
     }
 
     @Override

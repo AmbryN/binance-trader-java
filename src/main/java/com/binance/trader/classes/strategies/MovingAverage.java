@@ -8,7 +8,6 @@ import com.binance.trader.enums.Symbol;
 import com.binance.trader.interfaces.Exchange;
 import com.binance.trader.interfaces.Strategy;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class MovingAverage implements Strategy {
@@ -38,7 +37,7 @@ public abstract class MovingAverage implements Strategy {
                 "\nTicker " + tickerPrice +
                 "\nExpMAvg " + movingAvg);
 
-        StrategyResult result = StrategyResult.NONE;
+        StrategyResult result = StrategyResult.HOLD;
         if (tickerPrice > movingAvg && balances.get("quote") > symbol.MIN_QUOTE_TRANSACTION) {
             result = StrategyResult.BUY;
         } else if (tickerPrice < movingAvg && balances.get("base") > symbol.MIN_BASE_TRANSACTION) {

@@ -16,12 +16,12 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class MACDStrategyTest {
+public class MACDr2StrategyTest {
 
     @Mock
     Exchange exchangeMock;
 
-    @InjectMocks MACDStrategy strategy;
+    @InjectMocks MACDr2Strategy strategy;
     HashMap<String, Double> balances;
     @Before
     public void setup() {
@@ -34,32 +34,23 @@ public class MACDStrategyTest {
     }
 
     @Test
-    public void shouldDoNothingIfMACDUnderSignal() {
-        Double[] prices = prepareListOfPricesForDoingNothing();
-        when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, balances, 1500.);
+    public void shouldDoNothingIfMACDConsistentlyUnderSignal() {
+        // TODO: Write for r2
+    }
 
-        assertEquals(StrategyResult.HOLD, result);
+    @Test
+    public void shouldDoNothingIfMACDConsistentlyOverSignal() {
+        // TODO: Write a test when MACD is over Signal for longer period
     }
 
     @Test
     public void shouldBuyIfMACDCrossingUpSignal() {
-        HashMap<String, Double> balances = prepareBalances();
-        Double[] prices = prepareListOfPricesForBuying();
-        when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, balances, 1500.);
-
-        assertEquals(StrategyResult.BUY, result);
+        // TODO: Write for r2
     }
 
     @Test
     public void shouldSellIfMACDCrossingDownSignal() {
-        HashMap<String, Double> balances = prepareBalances();
-        Double[] prices = prepareListOfPricesForSelling();
-        when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, balances, 1500.);
-
-        assertEquals(StrategyResult.SELL, result);
+        // TODO: Write for r2
     }
 
     private Double[] prepareListOfPricesForDoingNothing() {
