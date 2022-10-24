@@ -6,6 +6,7 @@ import com.binance.trader.enums.Symbol;
 import com.binance.trader.enums.TimeInForce;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Date;
 
 public class OrderResult {
@@ -22,6 +23,7 @@ public class OrderResult {
         private TimeInForce timeInForce;
         private OrderType type;
         private OrderSide side;
+        private Fill[] fills;
 
         public Symbol getSymbol() {
                 return symbol;
@@ -71,6 +73,7 @@ public class OrderResult {
                         ", timeInForce=" + timeInForce +
                         ", type=" + type +
                         ", side=" + side +
+                        ", fills=" + Arrays.toString(fills) +
                         '}';
         }
 
@@ -83,6 +86,8 @@ public class OrderResult {
                         ", orignQty=" + origQty +
                         ", executedQty=" + executedQty +
                         ", status='" + status + '\'' +
-                        ", timeInForce=" + timeInForce;
+                        ", timeInForce=" + timeInForce +
+                        ", fills=" + Arrays.toString(fills);
+
         }
 }
