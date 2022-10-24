@@ -9,9 +9,11 @@ import java.util.HashMap;
  * Trading strategy used by the bot
  */
 public interface Strategy {
-    StrategyResult execute(Symbol symbol, HashMap<String, Double> balances, double tickerPrice);
+    StrategyResult execute(Symbol symbol, double tickerPrice);
 
     void init(Exchange exchange);
+
+    void printCurrentStatus(HashMap<String, Double> balances, double tickerPrice);
 
     String describe();
 

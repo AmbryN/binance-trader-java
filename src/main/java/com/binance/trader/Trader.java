@@ -54,8 +54,8 @@ public class Trader implements Runnable {
     private void trade() {
         HashMap<String, Double> balances = exchange.getBaseAndQuoteBalances(symbol);
         double tickerPrice = exchange.getTickerPrice(symbol);
-        StrategyResult result = strategy.execute(symbol, balances, tickerPrice);
-
+        StrategyResult result = strategy.execute(symbol, tickerPrice);
+        strategy.printCurrentStatus(balances, tickerPrice);
         if (result == StrategyResult.BUY && balances.get("quote") > symbol.MIN_QUOTE_TRANSACTION) {
             exchange.buy(symbol, tickerPrice, balances.get("quote"));
         } else if (result == StrategyResult.SELL && balances.get("base") > symbol.MIN_BASE_TRANSACTION) {

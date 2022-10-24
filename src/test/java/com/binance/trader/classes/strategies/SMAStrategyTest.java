@@ -33,7 +33,7 @@ public class SMAStrategyTest {
         strategy.setPeriod(Period.FiveMinutes);
 
         when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, balances, 15);
+        StrategyResult result = strategy.execute(Symbol.BTCUSDT, 15);
 
         assertEquals(StrategyResult.BUY, result);
     }
@@ -45,7 +45,7 @@ public class SMAStrategyTest {
         strategy.setPeriod(Period.FiveMinutes);
 
         when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, balances, 14.5);
+        StrategyResult result = strategy.execute(Symbol.BTCUSDT, 14.5);
 
         assertEquals(StrategyResult.SELL, result);
     }

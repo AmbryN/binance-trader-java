@@ -14,9 +14,8 @@ public class MACDr2Strategy extends MACDr1Strategy implements Strategy {
     }
 
     @Override
-    protected StrategyResult buyDecision(Symbol symbol, HashMap<String, Double> balances, double tickerPrice) {
-        computeParams(symbol, balances, tickerPrice);
-        printCurrentStatus(balances, tickerPrice);
+    protected StrategyResult buyDecision(Symbol symbol, double tickerPrice) {
+        computeParams(symbol, tickerPrice);
         if (getCurrentMACD() < 0 && crossingDirection == CrossingDirection.UP && isOverSpread) {
             return StrategyResult.BUY;
         } else if (crossingDirection == CrossingDirection.DOWN && isUnderSpread) {

@@ -14,6 +14,7 @@ public abstract class MovingAverage implements Strategy {
     protected Exchange exchange;
     protected Period period;
     protected int nbOfPeriods;
+    protected double movingAvg;
 
     protected MovingAverage() {}
 
@@ -29,24 +30,27 @@ public abstract class MovingAverage implements Strategy {
     protected void setNbOfPeriods(int nbOfPeriods) { this.nbOfPeriods = nbOfPeriods; }
 
     @Override
-    public StrategyResult execute(Symbol symbol, HashMap<String, Double> balances, double tickerPrice) {
-        double movingAvg = this.calculateMovingAvg(symbol);
-
-        System.out.println("Base balance: " + balances.get("base") +
-                "\nQuote balance: " + balances.get("quote") +
-                "\nTicker " + tickerPrice +
-                "\nExpMAvg " + movingAvg);
+    public StrategyResult execute(Symbol symbol, double tickerPrice) {
+        calculateMovingAvg(symbol);
 
         StrategyResult result = StrategyResult.HOLD;
-        if (tickerPrice > movingAvg && balances.get("quote") > symbol.MIN_QUOTE_TRANSACTION) {
+        if (tickerPrice > movingAvg) {
             result = StrategyResult.BUY;
-        } else if (tickerPrice < movingAvg && balances.get("base") > symbol.MIN_BASE_TRANSACTION) {
+        } else if (tickerPrice < movingAvg) {
             result = StrategyResult.SELL;
         }
         return result;
     }
 
-    protected abstract double calculateMovingAvg(Symbol symbol);
+    @Override
+    public void printCurrentStatus(HashMap<String, Double> balances, double tickerPrice) {
+        System.out.println("Base balance: " + balances.get("base") +
+                "\nQuote balance: " + balances.get("quote") +
+                "\nTicker " + tickerPrice +
+                "\nExpMAvg " + movingAvg);
+    }
+
+    protected abstract void calculateMovingAvg(Symbol symbol);
 
     protected Double[] getClosePrices(Symbol symbol, String periodAsStr, int nbOfRecordsToFetch) {
         return exchange.getClosePrices(symbol, periodAsStr, nbOfRecordsToFetch);

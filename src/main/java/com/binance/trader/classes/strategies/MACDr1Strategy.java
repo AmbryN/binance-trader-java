@@ -19,6 +19,8 @@ public class MACDr1Strategy extends MACDStrategy implements Strategy {
         super();
     }
 
+    protected void setMinSpread(double spread) { this.minSpread = spread; }
+
     @Override
     public void init(Exchange exchange) {
         super.init(exchange);
@@ -26,9 +28,8 @@ public class MACDr1Strategy extends MACDStrategy implements Strategy {
     }
 
     @Override
-    protected StrategyResult buyDecision(Symbol symbol, HashMap<String, Double> balances, double tickerPrice) {
-        computeParams(symbol, balances, tickerPrice);
-        printCurrentStatus(balances, tickerPrice);
+    protected StrategyResult buyDecision(Symbol symbol, double tickerPrice) {
+        computeParams(symbol, tickerPrice);
         if (crossingDirection == CrossingDirection.UP && isOverSpread) {
             return StrategyResult.BUY;
         } else if (crossingDirection == CrossingDirection.DOWN && isUnderSpread) {
@@ -37,8 +38,7 @@ public class MACDr1Strategy extends MACDStrategy implements Strategy {
         return StrategyResult.HOLD;
     }
 
-    @Override
-    protected void computeParams(Symbol symbol, HashMap<String, Double> balances, double tickerPrice) {
+    protected void computeParams(Symbol symbol, double tickerPrice) {
         getMacdAndSignalLines(symbol);
         computeCrossingDirection();
         isOverSpread(tickerPrice);

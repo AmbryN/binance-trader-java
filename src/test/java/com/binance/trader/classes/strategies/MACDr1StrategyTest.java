@@ -16,13 +16,12 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class MACDStrategyTest {
+public class MACDr1StrategyTest {
 
     @Mock
     Exchange exchangeMock;
 
-    @InjectMocks MACDStrategy strategy;
-    HashMap<String, Double> balances;
+    @InjectMocks MACDr1Strategy strategy;
     @Before
     public void setup() {
         MockitoAnnotations.openMocks(this);
@@ -30,36 +29,20 @@ public class MACDStrategyTest {
         strategy.setShortNbOfPeriods(12);
         strategy.setLongNbOfPeriods(26);
         strategy.setSignalNbOfPeriods(9);
-        balances = prepareBalances();
+        strategy.setMinSpread(2.0);
+    }
+
+    // TODO: Write specs on paper to be able to write the appropriate tests
+    @Test
+    public void shouldSellIfMACDUnderSignalPlusSpread() {
     }
 
     @Test
-    public void shouldDoNothingIfMACDUnderSignal() {
-        Double[] prices = prepareListOfPricesForDoingNothing();
-        when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, 1500.);
-
-        assertEquals(StrategyResult.HOLD, result);
+    public void shouldDoNothingIfMACDOverSignalPlusSpreadForMoreThanTwoPeriods() {
     }
 
     @Test
-    public void shouldBuyIfMACDCrossingUpSignal() {
-        HashMap<String, Double> balances = prepareBalances();
-        Double[] prices = prepareListOfPricesForBuying();
-        when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, 1500.);
-
-        assertEquals(StrategyResult.BUY, result);
-    }
-
-    @Test
-    public void shouldSellIfMACDCrossingDownSignal() {
-        HashMap<String, Double> balances = prepareBalances();
-        Double[] prices = prepareListOfPricesForSelling();
-        when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, 1500.);
-
-        assertEquals(StrategyResult.SELL, result);
+    public void shouldBuyIfMACDCrossesOverSignalPlusSpreadInTheLastPeriod() {
     }
 
     private Double[] prepareListOfPricesForDoingNothing() {
@@ -201,12 +184,5 @@ public class MACDStrategyTest {
                 1390.0,
                 1370.0
         };
-    }
-
-    public HashMap<String, Double> prepareBalances() {
-        HashMap<String, Double> balances = new HashMap<>();
-        balances.put("base", 5.);
-        balances.put("quote", 1500.);
-        return balances;
     }
 }

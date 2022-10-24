@@ -36,7 +36,7 @@ public class EMAStrategyTest {
         strategy.setNbOfPeriods(5);
 
         when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, balances, 16.5);
+        StrategyResult result = strategy.execute(Symbol.BTCUSDT, 16.5);
 
         assertEquals(StrategyResult.BUY, result);
     }
@@ -48,7 +48,7 @@ public class EMAStrategyTest {
         strategy.setPeriod(Period.FiveMinutes);
 
         when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, balances, 16.0);
+        StrategyResult result = strategy.execute(Symbol.BTCUSDT, 16.0);
 
         assertEquals(StrategyResult.SELL, result);
     }

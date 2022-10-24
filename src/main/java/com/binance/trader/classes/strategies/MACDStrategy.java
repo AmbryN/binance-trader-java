@@ -63,13 +63,12 @@ public class MACDStrategy implements Strategy {
     }
 
     @Override
-    public StrategyResult execute(Symbol symbol, HashMap<String, Double> balances, double tickerPrice) {
-        return buyDecision(symbol, balances, tickerPrice);
+    public StrategyResult execute(Symbol symbol, double tickerPrice) {
+        return buyDecision(symbol, tickerPrice);
     }
 
-    protected StrategyResult buyDecision(Symbol symbol, HashMap<String, Double> balances, double tickerPrice) {
-        computeParams(symbol, balances, tickerPrice);
-        printCurrentStatus(balances, tickerPrice);
+    protected StrategyResult buyDecision(Symbol symbol, double tickerPrice) {
+        computeParams(symbol);
         if (crossingDirection == CrossingDirection.UP) {
             return StrategyResult.BUY;
         } else if (crossingDirection == CrossingDirection.DOWN) {
@@ -78,7 +77,7 @@ public class MACDStrategy implements Strategy {
         return StrategyResult.HOLD;
     }
 
-    protected void computeParams(Symbol symbol, HashMap<String, Double> balances, double tickerPrice) {
+    protected void computeParams(Symbol symbol) {
         getMacdAndSignalLines(symbol);
         computeCrossingDirection();
     }
@@ -127,7 +126,8 @@ public class MACDStrategy implements Strategy {
         this.crossingDirection = crossingDirection;
     }
 
-    protected void printCurrentStatus(HashMap<String, Double> balances, double tickerPrice) {
+    @Override
+    public void printCurrentStatus(HashMap<String, Double> balances, double tickerPrice) {
         System.out.println(currentStatus(balances, tickerPrice));
     }
 
