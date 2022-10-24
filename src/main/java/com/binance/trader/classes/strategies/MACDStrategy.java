@@ -84,10 +84,9 @@ public class MACDStrategy implements Strategy {
 
     protected void getMacdAndSignalLines(Symbol symbol) {
         // To compute the {size} EMA, you always need {size * 2 - 1} records,
-        // but here you need to calculate 3 EMAs (short, long and signal),
-        // so you need at least the {long EMA size + signal EMA size * 2 - 2} to
-        // compute the short one and get enough long values to calculate the signal.
-        int recordsToFetch = this.longNbOfPeriods + this.signalNbOfPeriods * 2 - 2;
+        // so you need at least the {long EMA size * 2} to
+        // compute the short and long ones and derive the signal from it.
+        int recordsToFetch = this.longNbOfPeriods * 2 - 1;
         Double[] prices = exchange.getClosePrices(symbol, period.asString(), recordsToFetch);
 
         // Compute the short EMA (generally 12) and the long EMA (generally 26) used for the MACD line
@@ -103,7 +102,7 @@ public class MACDStrategy implements Strategy {
 
     protected Double[] computeMACDLine(Double[] shortEMAs, Double[] longEMAs) {
         ArrayList<Double> MACDLine = new ArrayList<>();
-        int recordsNeededForSignal = this.signalNbOfPeriods * 2 - 1;
+        int recordsNeededForSignal = this.longNbOfPeriods;
         int lastIndexShortEMA = shortEMAs.length - 1;
         int lastIndexLongEMA = longEMAs.length - 1;
         for (int i=1; i <= recordsNeededForSignal; i++) {
