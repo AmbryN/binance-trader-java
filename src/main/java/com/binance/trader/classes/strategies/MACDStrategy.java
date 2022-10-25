@@ -83,10 +83,9 @@ public class MACDStrategy implements Strategy {
     }
 
     protected void getMacdAndSignalLines(Symbol symbol) {
-        // To compute the {size} EMA, you always need {size * 2 - 1} records,
-        // so you need at least the {long EMA size * 2} to
-        // compute the short and long ones and derive the signal from it.
-        int recordsToFetch = this.longNbOfPeriods * 2 - 1;
+        // To compute the {size} EMA, you normally need {size * 2 - 1} records,
+        // but binance uses at least { 5 * size } to be more accurate.
+        int recordsToFetch = this.longNbOfPeriods * 5 - 4;
         Double[] prices = exchange.getClosePrices(symbol, period.asString(), recordsToFetch);
 
         // Compute the short EMA (generally 12) and the long EMA (generally 26) used for the MACD line
@@ -102,7 +101,8 @@ public class MACDStrategy implements Strategy {
 
     protected Double[] computeMACDLine(Double[] shortEMAs, Double[] longEMAs) {
         ArrayList<Double> MACDLine = new ArrayList<>();
-        int recordsNeededForSignal = this.longNbOfPeriods;
+        // Binance calculates the Signal on at least { 6 * signalNbOfPeriods }
+        int recordsNeededForSignal = this.signalNbOfPeriods * 6 - 5;
         int lastIndexShortEMA = shortEMAs.length - 1;
         int lastIndexLongEMA = longEMAs.length - 1;
         for (int i=1; i <= recordsNeededForSignal; i++) {

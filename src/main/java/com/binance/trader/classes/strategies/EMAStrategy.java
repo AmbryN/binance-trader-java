@@ -13,7 +13,8 @@ public class EMAStrategy extends MovingAverage {
 
     @Override
     protected void calculateMovingAvg(Symbol symbol) {
-        Double[] closePrices = this.getClosePrices(symbol, period.asString(), this.nbOfPeriods * 2 - 1);
+        // Binance uses at least { 5 * nbOfPeriods } to get the most accurate EMA
+        Double[] closePrices = this.getClosePrices(symbol, period.asString(), this.nbOfPeriods * 5 - 4);
         Double[] emaList = Calculus.expMovingAvgesWithSize(closePrices, this.nbOfPeriods);
         this.movingAvg = emaList[(emaList.length -1)];
     }
