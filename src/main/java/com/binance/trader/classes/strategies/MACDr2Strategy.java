@@ -10,10 +10,12 @@ import java.util.HashMap;
 public class MACDr2Strategy extends MACDStrategy implements Strategy {
 
     private Double lastBuyingPrice;
+    private boolean macdUnderZeroWhenCrossed;
 
     public MACDr2Strategy() {
         super();
         lastBuyingPrice = null;
+        macdUnderZeroWhenCrossed = false;
     }
 
     protected void setLastBuyingPrice(Double lastBuyingPrice) {
@@ -24,13 +26,23 @@ public class MACDr2Strategy extends MACDStrategy implements Strategy {
     protected StrategyResult buyDecision(Symbol symbol, double tickerPrice) {
         computeParams(symbol);
         if (getCurrentMACD() < 0 && crossingDirection == CrossingDirection.UP) {
+            macdUnderZeroWhenCrossed = true;
             lastBuyingPrice = tickerPrice;
             return StrategyResult.BUY;
-        } else if (crossingDirection == CrossingDirection.DOWN || (lastBuyingPrice != null && tickerPrice < lastBuyingPrice)) { // TODO : Write tests for "lastBuyingPrice"
+        } else if (crossingDirection == CrossingDirection.DOWN || (lastBuyingPrice != null && tickerPrice < lastBuyingPrice)) {
+            macdUnderZeroWhenCrossed = false;
             lastBuyingPrice = null;
             return StrategyResult.SELL;
         }
         return StrategyResult.HOLD;
+    }
+
+    @Override
+    protected String currentStatus(HashMap<String, Double> balances, double tickerPrice) {
+        return super.currentStatus(balances, tickerPrice) +
+                "\nMACD was under Zero: " + macdUnderZeroWhenCrossed +
+                "\nLast buying Price" + lastBuyingPrice;
+
     }
 
     @Override
