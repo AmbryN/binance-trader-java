@@ -30,9 +30,9 @@ public class MACDr1Strategy extends MACDStrategy implements Strategy {
     @Override
     protected StrategyResult buyDecision(Symbol symbol, double tickerPrice) {
         computeParams(symbol, tickerPrice);
-        if (crossingDirection == CrossingDirection.UP && isOverSpread) {
+        if (isOverSpread) {
             return StrategyResult.BUY;
-        } else if (crossingDirection == CrossingDirection.DOWN && isUnderSpread) {
+        } else if (isUnderSpread) {
             return StrategyResult.SELL;
         }
         return StrategyResult.HOLD;
