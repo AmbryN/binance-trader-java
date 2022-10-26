@@ -32,8 +32,9 @@ to use the same quote crypto for multiple bots trading different base cryptos
 - Moving Average Convergence Divergence - Refined 1 (MACDr1): this strategy is based on the MACD but 
 with a user definable spread (in %) between the MACD line and the signal line that triggers buy and sell 
 `(MACD - Signal) / CurrentPrice * 100 (> or <) spread`
-- Moving Average Convergence Divergence - Refined 2 (MACDr2): this strategy is based on the MACDr1 but
-only buys if the crypto is in oversold position
+- Moving Average Convergence Divergence - Refined 2 (MACDr2): this strategy is based on the MACD but
+it only buys if the crypto is in oversold position and implements a stop-loss if the ticker goes under
+the buy price
 
 ## Usage
 
