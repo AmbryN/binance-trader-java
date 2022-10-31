@@ -27,7 +27,9 @@ public class MACDr2Strategy extends MACDStrategy implements Strategy {
         computeParams(symbol);
         if (getCurrentMACD() < 0 && crossingDirection == CrossingDirection.UP) {
             macdUnderZeroWhenCrossed = true;
-            lastBuyingPrice = tickerPrice;
+            if (lastBuyingPrice == null) {
+                lastBuyingPrice = tickerPrice;
+            }
             return StrategyResult.BUY;
         } else if (crossingDirection == CrossingDirection.DOWN || (lastBuyingPrice != null && tickerPrice < lastBuyingPrice)) {
             macdUnderZeroWhenCrossed = false;
@@ -41,7 +43,7 @@ public class MACDr2Strategy extends MACDStrategy implements Strategy {
     protected String currentStatus(HashMap<String, Double> balances, double tickerPrice) {
         return super.currentStatus(balances, tickerPrice) +
                 "\nMACD was under Zero: " + macdUnderZeroWhenCrossed +
-                "\nLast buying Price" + lastBuyingPrice;
+                "\nLast buying Price " + lastBuyingPrice;
 
     }
 
