@@ -65,17 +65,15 @@ public class MACDStrategy implements Strategy {
 
     protected StrategyResult buyDecision(Symbol symbol, double tickerPrice) {
         computeParams(symbol);
-        if (crossingDirection == UP) {
+        if (getCurrentMACD() > getCurrentSignal()) {
             return StrategyResult.BUY;
-        } else if (crossingDirection == DOWN) {
+        } else {
             return StrategyResult.SELL;
         }
-        return StrategyResult.HOLD;
     }
 
     protected void computeParams(Symbol symbol) {
         getMacdAndSignalLines(symbol);
-        computeCrossingDirection();
     }
 
     protected void getMacdAndSignalLines(Symbol symbol) {
@@ -106,29 +104,21 @@ public class MACDStrategy implements Strategy {
         }
         return MACDLine.toArray(Double[]::new);
     }
-    protected void computeCrossingDirection() {
-        double currentMACD = getCurrentMACD();
-        double currentSignal = getCurrentSignal();
-
-        if (currentMACD > currentSignal && crossingDirection != UP) {
-            crossingDirection = UP;
-        } else if (currentMACD < currentSignal && crossingDirection != DOWN) {
-            crossingDirection = DOWN;
-        } else {
-            this.crossingDirection = NONE;
-        }
-    }
 
     @Override
     public void printCurrentStatus(HashMap<String, Double> balances, double tickerPrice) {
         System.out.println(currentStatus(balances, tickerPrice));
     }
 
+    @Override
+    public Period getPeriod() {
+        return this.period;
+    }
+
     protected String currentStatus(HashMap<String, Double> balances, double tickerPrice) {
         return "Base balance: " + balances.get("base") +
                 "\nQuote balance: " + balances.get("quote") +
                 "\nTicker " + tickerPrice +
-                "\nCrossing " + crossingDirection +
                 "\nMACD " + getCurrentMACD() +
                 "\nSignal " + getCurrentSignal();
     }

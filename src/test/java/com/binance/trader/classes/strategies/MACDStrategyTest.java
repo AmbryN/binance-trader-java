@@ -34,27 +34,6 @@ public class MACDStrategyTest {
         balances = prepareBalances();
     }
 
-    // TODO : Decide if the behaviour of MACDStrategy is OK
-    @Ignore
-    @Test
-    public void shouldDoNothingIfMACDUnderSignal() {
-        Double[] prices = prepareListOfPricesForDoingNothingUnder();
-        when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, 1500.);
-
-        assertEquals(StrategyResult.HOLD, result);
-    }
-
-    @Ignore
-    @Test
-    public void shouldDoNothingIfMACDOverSignal() {
-        Double[] prices = prepareListOfPricesForDoingNothingOver();
-        when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, 1500.);
-
-        assertEquals(StrategyResult.HOLD, result);
-    }
-
     @Test
     public void shouldBuyIfMACDCrossingUpSignal() {
         HashMap<String, Double> balances = prepareBalances();

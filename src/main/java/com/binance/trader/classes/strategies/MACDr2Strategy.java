@@ -4,11 +4,6 @@ import com.binance.trader.enums.StrategyResult;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.interfaces.Strategy;
 
-import java.util.HashMap;
-
-import static com.binance.trader.enums.CrossingDirection.DOWN;
-import static com.binance.trader.enums.CrossingDirection.UP;
-
 public class MACDr2Strategy extends MACDStrategy implements Strategy {
 
     public MACDr2Strategy() {
@@ -18,9 +13,9 @@ public class MACDr2Strategy extends MACDStrategy implements Strategy {
     @Override
     protected StrategyResult buyDecision(Symbol symbol, double tickerPrice) {
         computeParams(symbol);
-        if (getCurrentMACD() < 0 && crossingDirection == UP) {
+        if (getCurrentMACD() < 0 && getCurrentMACD() > getCurrentSignal()) {
             return StrategyResult.BUY;
-        } else if (crossingDirection == DOWN) {
+        } else if (getCurrentMACD() < getCurrentSignal()) {
             return StrategyResult.SELL;
         }
         return StrategyResult.HOLD;

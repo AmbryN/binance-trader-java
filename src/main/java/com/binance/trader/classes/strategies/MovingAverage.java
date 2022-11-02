@@ -27,6 +27,9 @@ public abstract class MovingAverage implements Strategy {
     protected void setPeriod(Period period) {
         this.period = period;
     }
+    public Period getPeriod() {
+        return this.period;
+    }
     protected void setNbOfPeriods(int nbOfPeriods) { this.nbOfPeriods = nbOfPeriods; }
 
     @Override
@@ -47,7 +50,7 @@ public abstract class MovingAverage implements Strategy {
         System.out.println("Base balance: " + balances.get("base") +
                 "\nQuote balance: " + balances.get("quote") +
                 "\nTicker " + tickerPrice +
-                "\nExpMAvg " + movingAvg);
+                "\nMAvg " + movingAvg);
     }
 
     protected abstract void calculateMovingAvg(Symbol symbol);

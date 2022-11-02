@@ -1,15 +1,12 @@
 package com.binance.trader;
 
-import ch.qos.logback.classic.Logger;
 import com.binance.trader.classes.facade.BinanceFacade;
 import com.binance.trader.classes.handlers.Try;
 import com.binance.trader.classes.selectors.*;
 import com.binance.trader.enums.StrategyResult;
 import com.binance.trader.enums.Symbol;
-import com.binance.trader.exceptions.BinanceTraderException;
 import com.binance.trader.interfaces.Exchange;
 import com.binance.trader.interfaces.Strategy;
-import com.binance.trader.utils.Logging;
 
 import java.util.HashMap;
 
@@ -42,13 +39,15 @@ public class Trader implements Runnable {
 
             start = new YesNoSelector().startSelector();
         }
+        Long period = strategy.getPeriod().toMillis();
         while (!Thread.interrupted()) {
-            start();
+            Try.toRunWithReconnect(this::trade, MAX_RECONNECT_TRIES);
+            try {
+                Thread.sleep(period / 120);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
-    }
-
-    private void start() {
-        Try.toRunNbOfTimes(this::trade, MAX_RECONNECT_TRIES);
     }
 
     private void trade() {

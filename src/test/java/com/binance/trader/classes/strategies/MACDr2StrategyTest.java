@@ -50,17 +50,6 @@ public class MACDr2StrategyTest {
         assertEquals(StrategyResult.SELL, result);
     }
 
-    @Ignore //TODO : Decide if lastBuyingPrice is really a bad idea
-    @Test
-    public void shouldSellIfTickerUnderLastBuyPrice() {
-        Double[] prices = prepareListOfPricesForSellingWhenTickerGoesUnderBuyPrice();
-
-        when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, 19349.5);
-
-        assertEquals(StrategyResult.SELL, result);
-    }
-
     @Test
     public void shouldBuyIfMACDCrossesOverSignalInTheLastPeriodAndMACDUnderZero() {
         Double[] prices = prepareListOfPricesForBuying();

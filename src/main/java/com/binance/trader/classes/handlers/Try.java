@@ -22,6 +22,7 @@ public class Try {
      * The method is used to safely execute the action provided in parameter
      * by surrounding it in the appropriate try - catch statements and returning
      * an Optional<T>
+     *
      * @param action is a function that fetches information from the exchange
      * @return Optional<T> Optional of the T object returned by the action
      */
@@ -41,6 +42,7 @@ public class Try {
     /**
      * The method is used to safely execute the action provided in parameter
      * by surrounding it in the appropriate try - catch statements
+     *
      * @param runnable is a function that sends information to the exchange
      */
     public static void toRunBinance(FallibleRunnable runnable) {
@@ -55,19 +57,19 @@ public class Try {
         }
     }
 
-    public static void toRunNbOfTimes(FallibleRunnable runnable, final int MAX_RECONNECT_TRIES) {
+    public static void toRunWithReconnect(FallibleRunnable runnable, final int MAX_RECONNECT_TRIES) {
         int tries = 0;
         while (tries < MAX_RECONNECT_TRIES) {
             try {
                 runnable.run();
-                tries = 0;
+                tries = MAX_RECONNECT_TRIES;
             } catch (BinanceTraderException e) {
                 logger.error(e.getMessage(), e);
                 if (tries < MAX_RECONNECT_TRIES) {
                     tries++;
                     logger.warn(String.format("Trying to reconnect [%d/%d].", tries, MAX_RECONNECT_TRIES));
                     try {
-                        Thread.sleep(2500);
+                        Thread.sleep(10000);
                     } catch (InterruptedException ex) {
                         throw new RuntimeException(ex);
                     }

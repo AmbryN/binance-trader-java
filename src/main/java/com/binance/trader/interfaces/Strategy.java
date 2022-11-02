@@ -1,5 +1,6 @@
 package com.binance.trader.interfaces;
 
+import com.binance.trader.enums.Period;
 import com.binance.trader.enums.StrategyResult;
 import com.binance.trader.enums.Symbol;
 
@@ -14,6 +15,8 @@ public interface Strategy {
     void init(Exchange exchange);
 
     void printCurrentStatus(HashMap<String, Double> balances, double tickerPrice);
+
+    Period getPeriod();
 
     String describe();
 
