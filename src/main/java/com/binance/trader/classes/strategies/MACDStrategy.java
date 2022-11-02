@@ -11,6 +11,8 @@ import com.binance.trader.utils.Calculus;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.binance.trader.enums.CrossingDirection.*;
+
 public class MACDStrategy implements Strategy {
     private Exchange exchange;
     private Period period;
@@ -21,7 +23,9 @@ public class MACDStrategy implements Strategy {
     private Double[] signalLine;
     protected CrossingDirection crossingDirection;
 
-    public MACDStrategy() {}
+    public MACDStrategy() {
+        this.crossingDirection = NONE;
+    }
 
     protected void setPeriod(Period period) { this.period = period; }
 
@@ -45,14 +49,6 @@ public class MACDStrategy implements Strategy {
         return this.signalLine[this.signalLine.length -1];
     }
 
-    protected double getLastMACD() {
-        return this.MACDLine[this.MACDLine.length -2];
-    }
-
-    protected double getLastSignal() {
-        return this.signalLine[this.signalLine.length -2];
-    }
-
     public void init(Exchange exchange) {
         this.exchange = exchange;
         this.period = new PeriodListSelector().startSelector();
@@ -69,9 +65,9 @@ public class MACDStrategy implements Strategy {
 
     protected StrategyResult buyDecision(Symbol symbol, double tickerPrice) {
         computeParams(symbol);
-        if (crossingDirection == CrossingDirection.UP) {
+        if (crossingDirection == UP) {
             return StrategyResult.BUY;
-        } else if (crossingDirection == CrossingDirection.DOWN) {
+        } else if (crossingDirection == DOWN) {
             return StrategyResult.SELL;
         }
         return StrategyResult.HOLD;
@@ -101,7 +97,7 @@ public class MACDStrategy implements Strategy {
 
     protected Double[] computeMACDLine(Double[] shortEMAs, Double[] longEMAs) {
         ArrayList<Double> MACDLine = new ArrayList<>();
-        // Binance calculates the Signal on at least { 6 * signalNbOfPeriods }
+        // Binance calculates the Signal with at least { 6 * signalNbOfPeriods }
         int recordsNeededForSignal = this.signalNbOfPeriods * 6 - 5;
         int lastIndexShortEMA = shortEMAs.length - 1;
         int lastIndexLongEMA = longEMAs.length - 1;
@@ -112,19 +108,15 @@ public class MACDStrategy implements Strategy {
     }
     protected void computeCrossingDirection() {
         double currentMACD = getCurrentMACD();
-        double lastMACD = getLastMACD();
         double currentSignal = getCurrentSignal();
-        double lastSignal = getLastSignal();
 
-        // TODO : Find a better method to compute a buy decision
-        // Too many false signals using this method
-        CrossingDirection crossingDirection = CrossingDirection.NONE;
-        if (currentMACD > currentSignal && lastMACD < lastSignal) {
-            crossingDirection = CrossingDirection.UP;
-        } else if (currentMACD < currentSignal && lastMACD > lastSignal) {
-            crossingDirection = CrossingDirection.DOWN;
+        if (currentMACD > currentSignal && crossingDirection != UP) {
+            crossingDirection = UP;
+        } else if (currentMACD < currentSignal && crossingDirection != DOWN) {
+            crossingDirection = DOWN;
+        } else {
+            this.crossingDirection = NONE;
         }
-        this.crossingDirection = crossingDirection;
     }
 
     @Override

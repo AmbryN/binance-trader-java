@@ -40,7 +40,6 @@ public class MACDr1Strategy extends MACDStrategy implements Strategy {
 
     protected void computeParams(Symbol symbol, double tickerPrice) {
         getMacdAndSignalLines(symbol);
-        computeCrossingDirection();
         isOverSpread(tickerPrice);
         isUnderSpread(tickerPrice);
     }

@@ -5,6 +5,7 @@ import com.binance.trader.enums.StrategyResult;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.interfaces.Exchange;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -27,7 +28,6 @@ public class MACDr2StrategyTest {
         strategy.setShortNbOfPeriods(12);
         strategy.setLongNbOfPeriods(26);
         strategy.setSignalNbOfPeriods(9);
-        strategy.setLastBuyingPrice(19350.12);
     }
 
     @Test
@@ -50,6 +50,7 @@ public class MACDr2StrategyTest {
         assertEquals(StrategyResult.SELL, result);
     }
 
+    @Ignore //TODO : Decide if lastBuyingPrice is really a bad idea
     @Test
     public void shouldSellIfTickerUnderLastBuyPrice() {
         Double[] prices = prepareListOfPricesForSellingWhenTickerGoesUnderBuyPrice();
