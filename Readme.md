@@ -12,6 +12,8 @@ It allows:
 * to log the trades into a file (orderLog.txt) in the project root directory
 
 Planned features:
+* Schedule the strategy to be run continuously and the actual transaction to be run with a lower
+  frequency (using Threads) in order to reduce the transient behaviour of the bot during signal crossing
 * Allow to trade with a fraction of your quote balance in order to be able
 to use the same quote crypto for multiple bots trading different base cryptos
 * Add UI for crypto and strategy selection
