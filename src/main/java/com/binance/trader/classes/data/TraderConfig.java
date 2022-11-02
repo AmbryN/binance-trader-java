@@ -1,4 +1,4 @@
-package com.binance.trader;
+package com.binance.trader.classes.data;
 
 import com.binance.trader.classes.facade.BinanceFacade;
 import com.binance.trader.classes.selectors.PeriodListSelector;
@@ -11,9 +11,9 @@ import com.binance.trader.interfaces.Strategy;
 
 public class TraderConfig {
     private final Exchange exchange;
-    private Symbol symbol;
-    private Strategy strategy;
-    private Period period;
+    private final Symbol symbol;
+    private final Strategy strategy;
+    private final Period period;
 
     public TraderConfig() {
         this.exchange = new BinanceFacade();

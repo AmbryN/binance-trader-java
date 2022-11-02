@@ -1,5 +1,6 @@
 package com.binance.trader;
 
+import com.binance.trader.classes.data.TraderConfig;
 import com.binance.trader.classes.handlers.Try;
 import com.binance.trader.classes.selectors.*;
 import com.binance.trader.runners.StrategyRunner;
@@ -12,7 +13,7 @@ public class Trader {
     private TraderConfig traderConfig;
 
     public Trader() {
-        this.es = Executors.newScheduledThreadPool(1);
+        this.es = Executors.newScheduledThreadPool(2);
     }
 
     public void run()  {
