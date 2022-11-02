@@ -10,7 +10,6 @@ import com.binance.trader.interfaces.FallibleRunnable;
 import com.binance.trader.utils.Logging;
 
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 
 /**
  * This class is used as a wrapper to calls to the exchange in order to catch
@@ -36,9 +35,6 @@ public class Try {
             logger.error("fullErrMessage: {} \nerrMessage: {} \nerrCode: {} \nHTTPStatusCode: {}",
                     e.getMessage(), e.getErrMsg(), e.getErrorCode(), e.getHttpStatusCode(), e);
             throw e;
-        } catch (InterruptedException | ExecutionException e) {
-            logger.error("Error in Thread when trying to get data: {}", e.getMessage(), e);
-            throw new RuntimeException(e);
         }
         return Optional.empty();
     }
@@ -49,7 +45,7 @@ public class Try {
      *
      * @param runnable is a function that sends information to the exchange
      */
-    public static void toRunBinance(FallibleRunnable runnable) {
+    public static void toRun(FallibleRunnable runnable) {
         try {
             runnable.run();
         } catch (BinanceConnectorException | BinanceServerException e) {
@@ -61,19 +57,18 @@ public class Try {
         }
     }
 
-    public static void toRunNbOfTimes(FallibleRunnable runnable, final int MAX_RECONNECT_TRIES) {
-        try {
-            runnable.run();
-        } catch (BinanceTraderException e) {
-            logger.error(e.getMessage(), e);
-            int tries = 0;
-            while (tries < MAX_RECONNECT_TRIES) {
+    public static <T> Optional<T> toGetWithTries(FallibleAction<T> action, final int MAX_RECONNECT_TRIES) {
+        int tries = 0;
+        while (tries < MAX_RECONNECT_TRIES) {
+            try {
+                return Optional.ofNullable(action.result());
+            } catch (BinanceConnectorException | BinanceServerException e) {
+                logger.error("Could not get from Binance: {}", e.getMessage(), e);
                 if (tries < MAX_RECONNECT_TRIES) {
                     tries++;
                     logger.warn(String.format("Trying to reconnect [%d/%d].", tries, MAX_RECONNECT_TRIES));
                     try {
                         Thread.sleep(2500);
-                        runnable.run();
                     } catch (InterruptedException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -81,7 +76,12 @@ public class Try {
                 if (tries == MAX_RECONNECT_TRIES) {
                     throw e;
                 }
+            } catch (BinanceClientException e) {
+                logger.error("fullErrMessage: {} \nerrMessage: {} \nerrCode: {} \nHTTPStatusCode: {}",
+                        e.getMessage(), e.getErrMsg(), e.getErrorCode(), e.getHttpStatusCode(), e);
+                throw e;
             }
         }
+        return Optional.empty();
     }
 }

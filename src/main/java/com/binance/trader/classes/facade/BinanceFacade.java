@@ -24,7 +24,7 @@ import java.util.Optional;
 public class BinanceFacade implements Exchange {
     private final static String TESTNET_URL = "https://testnet.binance.vision";
     private final static String BINANCE_URL = "https://api.binance.com";
-
+    private final static int MAX_RECONNECT_TRIES = 5;
     private SpotClientImpl client;
     private AccountInfoService accountInfoService;
     private TickerService tickerService;
@@ -55,7 +55,7 @@ public class BinanceFacade implements Exchange {
      */
     public HashMap<String, Double> getBaseAndQuoteBalances(Symbol symbol) throws BinanceTraderException {
         Optional<AccountInfo> optionalAccountInfo =
-                Try.toGet(() -> accountInfoService.getAccountInfo());
+                Try.toGetWithTries(() -> accountInfoService.getAccountInfo(), MAX_RECONNECT_TRIES);
         if (optionalAccountInfo.isPresent()) {
             AccountInfo accountInfo = optionalAccountInfo.get();
             return accountInfo.getBaseAndQuoteBalancesFor(symbol);
@@ -71,7 +71,7 @@ public class BinanceFacade implements Exchange {
      */
     public Double getTickerPrice(Symbol symbol) {
         Optional<Ticker> optionalTicker =
-                Try.toGet(() -> tickerService.getTicker(symbol));
+                Try.toGetWithTries(() -> tickerService.getTicker(symbol), MAX_RECONNECT_TRIES);
         if (optionalTicker.isPresent()) {
             return optionalTicker.get().getPrice();
         } else {
@@ -89,7 +89,7 @@ public class BinanceFacade implements Exchange {
      * @throws BinanceTraderException if prices could not be gotten from the exchange
      */
     public Double[] getClosePrices(Symbol symbol, String period, int nbOfRecordsToFetch) {
-        Optional<Kline[]> optionalKlines = Try.toGet(() -> klineService.fetchKlines(symbol, period, nbOfRecordsToFetch));
+        Optional<Kline[]> optionalKlines = Try.toGetWithTries(() -> klineService.fetchKlines(symbol, period, nbOfRecordsToFetch), MAX_RECONNECT_TRIES);
         if (optionalKlines.isPresent()) {
             Kline[] klines = optionalKlines.get();
             return getClosesPricesFrom(klines);
@@ -109,7 +109,7 @@ public class BinanceFacade implements Exchange {
      * @param quoteBalance amount to buy
      */
     public void buy(Symbol symbol, double tickerPrice, double quoteBalance) {
-        Try.toRunBinance(()
+        Try.toRun(()
                 -> orderService.buy(symbol,tickerPrice, quoteBalance));
     }
 
@@ -121,7 +121,7 @@ public class BinanceFacade implements Exchange {
      * @param baseBalance amount to sell
      */
     public void sell(Symbol symbol, double tickerPrice, double baseBalance) {
-        Try.toRunBinance(()
+        Try.toRun(()
                 -> orderService.sell(symbol,tickerPrice, baseBalance));
     }
 }

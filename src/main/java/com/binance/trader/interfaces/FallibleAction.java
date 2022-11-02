@@ -8,5 +8,5 @@ import java.util.concurrent.ExecutionException;
 
 @FunctionalInterface
 public interface FallibleAction<T> {
-    T result() throws BinanceConnectorException, BinanceServerException, BinanceClientException, InterruptedException, ExecutionException;
+    T result() throws BinanceConnectorException, BinanceServerException, BinanceClientException;
 }

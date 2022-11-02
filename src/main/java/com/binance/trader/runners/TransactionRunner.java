@@ -1,6 +1,5 @@
 package com.binance.trader.runners;
 
-import com.binance.trader.services.AsyncBalanceTickerService;
 import com.binance.trader.classes.data.TraderConfig;
 import com.binance.trader.classes.data.TransactionDecision;
 import com.binance.trader.enums.StrategyResult;
@@ -10,21 +9,18 @@ import com.binance.trader.interfaces.Exchange;
 import java.util.HashMap;
 
 public class TransactionRunner implements Runnable {
-    private final AsyncBalanceTickerService asyncBalanceTickerService;
     private final TraderConfig traderConfig;
 
     public TransactionRunner(TraderConfig traderConfig) {
         this.traderConfig = traderConfig;
-        asyncBalanceTickerService = new AsyncBalanceTickerService(traderConfig);
     }
 
     @Override
     public void run() {
-        HashMap<String, Double> balances = asyncBalanceTickerService.getBalances();
-        Double tickerPrice = asyncBalanceTickerService.getTicker();
-
         Exchange exchange = traderConfig.getExchange();
         Symbol symbol = traderConfig.getSymbol();
+        HashMap<String, Double> balances = exchange.getBaseAndQuoteBalances(symbol);
+        Double tickerPrice = exchange.getTickerPrice(symbol);
 
         StrategyResult action = TransactionDecision.getDecision();
         if (action == StrategyResult.BUY && balances.get("quote") > symbol.MIN_QUOTE_TRANSACTION) {
