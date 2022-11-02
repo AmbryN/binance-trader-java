@@ -1,65 +1,33 @@
 package com.binance.trader;
 
-import ch.qos.logback.classic.Logger;
-import com.binance.trader.classes.facade.BinanceFacade;
 import com.binance.trader.classes.handlers.Try;
 import com.binance.trader.classes.selectors.*;
-import com.binance.trader.enums.StrategyResult;
-import com.binance.trader.enums.Symbol;
-import com.binance.trader.exceptions.BinanceTraderException;
-import com.binance.trader.interfaces.Exchange;
-import com.binance.trader.interfaces.Strategy;
-import com.binance.trader.utils.Logging;
+import com.binance.trader.runners.StrategyRunner;
+import com.binance.trader.runners.TransactionRunner;
 
-import java.util.HashMap;
+import java.util.concurrent.*;
 
-public class Trader implements Runnable {
-    private final static int MAX_RECONNECT_TRIES = 5;
-    private final Exchange exchange;
-    private Strategy strategy;
-    private Symbol symbol;
+public class Trader {
+    private final ScheduledExecutorService es;
+    private TraderConfig traderConfig;
 
     public Trader() {
-        this.exchange = new BinanceFacade();
+        this.es = Executors.newScheduledThreadPool(1);
     }
 
-    public void init() {
-        this.symbol = new SymbolListSelector().startSelector();
-        this.strategy = new StrategyListSelector().startSelector();
-        strategy.init(exchange);
-    }
-
-    @Override
     public void run()  {
         boolean start = false;
         while(!start) {
-            this.init();
-            System.out.println("=== SUMMARY === " +
-                    "\nYou want to trade: " +
-                    "\nSymbol: " + symbol +
-                    "\nStrategy: " + strategy +
-                    "\n" + strategy.describe());
-
+            traderConfig = new TraderConfig();
+            traderConfig.describe();
             start = new YesNoSelector().startSelector();
         }
-        while (!Thread.interrupted()) {
-            start();
-        }
-    }
 
-    private void start() {
-        Try.toRunNbOfTimes(this::trade, MAX_RECONNECT_TRIES);
-    }
+        ScheduledFuture<?> strategyFuture = es.scheduleAtFixedRate(new StrategyRunner(traderConfig), 0, 5, TimeUnit.SECONDS);
+        ScheduledFuture<?> transactionFuture = es.scheduleAtFixedRate(new TransactionRunner(traderConfig), 1, 1, TimeUnit.MINUTES);
 
-    private void trade() {
-        HashMap<String, Double> balances = exchange.getBaseAndQuoteBalances(symbol);
-        double tickerPrice = exchange.getTickerPrice(symbol);
-        StrategyResult result = strategy.execute(symbol, tickerPrice);
-        strategy.printCurrentStatus(balances, tickerPrice);
-        if (result == StrategyResult.BUY && balances.get("quote") > symbol.MIN_QUOTE_TRANSACTION) {
-            exchange.buy(symbol, tickerPrice, balances.get("quote"));
-        } else if (result == StrategyResult.SELL && balances.get("base") > symbol.MIN_BASE_TRANSACTION) {
-            exchange.sell(symbol, tickerPrice, balances.get("base"));
-        }
+        // If method get() returns a value, it means an exception was thrown in the child thread
+        Try.toGet(strategyFuture::get);
+        Try.toGet(transactionFuture::get);
     }
 }

@@ -12,13 +12,10 @@ import com.binance.trader.services.AccountInfoService;
 import com.binance.trader.services.KlineService;
 import com.binance.trader.services.OrderService;
 import com.binance.trader.services.TickerService;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Facade class for Binance exchange which handles

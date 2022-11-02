@@ -1,8 +1,9 @@
 package com.binance.trader.classes.strategies;
 
 import com.binance.trader.classes.selectors.IntSelector;
-import com.binance.trader.classes.selectors.PeriodListSelector;
-import com.binance.trader.enums.*;
+import com.binance.trader.enums.CrossingDirection;
+import com.binance.trader.enums.Period;
+import com.binance.trader.enums.StrategyResult;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.interfaces.Exchange;
 import com.binance.trader.interfaces.Strategy;
@@ -53,9 +54,9 @@ public class MACDStrategy implements Strategy {
         return this.signalLine[this.signalLine.length -2];
     }
 
-    public void init(Exchange exchange) {
+    public void init(Exchange exchange, Period period) {
         this.exchange = exchange;
-        this.period = new PeriodListSelector().startSelector();
+        this.period = period;
         IntSelector selector = new IntSelector();
         this.shortNbOfPeriods = selector.startSelector("Short EMA");
         this.longNbOfPeriods = selector.startSelector("Long EMA");
@@ -141,8 +142,7 @@ public class MACDStrategy implements Strategy {
 
     @Override
     public String describe() {
-        return "Time Period: " + this.period +
-                "\nShort Number of Periods: " + this.shortNbOfPeriods +
+        return  "Short Number of Periods: " + this.shortNbOfPeriods +
                 "\nLong Number of Periods: " + this.longNbOfPeriods +
                 "\nSignal Number of Periods: " + this.signalNbOfPeriods;
     }

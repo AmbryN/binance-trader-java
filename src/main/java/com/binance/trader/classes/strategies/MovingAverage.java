@@ -18,9 +18,9 @@ public abstract class MovingAverage implements Strategy {
 
     protected MovingAverage() {}
 
-    public void init(Exchange exchange) {
+    public void init(Exchange exchange, Period period) {
         this.exchange = exchange;
-        this.period = new PeriodListSelector().startSelector();
+        this.period = period;
         this.nbOfPeriods = new IntSelector().startSelector("Moving Average");
     }
 
@@ -60,7 +60,6 @@ public abstract class MovingAverage implements Strategy {
 
     @Override
     public String describe() {
-        return "Time Period: " + this.period +
-                "\nNumber of Periods: " + this.nbOfPeriods;
+        return "Number of Periods: " + this.nbOfPeriods;
     }
 }

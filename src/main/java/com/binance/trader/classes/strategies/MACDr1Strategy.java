@@ -1,7 +1,7 @@
 package com.binance.trader.classes.strategies;
 
 import com.binance.trader.classes.selectors.DoubleSelector;
-import com.binance.trader.enums.CrossingDirection;
+import com.binance.trader.enums.Period;
 import com.binance.trader.enums.StrategyResult;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.interfaces.Exchange;
@@ -22,8 +22,8 @@ public class MACDr1Strategy extends MACDStrategy implements Strategy {
     protected void setMinSpread(double spread) { this.minSpread = spread; }
 
     @Override
-    public void init(Exchange exchange) {
-        super.init(exchange);
+    public void init(Exchange exchange, Period period) {
+        super.init(exchange, period);
         this.minSpread = new DoubleSelector().startSelector("Min Spread before Buy occurs (as double: e.g. 2.5 for 0.025): ");
     }
 
