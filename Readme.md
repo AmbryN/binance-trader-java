@@ -9,6 +9,8 @@ It allows:
 * to select a trading strategy from the available list
 * to set the strategy's variable (e.g. observation period, number of periods) used to execute said strategy
 * to send actual buy and sell orders on Binance (currently being tested on Binance's Testnet)
+* To schedule the strategy to be run continuously and to schedule the actual transaction with a lower 
+frequency (using Threads) in order to reduce the transient behaviour of the bot during signal crossing
 * to log the trades into a file (orderLog.txt) in the project root directory
 
 Planned features:
