@@ -23,7 +23,6 @@ public class MACDStrategyTest {
     Exchange exchangeMock;
 
     @InjectMocks MACDStrategy strategy;
-    HashMap<String, Double> balances;
     @Before
     public void setup() {
         MockitoAnnotations.openMocks(this);
@@ -31,12 +30,10 @@ public class MACDStrategyTest {
         strategy.setShortNbOfPeriods(12);
         strategy.setLongNbOfPeriods(26);
         strategy.setSignalNbOfPeriods(9);
-        balances = prepareBalances();
     }
 
     @Test
     public void shouldBuyIfMACDCrossingUpSignal() {
-        HashMap<String, Double> balances = prepareBalances();
         Double[] prices = prepareListOfPricesForBuying();
         when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
         StrategyResult result = strategy.execute(Symbol.BTCUSDT, 1500.);
@@ -46,7 +43,6 @@ public class MACDStrategyTest {
 
     @Test
     public void shouldSellIfMACDCrossingDownSignal() {
-        HashMap<String, Double> balances = prepareBalances();
         Double[] prices = prepareListOfPricesForSelling();
         when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
         StrategyResult result = strategy.execute(Symbol.BTCUSDT, 1500.);
