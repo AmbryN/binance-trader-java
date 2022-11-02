@@ -116,6 +116,8 @@ public class MACDStrategy implements Strategy {
         double currentSignal = getCurrentSignal();
         double lastSignal = getLastSignal();
 
+        // TODO : Find a better method to compute a buy decision
+        // Too many false signals using this method
         CrossingDirection crossingDirection = CrossingDirection.NONE;
         if (currentMACD > currentSignal && lastMACD < lastSignal) {
             crossingDirection = CrossingDirection.UP;

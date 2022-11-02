@@ -10,12 +10,10 @@ import java.util.HashMap;
 public class MACDr2Strategy extends MACDStrategy implements Strategy {
 
     private Double lastBuyingPrice;
-    private boolean macdUnderZeroWhenCrossed;
 
     public MACDr2Strategy() {
         super();
-        lastBuyingPrice = null;
-        macdUnderZeroWhenCrossed = false;
+        lastBuyingPrice = 0.;
     }
 
     protected void setLastBuyingPrice(Double lastBuyingPrice) {
@@ -25,15 +23,13 @@ public class MACDr2Strategy extends MACDStrategy implements Strategy {
     @Override
     protected StrategyResult buyDecision(Symbol symbol, double tickerPrice) {
         computeParams(symbol);
-        if (getCurrentMACD() < 0 && crossingDirection == CrossingDirection.UP) {
-            macdUnderZeroWhenCrossed = true;
-            if (lastBuyingPrice == null) {
-                lastBuyingPrice = tickerPrice;
+        if (getCurrentMACD() < 0 && getCurrentMACD() > getCurrentSignal()) {
+            if (lastBuyingPrice == 0.) {
+                setLastBuyingPrice(tickerPrice);
             }
             return StrategyResult.BUY;
-        } else if (crossingDirection == CrossingDirection.DOWN || (lastBuyingPrice != null && tickerPrice < lastBuyingPrice)) {
-            macdUnderZeroWhenCrossed = false;
-            lastBuyingPrice = null;
+        } else if (getCurrentMACD() < getCurrentSignal() || (lastBuyingPrice != null && tickerPrice < lastBuyingPrice)) {
+            setLastBuyingPrice(0.);
             return StrategyResult.SELL;
         }
         return StrategyResult.HOLD;
@@ -42,7 +38,6 @@ public class MACDr2Strategy extends MACDStrategy implements Strategy {
     @Override
     protected String currentStatus(HashMap<String, Double> balances, double tickerPrice) {
         return super.currentStatus(balances, tickerPrice) +
-                "\nMACD was under Zero: " + macdUnderZeroWhenCrossed +
                 "\nLast buying Price " + lastBuyingPrice;
 
     }
