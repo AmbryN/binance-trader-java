@@ -15,11 +15,9 @@ public class Trader implements Runnable {
     private final Exchange exchange;
     private Strategy strategy;
     private Symbol symbol;
-    private double lastBuyingPrice;
 
     public Trader() {
         this.exchange = new BinanceFacade();
-        this.lastBuyingPrice = 0.;
     }
 
     public void init() {
@@ -59,11 +57,9 @@ public class Trader implements Runnable {
         strategy.printCurrentStatus(balances, tickerPrice);
         if (result == StrategyResult.BUY && balances.get("quote") > symbol.MIN_QUOTE_TRANSACTION) {
             exchange.buy(symbol, tickerPrice, balances.get("quote"));
-            lastBuyingPrice = tickerPrice;
-        } else if ((result == StrategyResult.SELL || tickerPrice < lastBuyingPrice)
+        } else if ((result == StrategyResult.SELL)
                 && balances.get("base") > symbol.MIN_BASE_TRANSACTION) {
             exchange.sell(symbol, tickerPrice, balances.get("base"));
-            lastBuyingPrice = 0.;
         }
     }
 }
