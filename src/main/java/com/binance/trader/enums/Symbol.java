@@ -8,8 +8,8 @@ public enum Symbol {
     BTCBUSD(Crypto.BTC, Crypto.BUSD, 0.00001, 10, 100000, 100),
     ETHUSDT(Crypto.ETH, Crypto.USDT, 0.0001, 10, 10000, 100),
     ETHBUSD(Crypto.ETH, Crypto.BUSD, 0.0001, 10, 10000, 100),
-    LUNAUSDT(Crypto.LUNA, Crypto.USDT,0.01 , 10, 100, 100000),
-    LUNABUSD(Crypto.LUNA, Crypto.BUSD, 0.01 , 10, 100, 100000);
+    DOGEUSDT(Crypto.DOGE, Crypto.USDT, 1, 10, 1, 100000),
+    DOGEBUSD(Crypto.DOGE, Crypto.BUSD, 1, 10, 1, 100000);
 
     private final Crypto base;
     private final Crypto quote;

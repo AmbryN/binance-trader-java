@@ -23,7 +23,7 @@ public class AccountInfoTest {
     public void shouldReturnEmptyBalanceIfInexistant() {
         AccountInfo accountInfo = new AccountInfo(new Balance[] {});
 
-        Balance balance = accountInfo.getBalance(Crypto.LUNA);
-        assertEquals(balance, new Balance(Crypto.LUNA, 0.0, 0.0));
+        Balance balance = accountInfo.getBalance(Crypto.DOGE);
+        assertEquals(balance, new Balance(Crypto.DOGE, 0.0, 0.0));
     }
 }

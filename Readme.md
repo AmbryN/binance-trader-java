@@ -24,8 +24,6 @@ to use the same quote crypto for multiple bots trading different base cryptos
 - BTCBUSD
 - ETHUSDT
 - ETHBUSD
-- LUNAUSDT
-- LUNABUSD
 
 ## Available strategies
 - Simple Moving Average (SMA)

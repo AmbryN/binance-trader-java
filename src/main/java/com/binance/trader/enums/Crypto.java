@@ -5,5 +5,5 @@ public enum Crypto {
     ETH,
     USDT,
     BUSD,
-    LUNA,
+    DOGE
 }

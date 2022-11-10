@@ -12,7 +12,7 @@ public class SymbolTest {
     @Test
     public void shouldReturnCorrectBase() {
         assertEquals(Crypto.BTC, Symbol.BTCUSDT.getBase());
-        assertEquals(Crypto.LUNA, Symbol.LUNAUSDT.getBase());
+        assertEquals(Crypto.DOGE, Symbol.DOGEUSDT.getBase());
     }
 
     @Test
