@@ -3,8 +3,6 @@ package com.binance.trader.classes.strategies;
 import com.binance.trader.enums.Symbol;
 import com.binance.trader.utils.Calculus;
 
-import java.util.ArrayList;
-
 public class EMAStrategy extends MovingAverage {
 
     public EMAStrategy() {
@@ -14,7 +12,7 @@ public class EMAStrategy extends MovingAverage {
     @Override
     protected void calculateMovingAvg(Symbol symbol) {
         // Binance uses at least { 5 * nbOfPeriods } to get the most accurate EMA
-        Double[] closePrices = this.getClosePrices(symbol, period.asString(), this.nbOfPeriods * 5 - 4);
+        Double[] closePrices = this.getClosePrices(symbol, period.toString(), this.nbOfPeriods * 5 - 4);
         Double[] emaList = Calculus.expMovingAvgesWithSize(closePrices, this.nbOfPeriods);
         this.movingAvg = emaList[(emaList.length -1)];
     }

@@ -50,13 +50,14 @@ public enum Symbol {
         return this.quote;
     }
 
-    public String getPair() {
+    @Override
+    public String toString() {
         return this.base.toString() + this.quote.toString();
     }
 
     public static Symbol toSymbol(String pair) {
         for (Symbol symbol : Symbol.values()) {
-            if (symbol.getPair().equals(pair)) {
+            if (symbol.toString().equals(pair)) {
                 return symbol;
             }
         }

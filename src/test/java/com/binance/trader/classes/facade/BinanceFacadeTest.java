@@ -63,19 +63,19 @@ public class BinanceFacadeTest {
     @Test(expected = BinanceTraderException.class)
     public void shouldThrowExceptionIfGetTickerThrowsConnectorException() {
         when(tickerServiceMock.getTicker(any(Symbol.class))).thenThrow(BinanceConnectorException.class);
-        facade.getTickerPrice(Symbol.BTCUSDT);
+        facade.getTicker(Symbol.BTCUSDT);
     }
 
     @Test(expected = BinanceTraderException.class)
     public void shouldThrowExceptionIfGetTickerThrowsServerException() {
         when(tickerServiceMock.getTicker(any(Symbol.class))).thenThrow(BinanceServerException.class);
-        facade.getTickerPrice(Symbol.BTCUSDT);
+        facade.getTicker(Symbol.BTCUSDT);
     }
 
     @Test(expected = BinanceClientException.class)
     public void shouldThrowExceptionIfGetTickerThrowsClientException() {
         when(tickerServiceMock.getTicker(any(Symbol.class))).thenThrow(BinanceClientException.class);
-        facade.getTickerPrice(Symbol.BTCUSDT);
+        facade.getTicker(Symbol.BTCUSDT);
     }
 
     @Test(expected = BinanceTraderException.class)

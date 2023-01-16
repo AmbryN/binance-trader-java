@@ -43,7 +43,7 @@ public class Trader implements Runnable {
         }
         Long period = strategy.getPeriod().toMillis();
         while (!Thread.interrupted()) {
-            Try.toRunWithReconnect(this::trade, MAX_RECONNECT_TRIES);
+            Try.toRunTimes(this::trade, MAX_RECONNECT_TRIES);
             try {
                 Thread.sleep(period / 120);
             } catch (InterruptedException e) {
@@ -54,7 +54,7 @@ public class Trader implements Runnable {
 
     private void trade() {
         HashMap<String, Double> balances = exchange.getBaseAndQuoteBalances(symbol);
-        double tickerPrice = exchange.getTickerPrice(symbol);
+        double tickerPrice = exchange.getTicker(symbol);
         StrategyResult result = strategy.execute(symbol, tickerPrice);
         strategy.printCurrentStatus(balances, tickerPrice);
 

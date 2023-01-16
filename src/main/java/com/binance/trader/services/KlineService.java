@@ -21,7 +21,7 @@ public class KlineService {
 
     public Kline[] fetchKlines(Symbol symbol, String period, int nbOfPeriods) {
         LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
-        parameters.put("symbol", symbol.getPair());
+        parameters.put("symbol", symbol.toString());
         parameters.put("interval", period);
         parameters.put("limit", nbOfPeriods);
         Market market = this.client.createMarket();

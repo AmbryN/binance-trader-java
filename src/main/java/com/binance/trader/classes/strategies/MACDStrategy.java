@@ -80,7 +80,7 @@ public class MACDStrategy implements Strategy {
         // To compute the {size} EMA, you normally need {size * 2 - 1} records,
         // but binance uses at least { 5 * size } to be more accurate.
         int recordsToFetch = this.longNbOfPeriods * 5 - 4;
-        Double[] prices = exchange.getClosePrices(symbol, period.asString(), recordsToFetch);
+        Double[] prices = exchange.getClosePrices(symbol, period.toString(), recordsToFetch);
 
         // Compute the short EMA (generally 12) and the long EMA (generally 26) used for the MACD line
         Double[] shortEMAS = Calculus.expMovingAvgesWithSize(prices, this.shortNbOfPeriods);

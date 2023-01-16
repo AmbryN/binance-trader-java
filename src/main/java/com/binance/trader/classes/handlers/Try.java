@@ -12,15 +12,15 @@ import com.binance.trader.utils.Logging;
 import java.util.Optional;
 
 /**
- * This class is used as a wrapper to calls to the exchange in order to catch
- * exception thrown by the connector and handle them appropriately
+ * This class is used as a wrapper to calls to the exchange to catch
+ * exception thrown by the connector and handle them appropriately.
  */
 public class Try {
     public static final Logger logger = Logging.getInstance();
 
     /**
      * The method is used to safely execute the action provided in parameter
-     * by surrounding it in the appropriate try - catch statements and returning
+     * by surrounding it in the appropriate try – catch statements and returning
      * an Optional<T>
      *
      * @param action is a function that fetches information from the exchange
@@ -43,9 +43,9 @@ public class Try {
      * The method is used to safely execute the action provided in parameter
      * by surrounding it in the appropriate try - catch statements
      *
-     * @param runnable is a function that sends information to the exchange
+     * @param runnable is a function that sends data to the exchange
      */
-    public static void toRunBinance(FallibleRunnable runnable) {
+    public static void toRun(FallibleRunnable runnable) {
         try {
             runnable.run();
         } catch (BinanceConnectorException | BinanceServerException e) {
@@ -57,25 +57,31 @@ public class Try {
         }
     }
 
-    public static void toRunWithReconnect(FallibleRunnable runnable, final int MAX_RECONNECT_TRIES) {
+    /**
+     * The method is used to safely execute the action provided in parameter
+     * by surrounding it in the appropriate try – catch statements and allows for
+     * retries.
+     *
+     * @param runnable is a function that sends data to the exchange
+     */
+    public static void toRunTimes(FallibleRunnable runnable, final int MAX_RECONNECT_TRIES) {
         int tries = 0;
         while (tries < MAX_RECONNECT_TRIES) {
             try {
                 runnable.run();
-                tries = MAX_RECONNECT_TRIES;
+                break;
             } catch (BinanceTraderException e) {
                 logger.error(e.getMessage(), e);
-                if (tries < MAX_RECONNECT_TRIES) {
-                    tries++;
-                    logger.warn(String.format("Trying to reconnect [%d/%d].", tries, MAX_RECONNECT_TRIES));
-                    try {
-                        Thread.sleep(10000);
-                    } catch (InterruptedException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
                 if (tries == MAX_RECONNECT_TRIES) {
                     throw e;
+                }
+
+                tries++;
+                logger.warn(String.format("Trying to reconnect [%d/%d].", tries, MAX_RECONNECT_TRIES));
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
                 }
             }
         }

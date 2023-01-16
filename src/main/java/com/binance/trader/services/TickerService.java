@@ -23,7 +23,7 @@ public class TickerService {
      */
     public Ticker getTicker(Symbol symbol) throws BinanceConnectorException, BinanceClientException, BinanceServerException {
         LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
-        parameters.put("symbol", symbol.getPair());
+        parameters.put("symbol", symbol.toString());
 
         String result;
         result = client.createMarket().tickerSymbol(parameters);

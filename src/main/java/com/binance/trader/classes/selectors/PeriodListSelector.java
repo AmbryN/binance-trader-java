@@ -12,7 +12,7 @@ public class PeriodListSelector extends ListSelector<Period> {
         System.out.println("What should be the base period used for computation? ");
         int index = 0;
         for (Period period : list) {
-            System.out.println(index + ") " + period.name() + ": " + period.asString());
+            System.out.println(index + ") " + period.name() + ": " + period.toString());
             index++;
         }
     }

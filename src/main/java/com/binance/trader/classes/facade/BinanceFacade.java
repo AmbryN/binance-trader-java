@@ -12,17 +12,14 @@ import com.binance.trader.services.AccountInfoService;
 import com.binance.trader.services.KlineService;
 import com.binance.trader.services.OrderService;
 import com.binance.trader.services.TickerService;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
- * Facade class for Binance exchange which handles
- * all the connections and work for client the application
+ * Facade class for Binance exchange, which handles
+ * all the connections and work for the client application.
  */
 public class BinanceFacade implements Exchange {
     private final static String TESTNET_URL = "https://testnet.binance.vision";
@@ -72,7 +69,7 @@ public class BinanceFacade implements Exchange {
      * @return current price for given symbol
      * @throws BinanceTraderException if price could not be gotten from the exchange
      */
-    public Double getTickerPrice(Symbol symbol) {
+    public Double getTicker(Symbol symbol) {
         Optional<Ticker> optionalTicker =
                 Try.toGet(() -> tickerService.getTicker(symbol));
         if (optionalTicker.isPresent()) {
@@ -88,7 +85,7 @@ public class BinanceFacade implements Exchange {
      * @param symbol symbol to exchange
      * @param period chosen period of information
      * @param nbOfRecordsToFetch number of records to fetch
-     * @return closePrice list of prices
+     * @return array of closing prices
      * @throws BinanceTraderException if prices could not be gotten from the exchange
      */
     public Double[] getClosePrices(Symbol symbol, String period, int nbOfRecordsToFetch) {
@@ -112,7 +109,7 @@ public class BinanceFacade implements Exchange {
      * @param quoteBalance amount to buy
      */
     public void buy(Symbol symbol, double tickerPrice, double quoteBalance) {
-        Try.toRunBinance(()
+        Try.toRun(()
                 -> orderService.buy(symbol,tickerPrice, quoteBalance));
     }
 
@@ -124,7 +121,7 @@ public class BinanceFacade implements Exchange {
      * @param baseBalance amount to sell
      */
     public void sell(Symbol symbol, double tickerPrice, double baseBalance) {
-        Try.toRunBinance(()
+        Try.toRun(()
                 -> orderService.sell(symbol,tickerPrice, baseBalance));
     }
 }

@@ -22,7 +22,7 @@ public class Order {
     public LinkedHashMap<String, Object> asParams() {
         LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
         if (this.symbol != null) {
-            parameters.put("symbol", this.symbol.getPair());
+            parameters.put("symbol", this.symbol.toString());
         }
         if (this.side != null) {
             parameters.put("side", this.side.toString());

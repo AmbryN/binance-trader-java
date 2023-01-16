@@ -25,7 +25,8 @@ public enum Period {
         this.periodAsMs = periodAsMs;
     }
 
-    public String asString() {
+    @Override
+    public String toString() {
         return this.periodAsStr;
     }
 
