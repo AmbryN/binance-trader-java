@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+group 'org.crypto'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    junitVersion = '5.9.2'
+}
+
+sourceCompatibility = '19'
+targetCompatibility = '19'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    implementation project(':bot')
+    compileOnly('jakarta.platform:jakarta.jakartaee-web-api:9.1.0')
+
+    // https://mvnrepository.com/artifact/jakarta.servlet.jsp.jstl/jakarta.servlet.jsp.jstl-api
+    implementation group: 'jakarta.servlet.jsp.jstl', name: 'jakarta.servlet.jsp.jstl-api', version: '3.0.0'
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.0'
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+    // https://mvnrepository.com/artifact/org.mockito/mockito-core
+    testImplementation(group: 'org.mockito', name: 'mockito-core', version: '5.1.0')
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+}
+
+test {
+    useJUnitPlatform()
+
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
+}

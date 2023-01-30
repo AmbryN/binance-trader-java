@@ -1,7 +1,11 @@
 .vscode
 .idea
+.gradle
 logs
 target
 orderLog.txt
 .attach_pid*
 binance_trader.iml
+identifier.sqlite
+db.sql
+build

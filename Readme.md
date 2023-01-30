@@ -52,7 +52,7 @@ TESTNET_API_KEY="YOUR_TESTNET_API_KEY"
 TESTNET_SECRET_KEY="YOUR_TESTNET_SECRET_KEY"
 ```
 4) Run `mvn clean install`
-5) Run `mvn exec:java -Dexec.mainClass="com.binance.trader.App"`
+5) Run `mvn exec:java -Dexec.mainClass="org.crypto.bot.App"`
 
 ## Errors
 
