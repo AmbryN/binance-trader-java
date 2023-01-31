@@ -20,7 +20,8 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '19'
-          distribution: 'adopt'
-          cache: maven
-      - name: Test with Maven
-        run: mvn --batch-mode --update-snapshots test
+          distribution: 'temurin'
+      - name: Test with Gradle
+        run: gradle/gradle-build-action@v2
+        with:
+          arguments: test
