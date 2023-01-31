@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - gradle
 
 env:
   BINANCE_TRADER_ENV: "DEV"
