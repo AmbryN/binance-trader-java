@@ -36,14 +36,14 @@ public class BinanceExchange implements Exchange {
     private String secretKey;
 
     public BinanceExchange() {
-        url = TESTNET_URL;
-        apiKey = System.getenv("TESTNET_API_KEY");
-        secretKey = System.getenv("TESTNET_SECRET_KEY");
         if (System.getenv("BINANCE_TRADER_ENV").equals("PROD")) {
             url = BINANCE_URL;
             apiKey = System.getenv("BINANCE_API_KEY");
             secretKey = System.getenv("BINANCE_SECRET_KEY");
         }
+        url = TESTNET_URL;
+        apiKey = System.getenv("TESTNET_API_KEY");
+        secretKey = System.getenv("TESTNET_SECRET_KEY");
         client = new SpotClientImpl(apiKey, secretKey, url);
         accountInfoService = new AccountInfoService(client);
         tickerService = new TickerService(client);
