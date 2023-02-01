@@ -18,8 +18,6 @@ import static org.mockito.Mockito.when;
 
 public class EMAStrategyTest {
 
-    @Mock
-    Exchange exchangeMock;
     @InjectMocks EMAStrategy strategy;
 
     @BeforeEach
@@ -29,31 +27,27 @@ public class EMAStrategyTest {
 
     @Test
     public void shouldBuyIfPriceHigherThanExpMovingAvg() {
-        Double[] prices = prepareListOfPricesWithExpAverage16_237();
-        HashMap<String, Double> balances = prepareBalances();
+        double[] prices = prepareListOfPricesWithExpAverage16_237();
         strategy.setPeriod(Period.FiveMinutes);
         strategy.setNbOfPeriods(5);
 
-        when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, 16.5);
+        StrategyResult result = strategy.execute(16.5, prices);
 
         assertEquals(StrategyResult.BUY, result);
     }
 
     @Test
     public void shouldSellIfPriceLowerThanExpMovingAvg() {
-        Double[] prices = prepareListOfPricesWithExpAverage16_237();
-        HashMap<String, Double> balances = prepareBalances();
+        double[] prices = prepareListOfPricesWithExpAverage16_237();
         strategy.setPeriod(Period.FiveMinutes);
 
-        when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, 16.0);
+        StrategyResult result = strategy.execute(16.0, prices);
 
         assertEquals(StrategyResult.SELL, result);
     }
 
-    public Double[] prepareListOfPricesWithExpAverage16_237() {
-        return new Double[]{
+    public double[] prepareListOfPricesWithExpAverage16_237() {
+        return new double[]{
                 10.0,
                 11.0,
                 12.5,

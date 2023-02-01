@@ -10,15 +10,15 @@ import java.util.HashMap;
  * Trading strategy used by the bot
  */
 public interface Strategy {
-    StrategyResult execute(Symbol symbol, double tickerPrice);
+    StrategyResult execute(double tickerPrice, double[] closePrices);
 
-    void init(Exchange exchange);
+    void init();
 
-    void printCurrentStatus(HashMap<String, Double> balances, double tickerPrice);
+    int getAmountOfRecordsToFetch();
+
+    String getCurrentStatus();
 
     Period getPeriod();
 
     String describe();
-
-    String toString();
 }

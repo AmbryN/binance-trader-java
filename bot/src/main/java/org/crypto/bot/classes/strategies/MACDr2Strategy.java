@@ -11,8 +11,8 @@ public class MACDr2Strategy extends MACDStrategy implements Strategy {
     }
 
     @Override
-    protected StrategyResult buyDecision(Symbol symbol, double tickerPrice) {
-        computeParams(symbol);
+    protected StrategyResult buyDecision(double tickerPrice, double[] closePrices) {
+        computeParams(closePrices);
         if (getCurrentMACD() < 0 && getCurrentMACD() > getCurrentSignal()) {
             return StrategyResult.BUY;
         } else if (getCurrentMACD() < getCurrentSignal()) {

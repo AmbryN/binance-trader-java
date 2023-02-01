@@ -2,8 +2,6 @@ package org.crypto.bot.classes.strategies;
 
 import org.crypto.bot.classes.selectors.IntSelector;
 import org.crypto.bot.classes.selectors.PeriodListSelector;
-import org.crypto.bot.enums.Symbol;
-import org.crypto.bot.interfaces.Exchange;
 import org.crypto.bot.interfaces.Strategy;
 import org.crypto.bot.utils.Calculus;
 import org.crypto.bot.enums.CrossingDirection;
@@ -11,16 +9,15 @@ import org.crypto.bot.enums.Period;
 import org.crypto.bot.enums.StrategyResult;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MACDStrategy implements Strategy {
-    private Exchange exchange;
     private Period period;
     private int shortNbOfPeriods;
     private int longNbOfPeriods;
     private int signalNbOfPeriods;
-    private Double[] MACDLine;
-    private Double[] signalLine;
+    protected int nbOfRecordsToFetch;
+    private double[] MACDLine;
+    private double[] signalLine;
     protected CrossingDirection crossingDirection;
 
     public MACDStrategy() {
@@ -49,22 +46,29 @@ public class MACDStrategy implements Strategy {
         return this.signalLine[this.signalLine.length -1];
     }
 
-    public void init(Exchange exchange) {
-        this.exchange = exchange;
+    public void init() {
         this.period = new PeriodListSelector().startSelector();
         IntSelector selector = new IntSelector();
         this.shortNbOfPeriods = selector.startSelector("Short EMA");
         this.longNbOfPeriods = selector.startSelector("Long EMA");
         this.signalNbOfPeriods = selector.startSelector("Signal EMA");
+        // To compute the {size} EMA, you normally need {size * 2 - 1} records,
+        // but binance uses at least { 5 * size } to be more accurate.
+        this.nbOfRecordsToFetch = this.longNbOfPeriods * 5 - 4;
     }
 
     @Override
-    public StrategyResult execute(Symbol symbol, double tickerPrice) {
-        return buyDecision(symbol, tickerPrice);
+    public StrategyResult execute(double tickerPrice, double[] closePrices) {
+        return buyDecision(tickerPrice, closePrices);
     }
 
-    protected StrategyResult buyDecision(Symbol symbol, double tickerPrice) {
-        computeParams(symbol);
+    @Override
+    public int getAmountOfRecordsToFetch() {
+       return nbOfRecordsToFetch;
+    }
+
+    protected StrategyResult buyDecision(double tickerPrice, double[] closePrices) {
+        computeParams(closePrices);
         if (getCurrentMACD() > getCurrentSignal()) {
             return StrategyResult.BUY;
         } else {
@@ -72,19 +76,14 @@ public class MACDStrategy implements Strategy {
         }
     }
 
-    protected void computeParams(Symbol symbol) {
-        getMacdAndSignalLines(symbol);
+    protected void computeParams(double[] closePrices) {
+        getMacdAndSignalLines(closePrices);
     }
 
-    protected void getMacdAndSignalLines(Symbol symbol) {
-        // To compute the {size} EMA, you normally need {size * 2 - 1} records,
-        // but binance uses at least { 5 * size } to be more accurate.
-        int recordsToFetch = this.longNbOfPeriods * 5 - 4;
-        Double[] prices = exchange.getClosePrices(symbol, period.toString(), recordsToFetch);
-
+    protected void getMacdAndSignalLines(double[] closePrices) {
         // Compute the short EMA (generally 12) and the long EMA (generally 26) used for the MACD line
-        Double[] shortEMAS = Calculus.expMovingAvgesWithSize(prices, this.shortNbOfPeriods);
-        Double[] longEMAs = Calculus.expMovingAvgesWithSize(prices, this.longNbOfPeriods);
+        double[] shortEMAS = Calculus.expMovingAvgesWithSize(closePrices, this.shortNbOfPeriods);
+        double[] longEMAs = Calculus.expMovingAvgesWithSize(closePrices, this.longNbOfPeriods);
 
         // Compute the MACD Line which is the subtraction of the longEMA from the shortEMA
         this.MACDLine = this.computeMACDLine(shortEMAS, longEMAs);
@@ -93,7 +92,7 @@ public class MACDStrategy implements Strategy {
         this.signalLine = Calculus.expMovingAvgesWithSize(MACDLine, signalNbOfPeriods);
     }
 
-    protected Double[] computeMACDLine(Double[] shortEMAs, Double[] longEMAs) {
+    protected double[] computeMACDLine(double[] shortEMAs, double[] longEMAs) {
         ArrayList<Double> MACDLine = new ArrayList<>();
         // Binance calculates the Signal with at least { 6 * signalNbOfPeriods }
         int recordsNeededForSignal = this.signalNbOfPeriods * 6 - 5;
@@ -102,12 +101,7 @@ public class MACDStrategy implements Strategy {
         for (int i=1; i <= recordsNeededForSignal; i++) {
             MACDLine.add(shortEMAs[lastIndexShortEMA - recordsNeededForSignal + i] - longEMAs[lastIndexLongEMA - recordsNeededForSignal + i]);
         }
-        return MACDLine.toArray(Double[]::new);
-    }
-
-    @Override
-    public void printCurrentStatus(HashMap<String, Double> balances, double tickerPrice) {
-        System.out.println(currentStatus(balances, tickerPrice));
+        return MACDLine.stream().mapToDouble(Double::doubleValue).toArray();
     }
 
     @Override
@@ -115,20 +109,18 @@ public class MACDStrategy implements Strategy {
         return this.period;
     }
 
-    protected String currentStatus(HashMap<String, Double> balances, double tickerPrice) {
-        return "Base balance: " + balances.get("base") +
-                "\nQuote balance: " + balances.get("quote") +
-                "\nTicker " + tickerPrice +
-                "\nMACD " + getCurrentMACD() +
+    public String getCurrentStatus() {
+        return  "\nMACD " + getCurrentMACD() +
                 "\nSignal " + getCurrentSignal();
     }
 
     @Override
     public String describe() {
-        return "Time Period: " + this.period +
-                "\nShort Number of Periods: " + this.shortNbOfPeriods +
-                "\nLong Number of Periods: " + this.longNbOfPeriods +
-                "\nSignal Number of Periods: " + this.signalNbOfPeriods;
+        return this +
+                "\nTime Period: " + this.period +
+                "\n-> Short Number of Periods: " + this.shortNbOfPeriods +
+                "\n-> Long Number of Periods: " + this.longNbOfPeriods +
+                "\n-> Signal Number of Periods: " + this.signalNbOfPeriods;
     }
 
     @Override

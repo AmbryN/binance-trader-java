@@ -1,5 +1,6 @@
 package org.crypto.bot.interfaces;
 
+import org.crypto.bot.enums.Period;
 import org.crypto.bot.enums.Symbol;
 
 import java.util.HashMap;
@@ -9,9 +10,9 @@ import java.util.HashMap;
  */
 public interface Exchange {
     HashMap<String, Double> getBaseAndQuoteBalances(Symbol symbol);
-    Double getTicker(Symbol symbol);
+    double getTicker(Symbol symbol);
 
-    Double[] getClosePrices(Symbol symbol, String period, int nbOfRecordsToFetch);
+    double[] getClosePrices(Symbol symbol, Period period, int nbOfRecordsToFetch);
 
     void buy(Symbol symbol, double tickerPrice, double quoteBalance);
     void sell(Symbol symbol, double tickerPrice, double baseBalance);

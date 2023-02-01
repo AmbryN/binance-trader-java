@@ -8,20 +8,18 @@ import org.crypto.bot.enums.Symbol;
 import org.crypto.bot.interfaces.Exchange;
 import org.crypto.bot.interfaces.Strategy;
 
-import java.util.HashMap;
-
 public abstract class MovingAverage implements Strategy {
-    protected Exchange exchange;
     protected Period period;
     protected int nbOfPeriods;
+    protected int nbOfRecordsToFetch;
     protected double movingAvg;
 
     protected MovingAverage() {}
 
-    public void init(Exchange exchange) {
-        this.exchange = exchange;
+    public void init() {
         this.period = new PeriodListSelector().startSelector();
         this.nbOfPeriods = new IntSelector().startSelector("Moving Average");
+        this.nbOfRecordsToFetch = nbOfPeriods;
     }
 
     protected void setPeriod(Period period) {
@@ -33,8 +31,8 @@ public abstract class MovingAverage implements Strategy {
     protected void setNbOfPeriods(int nbOfPeriods) { this.nbOfPeriods = nbOfPeriods; }
 
     @Override
-    public StrategyResult execute(Symbol symbol, double tickerPrice) {
-        calculateMovingAvg(symbol);
+    public StrategyResult execute(double tickerPrice, double[] closePrices) {
+        calculateMovingAvg(closePrices);
 
         StrategyResult result = StrategyResult.HOLD;
         if (tickerPrice > movingAvg) {
@@ -45,25 +43,21 @@ public abstract class MovingAverage implements Strategy {
         return result;
     }
 
-    @Override
-    public void printCurrentStatus(HashMap<String, Double> balances, double tickerPrice) {
-        System.out.println("Base balance: " + balances.get("base") +
-                "\nQuote balance: " + balances.get("quote") +
-                "\nTicker " + tickerPrice +
-                "\nMAvg " + movingAvg);
+    public String getCurrentStatus() {
+        return "\nMAvg " + movingAvg;
     }
 
-    protected abstract void calculateMovingAvg(Symbol symbol);
-
-    protected Double[] getClosePrices(Symbol symbol, String periodAsStr, int nbOfRecordsToFetch) {
-        return exchange.getClosePrices(symbol, periodAsStr, nbOfRecordsToFetch);
-    }
-
-    public abstract String toString();
+    protected abstract void calculateMovingAvg(double[] closePrices);
 
     @Override
     public String describe() {
-        return "Time Period: " + this.period +
-                "\nNumber of Periods: " + this.nbOfPeriods;
+        return this +
+                "\n-> Time Period: " + this.period +
+                "\n-> Number of Periods: " + this.nbOfPeriods;
+    }
+
+    @Override
+    public int getAmountOfRecordsToFetch() {
+        return this.nbOfRecordsToFetch;
     }
 }

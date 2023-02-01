@@ -2,22 +2,14 @@ package org.crypto.bot.classes.strategies;
 
 import org.crypto.bot.enums.Period;
 import org.crypto.bot.enums.StrategyResult;
-import org.crypto.bot.enums.Symbol;
-import org.crypto.bot.interfaces.Exchange;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 public class MACDr2StrategyTest {
-
-    @Mock
-    Exchange exchangeMock;
 
     @InjectMocks MACDr2Strategy strategy;
     @BeforeEach
@@ -31,46 +23,42 @@ public class MACDr2StrategyTest {
 
     @Test
     public void shouldDoNothingIfMACDOverSignalForMoreThanTwoPeriods() {
-        Double[] prices = prepareListOfPricesForDoingNothingWhenMacdOverSignalForMoreThanTwoPeriods();
+        double[] prices = prepareListOfPricesForDoingNothingWhenMacdOverSignalForMoreThanTwoPeriods();
 
-        when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, 19500.);
+        StrategyResult result = strategy.execute(19500., prices);
 
         assertEquals(StrategyResult.HOLD, result);
     }
 
     @Test
     public void shouldSellIfMACDUnderSignal() {
-        Double[] prices = prepareListOfPricesForSellingIfMacdUnderSignal();
+        double[] prices = prepareListOfPricesForSellingIfMacdUnderSignal();
 
-        when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, 19500.);
+        StrategyResult result = strategy.execute(19500., prices);
 
         assertEquals(StrategyResult.SELL, result);
     }
 
     @Test
     public void shouldBuyIfMACDCrossesOverSignalInTheLastPeriodAndMACDUnderZero() {
-        Double[] prices = prepareListOfPricesForBuying();
+        double[] prices = prepareListOfPricesForBuying();
 
-        when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, 19500.);
+        StrategyResult result = strategy.execute(19500., prices);
 
         assertEquals(StrategyResult.BUY, result);
     }
 
     @Test
     public void shouldDoNothingIfMACDCrossesOverSignalInTheLastPeriodButMACDOverZero() {
-        Double[] prices = prepareListOfPricesForDoingNothingWhenMACDCrossesSignalInLastPeriodButMacdOverZero();
+        double[] prices = prepareListOfPricesForDoingNothingWhenMACDCrossesSignalInLastPeriodButMacdOverZero();
 
-        when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, 19500.);
+        StrategyResult result = strategy.execute(19500., prices);
 
         assertEquals(StrategyResult.HOLD, result);
     }
 
-    private Double[] prepareListOfPricesForSellingIfMacdUnderSignal() {
-        return new Double[] {
+    private double[] prepareListOfPricesForSellingIfMacdUnderSignal() {
+        return new double[] {
                 19183.68,
                 19141.23,
                 19133.03,
@@ -200,8 +188,8 @@ public class MACDr2StrategyTest {
         };
     }
 
-    private Double[] prepareListOfPricesForDoingNothingWhenMacdOverSignalForMoreThanTwoPeriods() {
-        return new Double[] {
+    private double[] prepareListOfPricesForDoingNothingWhenMacdOverSignalForMoreThanTwoPeriods() {
+        return new double[] {
                 19183.68,
                 19141.23,
                 19133.03,
@@ -331,8 +319,8 @@ public class MACDr2StrategyTest {
         };
     }
 
-    private Double[] prepareListOfPricesForSellingWhenTickerGoesUnderBuyPrice() {
-        return new Double[] {
+    private double[] prepareListOfPricesForSellingWhenTickerGoesUnderBuyPrice() {
+        return new double[] {
                 19183.68,
                 19141.23,
                 19133.03,
@@ -462,8 +450,8 @@ public class MACDr2StrategyTest {
         };
     }
 
-    private Double[] prepareListOfPricesForBuying() {
-        return new Double[] {
+    private double[] prepareListOfPricesForBuying() {
+        return new double[] {
                 19183.68,
                 19141.23,
                 19133.03,
@@ -593,8 +581,8 @@ public class MACDr2StrategyTest {
         };
     }
 
-    private Double[] prepareListOfPricesForDoingNothingWhenMACDCrossesSignalInLastPeriodButMacdOverZero() {
-        return new Double[] {
+    private double[] prepareListOfPricesForDoingNothingWhenMACDCrossesSignalInLastPeriodButMacdOverZero() {
+        return new double[] {
                 19183.68,
                 19141.23,
                 19133.03,

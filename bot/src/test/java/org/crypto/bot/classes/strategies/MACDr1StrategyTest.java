@@ -2,22 +2,14 @@ package org.crypto.bot.classes.strategies;
 
 import org.crypto.bot.enums.Period;
 import org.crypto.bot.enums.StrategyResult;
-import org.crypto.bot.enums.Symbol;
-import org.crypto.bot.interfaces.Exchange;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 public class MACDr1StrategyTest {
-
-    @Mock
-    Exchange exchangeMock;
 
     @InjectMocks MACDr1Strategy strategy;
     @BeforeEach
@@ -32,26 +24,24 @@ public class MACDr1StrategyTest {
 
     @Test
     public void shouldSellIfMACDUnderSignalPlusSpread() {
-        Double[] prices = prepareListOfPricesForSellingIfMacdUnderSpreadButOverSignal();
+        double[] prices = prepareListOfPricesForSellingIfMacdUnderSpreadButOverSignal();
 
-        when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, 19500.);
+        StrategyResult result = strategy.execute(19500., prices);
 
         assertEquals(StrategyResult.SELL, result);
     }
 
     @Test
     public void shouldBuyIfMACDCrossesOverSignalPlusSpread() {
-        Double[] prices = prepareListOfPricesForBuying();
+        double[] prices = prepareListOfPricesForBuying();
 
-        when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, 19500.);
+        StrategyResult result = strategy.execute(19500., prices);
 
         assertEquals(StrategyResult.BUY, result);
     }
 
-    private Double[] prepareListOfPricesForSellingIfMacdUnderSpreadButOverSignal() {
-        return new Double[] {
+    private double[] prepareListOfPricesForSellingIfMacdUnderSpreadButOverSignal() {
+        return new double[] {
                 19183.68,
                 19141.23,
                 19133.03,
@@ -181,8 +171,8 @@ public class MACDr1StrategyTest {
         };
     }
 
-    private Double[] prepareListOfPricesForBuying() {
-        return new Double[] {
+    private double[] prepareListOfPricesForBuying() {
+        return new double[] {
                 19183.68,
                 19141.23,
                 19133.03,

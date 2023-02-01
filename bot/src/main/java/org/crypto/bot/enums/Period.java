@@ -1,5 +1,9 @@
 package org.crypto.bot.enums;
 
+/**
+ * Represents the period of the candle / kline graph used
+ * for computing the technical indicators.
+ */
 public enum Period {
     OneSecond("1s", 1000L),
     OneMinute("1m", 60000L),
@@ -20,6 +24,7 @@ public enum Period {
 
     private final String periodAsStr;
     private final Long periodAsMs;
+
     Period(String periodAsStr, Long periodAsMs) {
         this.periodAsStr = periodAsStr;
         this.periodAsMs = periodAsMs;
@@ -30,6 +35,10 @@ public enum Period {
         return this.periodAsStr;
     }
 
+    /**
+     * Acts as a getter for the millisecond value of the Period.
+     * @return the period as milliseconds
+     */
     public Long toMillis() {
         return this.periodAsMs;
     }

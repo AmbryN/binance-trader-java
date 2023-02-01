@@ -21,14 +21,14 @@ public class MACDr1Strategy extends MACDStrategy implements Strategy {
     protected void setMinSpread(double spread) { this.minSpread = spread; }
 
     @Override
-    public void init(Exchange exchange) {
-        super.init(exchange);
+    public void init() {
+        super.init();
         this.minSpread = new DoubleSelector().startSelector("Min Spread before Buy occurs (as double: e.g. 2.5 for 0.025): ");
     }
 
     @Override
-    protected StrategyResult buyDecision(Symbol symbol, double tickerPrice) {
-        computeParams(symbol, tickerPrice);
+    protected StrategyResult buyDecision(double tickerPrice, double[] closePrices) {
+        computeParams(closePrices, tickerPrice);
         if (isOverSpread) {
             return StrategyResult.BUY;
         } else if (isUnderSpread) {
@@ -37,8 +37,8 @@ public class MACDr1Strategy extends MACDStrategy implements Strategy {
         return StrategyResult.HOLD;
     }
 
-    protected void computeParams(Symbol symbol, double tickerPrice) {
-        getMacdAndSignalLines(symbol);
+    protected void computeParams(double[] closePrices, double tickerPrice) {
+        getMacdAndSignalLines(closePrices);
         isOverSpread(tickerPrice);
         isUnderSpread(tickerPrice);
     }
@@ -55,9 +55,8 @@ public class MACDr1Strategy extends MACDStrategy implements Strategy {
         this.isUnderSpread = ((currentMACD - currentSignal) / tickerPrice) * 100 < (minSpread / 100.) * 0.8;
     }
 
-    @Override
-    protected String currentStatus(HashMap<String, Double> balances, double tickerPrice) {
-        return super.currentStatus(balances, tickerPrice) +
+    public String getCurrentStatus() {
+        return super.getCurrentStatus() +
                 "\nOver Spread " + isOverSpread +
                 "\nUnder Spread " + isUnderSpread;
 
@@ -66,7 +65,7 @@ public class MACDr1Strategy extends MACDStrategy implements Strategy {
     @Override
     public String describe() {
         return super.describe() +
-                "\nMin Spread before Buy: " + this.minSpread;
+                "\n-> Min Spread before Buy: " + this.minSpread;
     }
 
     @Override

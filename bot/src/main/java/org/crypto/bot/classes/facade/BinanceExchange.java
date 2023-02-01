@@ -5,6 +5,7 @@ import org.crypto.bot.classes.data.AccountInfo;
 import org.crypto.bot.classes.data.Kline;
 import org.crypto.bot.classes.data.Ticker;
 import org.crypto.bot.classes.handlers.Try;
+import org.crypto.bot.enums.Period;
 import org.crypto.bot.enums.Symbol;
 import org.crypto.bot.exceptions.BinanceTraderException;
 import org.crypto.bot.interfaces.Exchange;
@@ -21,7 +22,7 @@ import java.util.Optional;
  * Facade class for Binance exchange, which handles
  * all the connections and work for the client application.
  */
-public class BinanceFacade implements Exchange {
+public class BinanceExchange implements Exchange {
     private final static String TESTNET_URL = "https://testnet.binance.vision";
     private final static String BINANCE_URL = "https://api.binance.com";
 
@@ -34,7 +35,7 @@ public class BinanceFacade implements Exchange {
     private String apiKey;
     private String secretKey;
 
-    public BinanceFacade() {
+    public BinanceExchange() {
         url = TESTNET_URL;
         apiKey = System.getenv("TESTNET_API_KEY");
         secretKey = System.getenv("TESTNET_SECRET_KEY");
@@ -69,7 +70,7 @@ public class BinanceFacade implements Exchange {
      * @return current price for given symbol
      * @throws BinanceTraderException if price could not be gotten from the exchange
      */
-    public Double getTicker(Symbol symbol) {
+    public double getTicker(Symbol symbol) {
         Optional<Ticker> optionalTicker =
                 Try.toGet(() -> tickerService.getTicker(symbol));
         if (optionalTicker.isPresent()) {
@@ -88,8 +89,9 @@ public class BinanceFacade implements Exchange {
      * @return array of closing prices
      * @throws BinanceTraderException if prices could not be gotten from the exchange
      */
-    public Double[] getClosePrices(Symbol symbol, String period, int nbOfRecordsToFetch) {
-        Optional<Kline[]> optionalKlines = Try.toGet(() -> klineService.fetchKlines(symbol, period, nbOfRecordsToFetch));
+    public double[] getClosePrices(Symbol symbol, Period period, int nbOfRecordsToFetch) {
+        String periodAsString = period.toString();
+        Optional<Kline[]> optionalKlines = Try.toGet(() -> klineService.fetchKlines(symbol, periodAsString, nbOfRecordsToFetch));
         if (optionalKlines.isPresent()) {
             Kline[] klines = optionalKlines.get();
             return getClosesPricesFrom(klines);
@@ -97,8 +99,8 @@ public class BinanceFacade implements Exchange {
         throw new BinanceTraderException("Could not get Close Prices from the exchange");
     }
 
-    private Double[] getClosesPricesFrom(Kline[] klines) {
-        return Arrays.stream(klines).map(Kline::getClosePrice).toArray(Double[]::new);
+    private double[] getClosesPricesFrom(Kline[] klines) {
+        return Arrays.stream(klines).map(Kline::getClosePrice).mapToDouble(Double::doubleValue).toArray();
     }
 
     /**
@@ -123,5 +125,10 @@ public class BinanceFacade implements Exchange {
     public void sell(Symbol symbol, double tickerPrice, double baseBalance) {
         Try.toRun(()
                 -> orderService.sell(symbol,tickerPrice, baseBalance));
+    }
+
+    @Override
+    public String toString() {
+        return "Binance";
     }
 }

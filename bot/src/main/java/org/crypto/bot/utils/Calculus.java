@@ -9,7 +9,7 @@ public class Calculus {
      * @param values the list of values to compute the SMA from
      * @return the SMA
      */
-    public static double simpleMovingAvg(Double[] values) {
+    public static double simpleMovingAvg(double[] values) {
         if (values.length == 0) {
             return 0.;
         }
@@ -27,13 +27,13 @@ public class Calculus {
      * @param values the list of values to compute the EMA from
      * @return EMAList the list of the last {emaSize} values
      */
-    public static Double[] expMovingAvg(Double[] values) {
+    public static double[] expMovingAvg(double[] values) {
         // Find the middle of the list and ceil it which gives the size (nb of periods) of the EMA
         double middle = (double) values.length / 2.;
         int emaSize = (int) Math.ceil(middle);
 
         if (values.length == 0) {
-            return new Double[] {};
+            return new double[] {};
         }
         return expMovingAvgesWithSize(values, emaSize);
     }
@@ -44,9 +44,9 @@ public class Calculus {
      * @param emaSize is the number of periods used to compute the EMA
      * @return EMAList the list of the last {emaSize} values
      */
-    public static Double[] expMovingAvgesWithSize(Double[] values, int emaSize) {
+    public static double[] expMovingAvgesWithSize(double[] values, int emaSize) {
         if (values.length == 0) {
-            return new Double[]{0.};
+            return new double[]{0.};
         }
 
         // Smoothing factor K
@@ -58,14 +58,14 @@ public class Calculus {
         EMAList.add(firstSMA);
 
         // Sublist of the values which were not used for the SMA and need to be used for following EMAs
-        Double[] filteredValues = Arrays.copyOfRange(values, emaSize, values.length);
+        double[] filteredValues = Arrays.copyOfRange(values, emaSize, values.length);
 
         // Compute the following EMA from the starting SMA
         double lastEMA = firstSMA;
-        for (Double filteredValue : filteredValues) {
+        for (double filteredValue : filteredValues) {
             EMAList.add(smoothing * (filteredValue - lastEMA) + lastEMA);
             lastEMA = EMAList.get(EMAList.size() - 1);
         }
-        return EMAList.toArray(Double[]::new);
+        return EMAList.stream().mapToDouble(Double::doubleValue).toArray();
     }
 }

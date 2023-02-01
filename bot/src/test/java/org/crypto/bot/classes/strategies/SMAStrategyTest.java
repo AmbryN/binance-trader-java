@@ -2,8 +2,6 @@ package org.crypto.bot.classes.strategies;
 
 import org.crypto.bot.enums.Period;
 import org.crypto.bot.enums.StrategyResult;
-import org.crypto.bot.enums.Symbol;
-import org.crypto.bot.interfaces.Exchange;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -11,13 +9,9 @@ import org.mockito.*;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 public class SMAStrategyTest {
 
-    @Mock
-    Exchange exchangeMock;
     @InjectMocks SMAStrategy strategy;
 
     @BeforeEach
@@ -27,30 +21,26 @@ public class SMAStrategyTest {
 
     @Test
     public void shouldBuyIfPriceHigherThanMovingAvg() {
-        Double[] prices = prepareListOfPricesWithAverage14_95();
-        HashMap<String, Double> balances = prepareBalances();
+        double[] prices = prepareListOfPricesWithAverage14_95();
         strategy.setPeriod(Period.FiveMinutes);
 
-        when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, 15);
+        StrategyResult result = strategy.execute(15, prices);
 
         assertEquals(StrategyResult.BUY, result);
     }
 
     @Test
     public void shouldSellIfPriceLowerThanMovingAvg() {
-        Double[] prices = prepareListOfPricesWithAverage14_95();
-        HashMap<String, Double> balances = prepareBalances();
+        double[] prices = prepareListOfPricesWithAverage14_95();
         strategy.setPeriod(Period.FiveMinutes);
 
-        when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, 14.5);
+        StrategyResult result = strategy.execute(14.5, prices);
 
         assertEquals(StrategyResult.SELL, result);
     }
 
-    public Double[] prepareListOfPricesWithAverage14_95() {
-        return new Double[]{
+    public double[] prepareListOfPricesWithAverage14_95() {
+        return new double[]{
             10.0,
             11.0,
             12.5,

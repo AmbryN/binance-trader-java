@@ -10,8 +10,7 @@ public class SMAStrategy extends MovingAverage {
     }
 
     @Override
-    protected void calculateMovingAvg(Symbol symbol) {
-        Double[] closePrices = this.getClosePrices(symbol, period.toString(), this.nbOfPeriods);
+    protected void calculateMovingAvg(double[] closePrices) {
         this.movingAvg = Calculus.simpleMovingAvg(closePrices);
     }
 

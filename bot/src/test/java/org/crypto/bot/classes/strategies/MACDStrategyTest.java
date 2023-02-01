@@ -33,24 +33,22 @@ public class MACDStrategyTest {
 
     @Test
     public void shouldBuyIfMACDCrossingUpSignal() {
-        Double[] prices = prepareListOfPricesForBuying();
-        when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, 1500.);
+        double[] prices = prepareListOfPricesForBuying();
+        StrategyResult result = strategy.execute(1500., prices);
 
         assertEquals(StrategyResult.BUY, result);
     }
 
     @Test
     public void shouldSellIfMACDCrossingDownSignal() {
-        Double[] prices = prepareListOfPricesForSelling();
-        when(exchangeMock.getClosePrices(any(Symbol.class), any(String.class), any(Integer.class))).thenReturn(prices);
-        StrategyResult result = strategy.execute(Symbol.BTCUSDT, 1500.);
+        double[] prices = prepareListOfPricesForSelling();
+        StrategyResult result = strategy.execute(1500., prices);
 
         assertEquals(StrategyResult.SELL, result);
     }
 
-    private Double[] prepareListOfPricesForDoingNothingUnder() {
-       return new Double[] {
+    private double[] prepareListOfPricesForDoingNothingUnder() {
+       return new double[] {
                19183.68,
                19141.23,
                19133.03,
@@ -180,8 +178,8 @@ public class MACDStrategyTest {
         };
     }
 
-    private Double[] prepareListOfPricesForDoingNothingOver() {
-        return new Double[] {
+    private double[] prepareListOfPricesForDoingNothingOver() {
+        return new double[] {
                 19183.68,
                 19141.23,
                 19133.03,
@@ -311,8 +309,8 @@ public class MACDStrategyTest {
         };
     }
 
-    private Double[] prepareListOfPricesForBuying() {
-        return new Double[] {
+    private double[] prepareListOfPricesForBuying() {
+        return new double[] {
                 19183.68,
                 19141.23,
                 19133.03,
@@ -442,8 +440,8 @@ public class MACDStrategyTest {
         };
     }
 
-    private Double[] prepareListOfPricesForSelling() {
-        return new Double[] {
+    private double[] prepareListOfPricesForSelling() {
+        return new double[] {
                 19183.68,
                 19141.23,
                 19133.03,

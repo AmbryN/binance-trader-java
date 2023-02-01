@@ -3,6 +3,7 @@ package org.crypto.bot.classes.facade;
 import com.binance.connector.client.exceptions.BinanceClientException;
 import com.binance.connector.client.exceptions.BinanceConnectorException;
 import com.binance.connector.client.exceptions.BinanceServerException;
+import org.crypto.bot.enums.Period;
 import org.crypto.bot.enums.Symbol;
 import org.crypto.bot.exceptions.BinanceTraderException;
 import org.crypto.bot.services.AccountInfoService;
@@ -20,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
-public class BinanceFacadeTest {
+public class BinanceExchangeTest {
 
     @Mock
     AccountInfoService accountInfoServiceMock;
@@ -33,7 +34,8 @@ public class BinanceFacadeTest {
     @Mock
     KlineService klineServiceMock;
 
-    @InjectMocks BinanceFacade facade;
+    @InjectMocks
+    BinanceExchange facade;
 
     @BeforeEach
     public void setup() {
@@ -86,21 +88,21 @@ public class BinanceFacadeTest {
     public void shouldThrowExceptionIfGetClosePricesThrowsConnectorException() {
         when(klineServiceMock.fetchKlines(any(Symbol.class), any(String.class), any(Integer.class))).thenThrow(BinanceConnectorException.class);
         assertThrows(BinanceTraderException.class,
-                () -> facade.getClosePrices(Symbol.BTCUSDT, "5m", 12));
+                () -> facade.getClosePrices(Symbol.BTCUSDT, Period.FiveMinutes, 12));
     }
 
     @Test
     public void shouldThrowExceptionIfGetClosePricesThrowsServerException() {
         when(klineServiceMock.fetchKlines(any(Symbol.class), any(String.class), any(Integer.class))).thenThrow(BinanceServerException.class);
         assertThrows(BinanceTraderException.class,
-                () -> facade.getClosePrices(Symbol.BTCUSDT, "5m", 12));
+                () -> facade.getClosePrices(Symbol.BTCUSDT, Period.FiveMinutes, 12));
     }
 
     @Test
     public void shouldThrowExceptionIfGetClosePricesThrowsClientException() {
         when(klineServiceMock.fetchKlines(any(Symbol.class), any(String.class), any(Integer.class))).thenThrow(BinanceClientException.class);
         assertThrows(BinanceClientException.class,
-                () -> facade.getClosePrices(Symbol.BTCUSDT, "5m", 12));
+                () -> facade.getClosePrices(Symbol.BTCUSDT, Period.FiveMinutes, 12));
     }
 
     @Test
