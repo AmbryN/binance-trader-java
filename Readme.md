@@ -7,12 +7,13 @@
 It allows:
 * to select a crypto pair to trade from the available pairs
 * to select a trading strategy from the available list
-* to set the strategy's variable (e.g. observation period, number of periods) used to execute said strategy
+* to set the strategy’s variable (e.g. observation period, number of periods) used to execute said strategy
 * to send actual buy and sell orders on Binance (currently being tested on Binance’s Testnet)
 * to log the trades into a file (orderLog.txt) in the project root directory
 
 Planned features:
-* Rework of the strategy building scheme to provide the user with a set of rules, which can be added to it
+* Rework of the strategy building scheme to provide the user with a set of rules, 
+* which can be used to tweak the strategy's behavior
 * Add UI for crypto and strategy selection
 * Implementation of threads to allow for remote management through the UI
 * Allow to trade with a fraction of your quote balance to be able
@@ -53,9 +54,30 @@ TESTNET_API_KEY="YOUR_TESTNET_API_KEY"
 TESTNET_SECRET_KEY="YOUR_TESTNET_SECRET_KEY"
 ```
 4) Run `./gradlew build`
+
+### Run in Console mode
 5) Run `java -jar bot/build/libs/bot-1.0-SNAPSHOT.jar`
 
-**Info** : Only the bot can be run in console mode. The webapp is in a non-working state for the moment even though
+### Run in Library mode (experimental)
+5) You can create a new instance of a Trader object in the following manner:
+```java
+class MyConsumerApp {
+    public void main(String[] args) {
+        Exchange exchange = new BinanceExchange();  // The only exchange for now
+        Symbol symbol = Symbol.BTCUSDT;             // From the available symbols Enum
+        Strategy strategy = new SMAStrategy();      // From the available strategies
+
+        Trader trader = new Trader(exchange, symbol, strategy);
+        trader.run();
+    }
+}
+```
+
+**Warning** : Development on this feature is in its beginning phase, 
+thus running the bot as a library is experimental and will produce unexpected behaviors.
+
+### Running the Webapp
+The webapp is in a non-working state for the moment even though
 it can be run using an application server on which to deploy the packaged war file.
 
 ## Errors
