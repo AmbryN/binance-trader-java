@@ -1,25 +1,18 @@
 package org.crypto.bot.classes.selectors;
 
-import org.crypto.bot.classes.strategies.*;
-import org.crypto.bot.interfaces.Strategy;
+import org.crypto.bot.enums.StrategyName;
 
-public class StrategyListSelector extends ListSelector<Strategy> {
+public class StrategyListSelector extends ListSelector<StrategyName> {
 
     public StrategyListSelector() {
-        this.list = new Strategy[]{
-                new SMAStrategy(),
-                new EMAStrategy(),
-                new MACDStrategy(),
-                new MACDr1Strategy(),
-                new MACDr2Strategy(),
-        };
+        this.list = StrategyName.values();
     }
 
     @Override
     protected void showSelector() {
         System.out.println("What strategy do you want to use? ");
         int index = 0;
-        for (Strategy strategy : list) {
+        for (StrategyName strategy : list) {
             System.out.println(index + ") " + strategy.toString());
             index++;
         }

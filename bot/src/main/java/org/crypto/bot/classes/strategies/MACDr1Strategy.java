@@ -14,17 +14,12 @@ public class MACDr1Strategy extends MACDStrategy implements Strategy {
     protected boolean isOverSpread;
     protected boolean isUnderSpread;
 
+//    this.minSpread = new DoubleSelector().startSelector("Min Spread before Buy occurs (as double: e.g. 2.5 for 0.025): ");
     public MACDr1Strategy() {
         super();
     }
 
-    protected void setMinSpread(double spread) { this.minSpread = spread; }
-
-    @Override
-    public void init() {
-        super.init();
-        this.minSpread = new DoubleSelector().startSelector("Min Spread before Buy occurs (as double: e.g. 2.5 for 0.025): ");
-    }
+    public void setMinSpread(double spread) { this.minSpread = spread; }
 
     @Override
     protected StrategyResult buyDecision(double tickerPrice, double[] closePrices) {

@@ -2,12 +2,12 @@ package org.crypto.bot;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
+import org.crypto.bot.classes.factory.StrategyFactory;
 import org.crypto.bot.classes.facade.BinanceExchange;
 import org.crypto.bot.classes.handlers.Try;
-import org.crypto.bot.classes.selectors.StrategyListSelector;
-import org.crypto.bot.classes.selectors.SymbolListSelector;
-import org.crypto.bot.classes.selectors.YesNoSelector;
+import org.crypto.bot.classes.selectors.*;
 import org.crypto.bot.enums.Period;
+import org.crypto.bot.enums.StrategyName;
 import org.crypto.bot.enums.StrategyResult;
 import org.crypto.bot.enums.Symbol;
 import org.crypto.bot.interfaces.Exchange;
@@ -95,15 +95,15 @@ public class Trader implements Runnable {
         Logger logger = Logging.getInstance();
         logger.setLevel(Level.WARN);
 
-        Symbol symbol = null;
-        Strategy strategy = null;
+        Symbol symbol;
+        Strategy strategy;
         Trader trader = null;
 
         boolean start = false;
         while(!start) {
             symbol = new SymbolListSelector().startSelector();
-            strategy = new StrategyListSelector().startSelector();
-            strategy.init();
+            StrategyName strategyName = new StrategyListSelector().startSelector();
+            strategy = StrategyFactory.getStrategyBuilderFor(strategyName);
 
             trader = new Trader(new BinanceExchange(), symbol, strategy);
 

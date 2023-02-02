@@ -18,9 +18,6 @@ import static org.mockito.Mockito.when;
 
 public class MACDStrategyTest {
 
-    @Mock
-    Exchange exchangeMock;
-
     @InjectMocks MACDStrategy strategy;
     @BeforeEach
     public void setup() {

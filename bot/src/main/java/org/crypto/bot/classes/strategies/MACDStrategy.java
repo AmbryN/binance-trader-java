@@ -1,7 +1,5 @@
 package org.crypto.bot.classes.strategies;
 
-import org.crypto.bot.classes.selectors.IntSelector;
-import org.crypto.bot.classes.selectors.PeriodListSelector;
 import org.crypto.bot.interfaces.Strategy;
 import org.crypto.bot.utils.Calculus;
 import org.crypto.bot.enums.CrossingDirection;
@@ -20,21 +18,28 @@ public class MACDStrategy implements Strategy {
     private double[] signalLine;
     protected CrossingDirection crossingDirection;
 
+//        this.period = new PeriodListSelector().startSelector();
+//    IntSelector selector = new IntSelector();
+//        this.shortNbOfPeriods = selector.startSelector("Short EMA");
+//        this.longNbOfPeriods = selector.startSelector("Long EMA");
     public MACDStrategy() {
         this.crossingDirection = CrossingDirection.NONE;
     }
 
-    protected void setPeriod(Period period) { this.period = period; }
+    public void setPeriod(Period period) { this.period = period; }
 
-    protected void setShortNbOfPeriods(int shortNbOfPeriods) {
+    public void setShortNbOfPeriods(int shortNbOfPeriods) {
         this.shortNbOfPeriods = shortNbOfPeriods;
     }
 
-    protected void setLongNbOfPeriods(int longNbOfPeriods) {
+    public void setLongNbOfPeriods(int longNbOfPeriods) {
         this.longNbOfPeriods = longNbOfPeriods;
+        // To compute the {size} EMA, you normally need {size * 2 - 1} records,
+        // but binance uses at least { 5 * size } to be more accurate.
+        this.nbOfRecordsToFetch = this.longNbOfPeriods * 5 - 4;
     }
 
-    protected void setSignalNbOfPeriods(int signalNbOfPeriods) {
+    public void setSignalNbOfPeriods(int signalNbOfPeriods) {
         this.signalNbOfPeriods = signalNbOfPeriods;
     }
 
@@ -44,17 +49,6 @@ public class MACDStrategy implements Strategy {
 
     protected double getCurrentSignal() {
         return this.signalLine[this.signalLine.length -1];
-    }
-
-    public void init() {
-        this.period = new PeriodListSelector().startSelector();
-        IntSelector selector = new IntSelector();
-        this.shortNbOfPeriods = selector.startSelector("Short EMA");
-        this.longNbOfPeriods = selector.startSelector("Long EMA");
-        this.signalNbOfPeriods = selector.startSelector("Signal EMA");
-        // To compute the {size} EMA, you normally need {size * 2 - 1} records,
-        // but binance uses at least { 5 * size } to be more accurate.
-        this.nbOfRecordsToFetch = this.longNbOfPeriods * 5 - 4;
     }
 
     @Override

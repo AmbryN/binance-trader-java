@@ -1,7 +1,7 @@
 package org.crypto.bot.classes.selectors;
 
 import org.crypto.bot.classes.inputs.NumberInput;
-import org.crypto.bot.interfaces.Strategy;
+import org.crypto.bot.enums.StrategyName;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -27,6 +27,6 @@ public class StrategySelectorTest {
     @Test
     public void shouldReturnValidStrategyWhenInputIsCorrect() {
         when(inputMock.getUserInt()).thenReturn(0);
-        assertThat(selector.startSelector(), instanceOf(Strategy.class));
+        assertThat(selector.startSelector(), instanceOf(StrategyName.class));
     }
 }

@@ -14,21 +14,22 @@ public abstract class MovingAverage implements Strategy {
     protected int nbOfRecordsToFetch;
     protected double movingAvg;
 
+//    this.period = new PeriodListSelector().startSelector();
+//        this.nbOfPeriods = new IntSelector().startSelector("Moving Average");
+//        this.nbOfRecordsToFetch = nbOfPeriods;
     protected MovingAverage() {}
 
-    public void init() {
-        this.period = new PeriodListSelector().startSelector();
-        this.nbOfPeriods = new IntSelector().startSelector("Moving Average");
-        this.nbOfRecordsToFetch = nbOfPeriods;
-    }
-
-    protected void setPeriod(Period period) {
+    public void setPeriod(Period period) {
         this.period = period;
     }
     public Period getPeriod() {
         return this.period;
     }
-    protected void setNbOfPeriods(int nbOfPeriods) { this.nbOfPeriods = nbOfPeriods; }
+
+    public void setNbOfPeriods(int nbOfPeriods) {
+        this.nbOfPeriods = nbOfPeriods;
+        this.nbOfRecordsToFetch = nbOfPeriods;
+    }
 
     @Override
     public StrategyResult execute(double tickerPrice, double[] closePrices) {

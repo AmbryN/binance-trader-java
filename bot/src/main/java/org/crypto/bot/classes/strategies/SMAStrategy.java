@@ -1,6 +1,5 @@
 package org.crypto.bot.classes.strategies;
 
-import org.crypto.bot.enums.Symbol;
 import org.crypto.bot.utils.Calculus;
 
 public class SMAStrategy extends MovingAverage {

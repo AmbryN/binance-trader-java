@@ -12,8 +12,6 @@ import java.util.HashMap;
 public interface Strategy {
     StrategyResult execute(double tickerPrice, double[] closePrices);
 
-    void init();
-
     int getAmountOfRecordsToFetch();
 
     String getCurrentStatus();

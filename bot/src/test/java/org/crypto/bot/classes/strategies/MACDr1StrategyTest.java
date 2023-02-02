@@ -31,6 +31,7 @@ public class MACDr1StrategyTest {
         assertEquals(StrategyResult.SELL, result);
     }
 
+
     @Test
     public void shouldBuyIfMACDCrossesOverSignalPlusSpread() {
         double[] prices = prepareListOfPricesForBuying();
