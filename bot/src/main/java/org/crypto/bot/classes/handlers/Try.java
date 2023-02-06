@@ -5,8 +5,6 @@ import com.binance.connector.client.exceptions.BinanceClientException;
 import com.binance.connector.client.exceptions.BinanceConnectorException;
 import com.binance.connector.client.exceptions.BinanceServerException;
 import org.crypto.bot.exceptions.BinanceTraderException;
-import org.crypto.bot.interfaces.FallibleAction;
-import org.crypto.bot.interfaces.FallibleRunnable;
 import org.crypto.bot.utils.Logging;
 
 import java.util.Optional;
@@ -21,10 +19,10 @@ public class Try {
     /**
      * The method is used to safely execute the action provided in parameter
      * by surrounding it in the appropriate try – catch statements and returning
-     * an Optional<T>
+     * an Optional T
      *
      * @param action is a function that fetches information from the exchange
-     * @return Optional<T> Optional of the T object returned by the action
+     * @return Optional of the T object returned by the action
      */
     public static <T> Optional<T> toGet(FallibleAction<T> action) {
         try {
