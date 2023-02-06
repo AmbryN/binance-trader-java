@@ -1,6 +1,5 @@
 package org.crypto.bot.classes.indicators;
 
-import org.crypto.bot.enums.Period;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +11,7 @@ public class MACDIndicatorTest {
 
     @BeforeEach
     void setup() {
-        macd = new MACDIndicator(Period.FiveMinutes, 12, 26, 9);
+        macd = new MACDIndicator(12, 26, 9);
     }
     @Test
     public void shouldReturnTheCorrectMACDDifference() {

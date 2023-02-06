@@ -9,9 +9,7 @@ public class EMAIndicatorTest {
     @Test
     public void shouldReturnTheCorrectEMA() {
         double[] prices = prepareListOfPricesWithExpAverage16_237();
-        EMAIndicator emaIndicator = new EMAIndicator();
-        emaIndicator.setPeriod(Period.FiveMinutes);
-        emaIndicator.setNbOfPeriods(5);
+        EMAIndicator emaIndicator = new EMAIndicator(5);
 
         assertEquals(16.237, emaIndicator.getValue(prices), 0.001);
     }
@@ -19,9 +17,8 @@ public class EMAIndicatorTest {
     @Test
     public void shouldReturnZero() {
         double[] pricesEmpty = new double[9];
-        EMAIndicator emaIndicator = new EMAIndicator();
-        emaIndicator.setPeriod(Period.FiveMinutes);
-        emaIndicator.setNbOfPeriods(5);
+        EMAIndicator emaIndicator = new EMAIndicator(5);
+
         assertEquals(0, emaIndicator.getValue(pricesEmpty), 0);
     }
 

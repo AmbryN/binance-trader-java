@@ -107,15 +107,15 @@ public class BinanceExchangeTest {
 
     @Test
     public void shouldThrowExceptionIfBuyThrowsClientException() {
-        doThrow(BinanceClientException.class).when(orderServiceMock).buy(any(Symbol.class), any(Double.class), any(Double.class));
+        doThrow(BinanceClientException.class).when(orderServiceMock).buy(any(Symbol.class), any(Double.class));
         assertThrows(BinanceClientException.class,
-                () -> facade.buy(Symbol.BTCUSDT, 1500., 3000.));
+                () -> facade.buy(Symbol.BTCUSDT,  3000.));
     }
 
     @Test
     public void shouldThrowExceptionIfSellThrowsClientException() {
-        doThrow(BinanceClientException.class).when(orderServiceMock).buy(any(Symbol.class), any(Double.class), any(Double.class));
+        doThrow(BinanceClientException.class).when(orderServiceMock).buy(any(Symbol.class), any(Double.class));
         assertThrows(BinanceClientException.class,
-                () -> facade.buy(Symbol.BTCUSDT, 1500., 3000.));
+                () -> facade.buy(Symbol.BTCUSDT, 3000.));
     }
 }

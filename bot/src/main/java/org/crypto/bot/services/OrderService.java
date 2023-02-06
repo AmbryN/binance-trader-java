@@ -28,13 +28,11 @@ public class OrderService {
     }
 
     public void buy(Symbol symbol, double quoteBalance) throws BinanceConnectorException, BinanceClientException, BinanceServerException {
-        //Order order = buildLimitBuyOrder(quoteBalance, symbol, tickerPrice);
         Order order = buildMarketBuyOrder(quoteBalance, symbol);
         this.sendOrder(order);
     }
 
     public void sell(Symbol symbol, double baseBalance) throws BinanceConnectorException, BinanceClientException, BinanceServerException {
-        // Order order = buildLimitSellOrder(baseBalance, symbol, tickerPrice);
         Order order = buildMarkerSellOrder(baseBalance, symbol);
         this.sendOrder(order);
     }
