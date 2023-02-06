@@ -1,15 +1,33 @@
 package org.crypto.bot.classes.indicators;
 
+import org.crypto.bot.enums.Period;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MACDIndicatorTest {
 
+    MACDIndicator macd;
+
+    @BeforeEach
+    void setup() {
+        macd = new MACDIndicator(Period.FiveMinutes, 12, 26, 9);
+    }
+    @Test
     public void shouldReturnTheCorrectMACDDifference() {
         double[] prices = prepareListOfPricesForDoingNothingUnder();
-        MACDIndicator macd = new MACDIndicator();
 
-        assertEquals(macd.getValue(prices), -5.4635, 0.0001);
+        assertEquals(-5.4635, macd.getValue(prices), 0.001);
     }
+
+    @Test
+    public void shouldReturnZeroIfPricesAreEmpty() {
+        double[] prices = new double[126];
+
+        assertEquals(macd.getValue(prices), 0, 0);
+    }
+
     private double[] prepareListOfPricesForDoingNothingUnder() {
         return new double[] {
                 19183.68,

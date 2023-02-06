@@ -1,21 +1,19 @@
 package org.crypto.bot.classes.selectors;
 
-public class IndicatorSelector extends ListSelector<String> {
+import org.crypto.bot.enums.IndicatorEnum;
+
+public class IndicatorSelector extends ListSelector<IndicatorEnum> {
 
     public IndicatorSelector() {
-        this.list = new String[] {
-                "Simple Moving Average",
-                "Exp. Moving Average",
-                "Moving Average Convergence Divergence"
-        };
+        this.list = IndicatorEnum.values();
     }
 
     @Override
     protected void showSelector() {
         System.out.println("What indicator do you want to use? ");
         int index = 0;
-        for (String rule : list) {
-            System.out.println(index + ") " + rule);
+        for (IndicatorEnum value : list) {
+            System.out.println(index + ") " + value);
             index++;
         }
     }

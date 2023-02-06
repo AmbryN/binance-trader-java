@@ -3,24 +3,28 @@ package org.crypto.bot.classes.rules;
 import org.crypto.bot.classes.indicators.Indicator;
 
 public class UnderIndicatorRule implements Rule {
-
-    private Indicator first;
-    private Indicator second;
+    Indicator first;
+    Indicator second;
 
     public UnderIndicatorRule() {}
 
-    @Override
-    public void setFirstIndicator(Indicator indicator) {
-        this.first = indicator;
+    public UnderIndicatorRule(Indicator first, Indicator second) {
+        this.first = first;
+        this.second = second;
     }
 
     @Override
-    public void setSecondIndicator(Indicator indicator) {
-        this.second = indicator;
-    }
-
-    @Override
-    public boolean isSatisfied(double[] prices) {
+    public boolean isSatisfied(double ticker, double[] prices) {
         return first.getValue(prices) < second.getValue(prices);
+    }
+
+    @Override
+    public int getNbOfRecordsToFetch() {
+        return Math.max(first.getNbOfRecordsToFetch(), second.getNbOfRecordsToFetch());
+    }
+
+    @Override
+    public String toString() {
+        return "(" + first + " UNDER " + second + ")";
     }
 }

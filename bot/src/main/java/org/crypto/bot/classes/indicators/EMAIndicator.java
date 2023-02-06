@@ -1,11 +1,14 @@
 package org.crypto.bot.classes.indicators;
 
-import org.crypto.bot.enums.Period;
 import org.crypto.bot.utils.Calculus;
 
-public class EMAIndicator extends MovingAverageIndicator {
+public class EMAIndicator extends MAIndicator {
 
     public EMAIndicator() {}
+
+    public EMAIndicator(int nbOfPeriods) {
+        super(nbOfPeriods);
+    }
 
     @Override
     public int getNbOfRecordsToFetch() {
@@ -21,11 +24,6 @@ public class EMAIndicator extends MovingAverageIndicator {
 
     @Override
     public String toString() {
-        return "Exp. Moving Average";
-    }
-
-    @Override
-    public String describe() {
-        return this + super.describe();
+        return "(Exp. Moving Average: " + nbOfPeriods + ")";
     }
 }

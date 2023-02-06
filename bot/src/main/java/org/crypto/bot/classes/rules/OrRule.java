@@ -1,9 +1,6 @@
 package org.crypto.bot.classes.rules;
 
-import org.crypto.bot.classes.indicators.Indicator;
-
 public class OrRule implements Rule {
-
     private final Rule firstRule;
     private final Rule secondRule;
 
@@ -13,17 +10,17 @@ public class OrRule implements Rule {
     }
 
     @Override
-    public boolean isSatisfied(double[] prices) {
-        return firstRule.isSatisfied(prices) || secondRule.isSatisfied(prices);
+    public boolean isSatisfied(double ticker, double[] prices) {
+        return firstRule.isSatisfied(ticker, prices) || secondRule.isSatisfied(ticker, prices);
     }
 
     @Override
-    public void setFirstIndicator(Indicator indicator) {
-
+    public int getNbOfRecordsToFetch() {
+        return Math.max(firstRule.getNbOfRecordsToFetch(), secondRule.getNbOfRecordsToFetch());
     }
 
     @Override
-    public void setSecondIndicator(Indicator indicator) {
-
+    public String toString() {
+        return "(" + firstRule + " OR " + secondRule + ")";
     }
 }

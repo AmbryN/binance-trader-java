@@ -1,9 +1,8 @@
 package org.crypto.bot.classes.builder.indicators;
 
 import org.crypto.bot.classes.indicators.SMAIndicator;
-import org.crypto.bot.enums.Period;
 
-public class SMAIndicatorBuilder extends MovingAverageIndicatorBuilder {
+public class SMAIndicatorBuilder extends MAIndicatorBuilder {
     private SMAIndicator indicator;
 
     @Override
@@ -11,14 +10,11 @@ public class SMAIndicatorBuilder extends MovingAverageIndicatorBuilder {
         this.indicator = new SMAIndicator();
     }
 
-    public void setPeriod(Period period) {
-        this.indicator.setPeriod(period);
-    }
-
     public void setNbOfPeriods(int nbOfPeriods) {
         this.indicator.setNbOfPeriods(nbOfPeriods);
     }
 
+    @Override
     public SMAIndicator getIndicator() {
         return this.indicator;
     }

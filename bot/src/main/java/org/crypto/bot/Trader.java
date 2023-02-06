@@ -8,6 +8,8 @@ import org.crypto.bot.classes.handlers.Try;
 import org.crypto.bot.classes.rules.Rule;
 import org.crypto.bot.classes.selectors.*;
 import org.crypto.bot.enums.Period;
+import org.crypto.bot.enums.RuleEnum;
+import org.crypto.bot.enums.StrategyResult;
 import org.crypto.bot.enums.Symbol;
 import org.crypto.bot.classes.exchange.Exchange;
 import org.crypto.bot.classes.strategies.Strategy;
@@ -22,12 +24,14 @@ import java.util.HashMap;
 public class Trader implements Runnable {
     private final static int MAX_RECONNECT_TRIES = 5;
     private final Exchange exchange;
+    private final Period period;
     private final Strategy strategy;
     private final Symbol symbol;
     private double lastBuyingPrice;
 
-    public Trader(Exchange exchange, Symbol symbol, Strategy strategy) {
+    public Trader(Exchange exchange, Period period, Symbol symbol, Strategy strategy) {
         this.exchange = exchange;
+        this.period = period;
         this.symbol = symbol;
         this.strategy = strategy;
         this.lastBuyingPrice = 0.;
@@ -41,13 +45,12 @@ public class Trader implements Runnable {
      */
     public void run()  {
         while (!Thread.interrupted()) {
-//            Long period = strategy.getPeriod().toMillis();
             Try.toRunTimes(this::tick, MAX_RECONNECT_TRIES);
-//            try {
-//                Thread.sleep(period / 120);
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
+            try {
+                Thread.sleep(3600000 / 120); // 1 hour in ms / 120 = 30s
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -58,33 +61,33 @@ public class Trader implements Runnable {
         HashMap<String, Double> balances = exchange.getBaseAndQuoteBalances(symbol);
         double tickerPrice = exchange.getTicker(symbol);
 
-        Period period = strategy.getPeriod();
-//        int recordsToFetchEntrance = strategy.getEntranceRule().getAmountOfRecordsToFetch();
-//        int recordsToFetchExit = strategy.getExitRule().getAmmountOfRecordsToFetch();
-//
-//        double[] closePrices = exchange.getClosePrices(symbol, period, Math.max(recordsToFetchEntrance, recordsToFetchExit));
-//
-//        StrategyResult result = strategy.execute(tickerPrice, closePrices);
-//
-//        System.out.println(
-//                "Base balance: " + balances.get("base") +
-//                "\nQuote balance: " + balances.get("quote") +
-//                "\nTicker: " + tickerPrice +
-//                strategy.getCurrentStatus());
-//
-//        if (result == StrategyResult.BUY && balances.get("quote") > symbol.MIN_QUOTE_TRANSACTION) {
-//            exchange.buy(symbol, tickerPrice, balances.get("quote"));
-//            lastBuyingPrice = tickerPrice;
-//        } else if ((result == StrategyResult.SELL || tickerPrice < lastBuyingPrice * 0.99)
-//                && balances.get("base") > symbol.MIN_BASE_TRANSACTION) {
-//            exchange.sell(symbol, tickerPrice, balances.get("base"));
-//            lastBuyingPrice = 0.;
-//        }
+        int recordsToFetchEntrance = strategy.getEntranceRule().getNbOfRecordsToFetch();
+        int recordsToFetchExit = strategy.getExitRule().getNbOfRecordsToFetch();
+        int maxRecords = Math.max(recordsToFetchEntrance, recordsToFetchExit);
+
+        double[] closePrices = exchange.getClosePrices(symbol, period, maxRecords);
+
+        StrategyResult result = strategy.execute(tickerPrice, closePrices);
+
+        System.out.println(
+                "Base balance: " + balances.get("base") +
+                "\nQuote balance: " + balances.get("quote") +
+                "\nTicker: " + tickerPrice +
+                "\nStrategy: " + strategy);
+
+        if (result == StrategyResult.BUY && balances.get("quote") > symbol.MIN_QUOTE_TRANSACTION) {
+            exchange.buy(symbol, balances.get("quote"));
+            lastBuyingPrice = tickerPrice;
+        } else if ((result == StrategyResult.SELL || tickerPrice < lastBuyingPrice * 0.99)
+                && balances.get("base") > symbol.MIN_BASE_TRANSACTION) {
+            exchange.sell(symbol, balances.get("base"));
+            lastBuyingPrice = 0.;
+        }
     }
 
     @Override
     public String toString() {
-        return String.format("On: %s\nSymbol:  %s\nStrategy: %s\n", exchange, symbol, strategy.describe());
+        return String.format("On: %s\nSymbol:  %s\nStrategy: %s\n", exchange, symbol, strategy);
     }
 
 
@@ -107,14 +110,14 @@ public class Trader implements Runnable {
             symbol = new SymbolListSelector().startSelector();
             period = new PeriodListSelector().startSelector();
 
-            String entranceString = new RuleSelector().startSelector();
-            entranceRule = RuleFactory.createRule(entranceString);
+            RuleEnum entranceChoice = new RuleSelector().startSelector();
+            entranceRule = RuleFactory.createRule(entranceChoice);
 
-            String exitString = new RuleSelector().startSelector();
-            exitRule = RuleFactory.createRule(exitString);
-            strategy = new Strategy(period, entranceRule, exitRule);
+            RuleEnum exitChoice = new RuleSelector().startSelector();
+            exitRule = RuleFactory.createRule(exitChoice);
 
-            trader = new Trader(new BinanceExchange(), symbol, strategy);
+            strategy = new Strategy(entranceRule, exitRule);
+            trader = new Trader(new BinanceExchange(), period, symbol, strategy);
 
             System.out.println("=== SUMMARY ===\nYou want to trade:");
             System.out.println(trader);

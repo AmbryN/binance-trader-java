@@ -6,16 +6,17 @@ import org.crypto.bot.utils.Calculus;
 import java.util.ArrayList;
 
 public class MACDIndicator implements Indicator {
-    private Period period;
     private int shortNbOfPeriods;
     private int longNbOfPeriods;
     private int signalNbOfPeriods;
-    private double[] MACDLine;
-    private double[] signalLine;
 
     public MACDIndicator() {}
 
-    public void setPeriod(Period period) { this.period = period; }
+    public MACDIndicator(int shortNbOfPeriods, int longNbOfPeriods, int signalNbOfPeriods) {
+        this.shortNbOfPeriods = shortNbOfPeriods;
+        this.longNbOfPeriods = longNbOfPeriods;
+        this.signalNbOfPeriods = signalNbOfPeriods;
+    }
 
     public void setShortNbOfPeriods(int shortNbOfPeriods) {
         this.shortNbOfPeriods = shortNbOfPeriods;
@@ -23,7 +24,6 @@ public class MACDIndicator implements Indicator {
 
     public void setLongNbOfPeriods(int longNbOfPeriods) {
         this.longNbOfPeriods = longNbOfPeriods;
-
     }
 
     public void setSignalNbOfPeriods(int signalNbOfPeriods) {
@@ -65,15 +65,6 @@ public class MACDIndicator implements Indicator {
 
     @Override
     public String toString() {
-        return "Moving Average Convergence Divergence";
-    }
-
-    @Override
-    public String describe() {
-        return this +
-                "\nTime Period: " + this.period +
-                "\n-> Short Number of Periods: " + this.shortNbOfPeriods +
-                "\n-> Long Number of Periods: " + this.longNbOfPeriods +
-                "\n-> Signal Number of Periods: " + this.signalNbOfPeriods;
+        return  "(MACD: Short " + this.shortNbOfPeriods + " / Long " + this.longNbOfPeriods + " / Signal " + this.signalNbOfPeriods + ")";
     }
 }

@@ -1,31 +1,33 @@
 package org.crypto.bot.classes.factory;
 
-import org.crypto.bot.classes.builder.indicators.EMAIndicatorBuilder;
-import org.crypto.bot.classes.builder.indicators.IndicatorDirector;
-import org.crypto.bot.classes.builder.indicators.MACDIndicatorBuilder;
-import org.crypto.bot.classes.builder.indicators.SMAIndicatorBuilder;
+import org.crypto.bot.classes.builder.indicators.*;
 import org.crypto.bot.classes.indicators.Indicator;
+import org.crypto.bot.enums.IndicatorEnum;
 
 public class IndicatorFactory {
-    public static Indicator getIndicatorBuilder(String indicatorName) {
+    public static Indicator getIndicatorBuilder(IndicatorEnum indicatorName) {
         IndicatorDirector director = new IndicatorDirector();
         return switch (indicatorName) {
-            case "Simple Moving Average" -> {
+            case Constant -> {
+                ConstantIndicatorBuilder builder = new ConstantIndicatorBuilder();
+                director.makeConstantIndicator(builder);
+                yield builder.getIndicator();
+            }
+            case SimpleMovingAverage -> {
                 SMAIndicatorBuilder builder = new SMAIndicatorBuilder();
-                director.makeSMAIndicator(builder);
+                director.makeMAIndicator(builder);
                 yield builder.getIndicator();
             }
-            case "Exp. Moving Average" -> {
+            case ExpMovingAverage -> {
                 EMAIndicatorBuilder builder = new EMAIndicatorBuilder();
-                director.makeEMAIndicator(builder);
+                director.makeMAIndicator(builder);
                 yield builder.getIndicator();
             }
-            case "Moving Average Convergence Divergence" -> {
+            case MACD -> {
                 MACDIndicatorBuilder builder = new MACDIndicatorBuilder();
                 director.makeMACDIndicator(builder);
                 yield builder.getIndicator();
             }
-            default -> throw new IllegalArgumentException("Indicator doesn't exist");
         };
     }
 }

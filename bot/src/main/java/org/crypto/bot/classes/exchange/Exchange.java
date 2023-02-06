@@ -14,6 +14,6 @@ public interface Exchange {
 
     double[] getClosePrices(Symbol symbol, Period period, int nbOfRecordsToFetch);
 
-    void buy(Symbol symbol, double tickerPrice, double quoteBalance);
-    void sell(Symbol symbol, double tickerPrice, double baseBalance);
+    void buy(Symbol symbol, double quoteBalance);
+    void sell(Symbol symbol, double baseBalance);
 }

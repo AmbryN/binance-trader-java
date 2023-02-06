@@ -106,24 +106,22 @@ public class BinanceExchange implements Exchange {
      * Buy amount {baseBalance} of {symbol} at the {tickerPrice}.
      * If the method fails, it logs it via the Try class and doesn't retry
      * @param symbol symbol to exchange
-     * @param tickerPrice price at which to buy
      * @param quoteBalance amount to buy
      */
-    public void buy(Symbol symbol, double tickerPrice, double quoteBalance) {
+    public void buy(Symbol symbol, double quoteBalance) {
         Try.toRun(()
-                -> orderService.buy(symbol,tickerPrice, quoteBalance));
+                -> orderService.buy(symbol, quoteBalance));
     }
 
     /**
      * Sell amount {baseBalance} of {symbol} at the {tickerPrice}.
      * If the method fails, it logs it via the Try class and doesn't retry
      * @param symbol symbol to exchange
-     * @param tickerPrice price at which to sell
      * @param baseBalance amount to sell
      */
-    public void sell(Symbol symbol, double tickerPrice, double baseBalance) {
+    public void sell(Symbol symbol, double baseBalance) {
         Try.toRun(()
-                -> orderService.sell(symbol,tickerPrice, baseBalance));
+                -> orderService.sell(symbol, baseBalance));
     }
 
     @Override

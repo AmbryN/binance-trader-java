@@ -1,7 +1,6 @@
 package org.crypto.bot.classes.builder.indicators;
 
 import org.crypto.bot.classes.indicators.MACDIndicator;
-import org.crypto.bot.enums.Period;
 
 public class MACDIndicatorBuilder implements IndicatorBuilder {
     private MACDIndicator indicator;
@@ -9,10 +8,6 @@ public class MACDIndicatorBuilder implements IndicatorBuilder {
     @Override
     public void reset() {
         this.indicator = new MACDIndicator();
-    }
-
-    public void setPeriod(Period period) {
-        this.indicator.setPeriod(period);
     }
 
     public void setShortNbOfPeriods(int shortNbOfPeriods) {

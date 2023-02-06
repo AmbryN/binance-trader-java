@@ -4,23 +4,28 @@ import org.crypto.bot.classes.indicators.Indicator;
 
 public class OverIndicatorRule implements Rule {
 
-    private Indicator first;
-    private Indicator second;
+    Indicator first;
+    Indicator second;
 
     public OverIndicatorRule() { }
 
-    @Override
-    public void setFirstIndicator(Indicator indicator) {
-        this.first = indicator;
+    public OverIndicatorRule(Indicator first, Indicator second) {
+       this.first = first;
+       this.second = second;
     }
 
     @Override
-    public void setSecondIndicator(Indicator indicator) {
-        this.second = indicator;
-    }
-
-    @Override
-    public boolean isSatisfied(double[] prices) {
+    public boolean isSatisfied(double ticker, double[] prices) {
         return first.getValue(prices) > second.getValue(prices);
+    }
+
+    @Override
+    public int getNbOfRecordsToFetch() {
+        return Math.max(first.getNbOfRecordsToFetch(), second.getNbOfRecordsToFetch());
+    }
+
+    @Override
+    public String toString() {
+        return "(" + first + " OVER " + second + ")";
     }
 }

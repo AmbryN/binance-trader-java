@@ -1,19 +1,13 @@
 package org.crypto.bot.classes.indicators;
 
-import org.crypto.bot.enums.Period;
+public abstract class MAIndicator implements Indicator {
 
-public abstract class MovingAverageIndicator implements Indicator {
-
-    protected Period period;
     protected int nbOfPeriods;
 
-    protected MovingAverageIndicator() {}
+    protected MAIndicator() {}
 
-    public void setPeriod(Period period) {
-        this.period = period;
-    }
-    public Period getPeriod() {
-        return this.period;
+    protected MAIndicator(int nbOfPeriods) {
+        this.nbOfPeriods = nbOfPeriods;
     }
 
     public void setNbOfPeriods(int nbOfPeriods) {
@@ -31,7 +25,6 @@ public abstract class MovingAverageIndicator implements Indicator {
     protected abstract double calculateMovingAvg(double[] closePrices);
 
     public String describe() {
-        return "\n-> Time Period: " + this.period +
-                "\n-> Number of Periods: " + this.nbOfPeriods;
+        return "\n-> Number of Periods: " + this.nbOfPeriods;
     }
 }
