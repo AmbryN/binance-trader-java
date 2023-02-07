@@ -17,6 +17,16 @@ public class PriceLowerThan implements Rule {
     }
 
     @Override
+    public Rule and(Rule rule) {
+        return new AndRule(this, rule);
+    }
+
+    @Override
+    public Rule or(Rule rule) {
+        return new OrRule(this, rule);
+    }
+
+    @Override
     public String toString() {
         return "( Lower Than: " + value + " )";
     }

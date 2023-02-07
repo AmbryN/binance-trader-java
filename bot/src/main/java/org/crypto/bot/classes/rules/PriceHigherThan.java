@@ -1,7 +1,8 @@
 package org.crypto.bot.classes.rules;
 
 public class PriceHigherThan implements Rule {
-    private final double value;
+    private double value;
+
     public PriceHigherThan(double value) {
         this.value = value;
     }
@@ -15,6 +16,16 @@ public class PriceHigherThan implements Rule {
     @Override
     public int getNbOfRecordsToFetch() {
         return 0;
+    }
+
+    @Override
+    public Rule and(Rule rule) {
+        return new AndRule(this, rule);
+    }
+
+    @Override
+    public Rule or(Rule rule) {
+        return new OrRule(this, rule);
     }
 
     @Override

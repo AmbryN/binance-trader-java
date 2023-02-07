@@ -3,7 +3,6 @@ package org.crypto.bot.classes.indicators;
 import org.crypto.bot.utils.Calculus;
 
 public class EMAIndicator extends MAIndicator {
-
     public EMAIndicator() {}
 
     public EMAIndicator(int nbOfPeriods) {
@@ -19,11 +18,12 @@ public class EMAIndicator extends MAIndicator {
     @Override
     protected double calculateMovingAvg(double[] closePrices) {
         double[] emaList = Calculus.expMovingAvgesWithSize(closePrices, this.nbOfPeriods);
-        return emaList[(emaList.length - 1)];
+        this.lastValue = emaList[(emaList.length - 1)];
+        return this.lastValue;
     }
 
     @Override
     public String toString() {
-        return "(Exp. Moving Average: " + nbOfPeriods + ")";
+        return "(Exp. Moving Average: " + nbOfPeriods + " - Current: " + lastValue + ")";
     }
 }

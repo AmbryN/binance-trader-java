@@ -24,9 +24,9 @@ public class Strategy {
     }
 
     public StrategyResult execute(double tickerPrice, double[] closePrices) {
-        if (entranceRule.isSatisfied(tickerPrice, closePrices)) {
+        if (entranceRule.isSatisfied(tickerPrice, closePrices) && !exitRule.isSatisfied(tickerPrice, closePrices)) {
             return StrategyResult.BUY;
-        } else if (exitRule.isSatisfied(tickerPrice, closePrices)) {
+        } else if (exitRule.isSatisfied(tickerPrice, closePrices) && !entranceRule.isSatisfied(tickerPrice, closePrices)) {
             return StrategyResult.SELL;
         } else {
             return StrategyResult.HOLD;
@@ -36,8 +36,7 @@ public class Strategy {
 
 
     public String toString() {
-        return "Strategy" +
-                "\nEntrance Rule: " + entranceRule +
+        return  "\nEntrance Rule: " + entranceRule +
                 "\nExit Rule: " + exitRule;
     }
 }

@@ -1,6 +1,7 @@
 package org.crypto.bot.classes.indicators;
 
 public abstract class MAIndicator implements Indicator {
+    protected double lastValue;
 
     protected int nbOfPeriods;
 
@@ -18,8 +19,10 @@ public abstract class MAIndicator implements Indicator {
         return this.nbOfPeriods;
     }
 
+    @Override
     public double getValue(double[] closePrices) {
-        return calculateMovingAvg(closePrices);
+        this.lastValue = calculateMovingAvg(closePrices);
+        return lastValue;
     }
 
     protected abstract double calculateMovingAvg(double[] closePrices);

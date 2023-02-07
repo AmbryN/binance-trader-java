@@ -25,6 +25,16 @@ public class OverIndicatorRule implements Rule {
     }
 
     @Override
+    public Rule and(Rule rule) {
+        return new AndRule(this, rule);
+    }
+
+    @Override
+    public Rule or(Rule rule) {
+        return new OrRule(this, rule);
+    }
+
+    @Override
     public String toString() {
         return "(" + first + " OVER " + second + ")";
     }

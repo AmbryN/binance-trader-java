@@ -1,6 +1,5 @@
 package org.crypto.bot.classes.factory;
 
-import org.crypto.bot.classes.indicators.ConstantIndicator;
 import org.crypto.bot.classes.indicators.Indicator;
 import org.crypto.bot.classes.rules.OverIndicatorRule;
 import org.crypto.bot.classes.rules.Rule;

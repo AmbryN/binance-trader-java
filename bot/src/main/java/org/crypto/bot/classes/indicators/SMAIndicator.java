@@ -18,6 +18,6 @@ public class SMAIndicator extends MAIndicator {
 
     @Override
     public String toString() {
-        return "(Simple Moving Average: " + nbOfPeriods + ")";
+        return "(Simple Moving Average: " + nbOfPeriods + " - Current: " + lastValue +")";
     }
 }

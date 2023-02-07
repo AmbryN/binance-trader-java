@@ -9,6 +9,7 @@ public class MACDIndicator implements Indicator {
     private int shortNbOfPeriods;
     private int longNbOfPeriods;
     private int signalNbOfPeriods;
+    private double lastValue;
 
     public MACDIndicator() {}
 
@@ -41,7 +42,8 @@ public class MACDIndicator implements Indicator {
 
         // Compute the signal line which is the EMA9 of the MACD line (subtractions)
         double[] signalLine = Calculus.expMovingAvgesWithSize(MACDLine, signalNbOfPeriods);
-        return MACDLine[MACDLine.length - 1] - signalLine[signalLine.length - 1];
+        this.lastValue = MACDLine[MACDLine.length - 1] - signalLine[signalLine.length - 1];
+        return this.lastValue;
     }
 
     protected double[] computeMACDLine(double[] shortEMAs, double[] longEMAs) {
@@ -65,6 +67,6 @@ public class MACDIndicator implements Indicator {
 
     @Override
     public String toString() {
-        return  "(MACD: Short " + this.shortNbOfPeriods + " / Long " + this.longNbOfPeriods + " / Signal " + this.signalNbOfPeriods + ")";
+        return  "(MACD: Short " + this.shortNbOfPeriods + " / Long " + this.longNbOfPeriods + " / Signal " + this.signalNbOfPeriods + " - Current: " + lastValue + ")";
     }
 }

@@ -24,21 +24,21 @@ class OrRuleTest {
     void isSatisfiedWhenBothRulesAreSatisfied() {
         when(first.isSatisfied(anyDouble(), any())).thenReturn(true);
         when(second.isSatisfied(anyDouble(), any())).thenReturn(true);
-        assertTrue(rule.isSatisfied(anyDouble(), any()));
+        assertTrue(rule.isSatisfied(0, new double[0]));
     }
 
     @Test
     void isSatisfedWhenOneRuleIsSatisfied() {
         when(first.isSatisfied(anyDouble(), any())).thenReturn(true);
         when(second.isSatisfied(anyDouble(), any())).thenReturn(false);
-        assertTrue(rule.isSatisfied(anyDouble(), any()));
+        assertTrue(rule.isSatisfied(0, new double[0]));
     }
 
     @Test
     void isNotSatisfedWhenBothRulesNotSatisfied() {
         when(first.isSatisfied(anyDouble(), any())).thenReturn(false);
         when(second.isSatisfied(anyDouble(), any())).thenReturn(false);
-        assertFalse(rule.isSatisfied(anyDouble(), any()));
+        assertFalse(rule.isSatisfied(0, new double[0]));
     }
 
     @Test
@@ -46,5 +46,15 @@ class OrRuleTest {
         when(first.getNbOfRecordsToFetch()).thenReturn(26);
         when(second.getNbOfRecordsToFetch()).thenReturn(12);
         assertEquals(26, rule.getNbOfRecordsToFetch());
+    }
+
+    @Test
+    void andShouldReturnAnAndRule() {
+        assertInstanceOf(AndRule.class, rule.and(first));
+    }
+
+    @Test
+    void orShouldReturnAnOrRule() {
+        assertInstanceOf(OrRule.class, rule.or(first));
     }
 }
