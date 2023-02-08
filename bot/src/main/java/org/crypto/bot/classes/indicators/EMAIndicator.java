@@ -5,8 +5,8 @@ import org.crypto.bot.utils.Calculus;
 public class EMAIndicator extends MAIndicator {
     public EMAIndicator() {}
 
-    public EMAIndicator(int nbOfPeriods) {
-        super(nbOfPeriods);
+    public EMAIndicator(Indicator indicator, int nbOfPeriods) {
+        super(indicator, nbOfPeriods);
     }
 
     @Override

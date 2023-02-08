@@ -3,7 +3,7 @@ plugins {
     id 'war'
 }
 
-group 'org.crypto'
+group 'dev.crypto'
 version '1.0-SNAPSHOT'
 
 repositories {

@@ -11,13 +11,13 @@ public class MACDIndicatorTest {
 
     @BeforeEach
     void setup() {
-        macd = new MACDIndicator(12, 26, 9);
+        macd = new MACDIndicator(new ClosePriceIndicator(),12, 26, 9);
     }
     @Test
     public void shouldReturnTheCorrectMACDDifference() {
         double[] prices = prepareListOfPricesForDoingNothingUnder();
 
-        assertEquals(-5.4635, macd.getValue(prices), 0.001);
+        assertEquals(-9.9828, macd.getValue(prices), 0.0001);
     }
 
     @Test

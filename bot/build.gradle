@@ -15,7 +15,7 @@ jar {
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }}
 }
 
-group 'org.crypto'
+group 'dev.crypto'
 version '1.0-SNAPSHOT'
 
 repositories {

@@ -7,8 +7,8 @@ public class SMAIndicator extends MAIndicator {
 
     public SMAIndicator() {}
 
-    public SMAIndicator(int nbOfPeriods) {
-        super(nbOfPeriods);
+    public SMAIndicator(Indicator indicator, int nbOfPeriods) {
+        super(indicator, nbOfPeriods);
     }
 
     @Override

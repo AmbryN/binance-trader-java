@@ -4,7 +4,7 @@ import jakarta.enterprise.context.Dependent;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaQuery;
-import org.crypto.webapp.beans.Utilisateur;
+import org.crypto.webapp.beans.User;
 
 import java.util.List;
 
@@ -13,9 +13,9 @@ public class UserRepository {
     @PersistenceContext(unitName = "default")
     private EntityManager em;
 
-    public List<Utilisateur> findAll() {
-        CriteriaQuery<Utilisateur> criteriaQuery = em.getCriteriaBuilder().createQuery(Utilisateur.class);
-        criteriaQuery.select(criteriaQuery.from(Utilisateur.class));
+    public List<User> findAll() {
+        CriteriaQuery<User> criteriaQuery = em.getCriteriaBuilder().createQuery(User.class);
+        criteriaQuery.select(criteriaQuery.from(User.class));
         return em.createQuery(criteriaQuery).getResultList();
     }
 }

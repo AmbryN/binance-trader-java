@@ -34,6 +34,10 @@ public class ConstantIndicator implements Indicator{
         return value;
     }
 
+    public double[] getAllValues(double[] prices) {
+        return new double[]{value};
+    }
+
     public void setValue(double value) {
         this.value = value;
     }

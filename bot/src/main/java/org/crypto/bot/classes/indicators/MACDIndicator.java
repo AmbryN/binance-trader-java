@@ -10,10 +10,12 @@ public class MACDIndicator implements Indicator {
     private int longNbOfPeriods;
     private int signalNbOfPeriods;
     private double lastValue;
+    private Indicator indicator;
 
     public MACDIndicator() {}
 
-    public MACDIndicator(int shortNbOfPeriods, int longNbOfPeriods, int signalNbOfPeriods) {
+    public MACDIndicator(Indicator indicator, int shortNbOfPeriods, int longNbOfPeriods, int signalNbOfPeriods) {
+        this.indicator = indicator;
         this.shortNbOfPeriods = shortNbOfPeriods;
         this.longNbOfPeriods = longNbOfPeriods;
         this.signalNbOfPeriods = signalNbOfPeriods;
@@ -33,17 +35,27 @@ public class MACDIndicator implements Indicator {
 
     @Override
     public double getValue(double[] closePrices) {
+        double[] values = this.indicator.getAllValues(closePrices);
         // Compute the short EMA (generally 12) and the long EMA (generally 26) used for the MACD line
-        double[] shortEMAS = Calculus.expMovingAvgesWithSize(closePrices, this.shortNbOfPeriods);
-        double[] longEMAs = Calculus.expMovingAvgesWithSize(closePrices, this.longNbOfPeriods);
+        double[] shortEMAS = Calculus.expMovingAvgesWithSize(values, this.shortNbOfPeriods);
+        double[] longEMAs = Calculus.expMovingAvgesWithSize(values, this.longNbOfPeriods);
+
+        // Compute the MACD Line which is the subtraction of the longEMA from the shortEMA
+        double[] MACDLine = this.computeMACDLine(shortEMAS, longEMAs);
+        this.lastValue = MACDLine[MACDLine.length - 1];
+        return this.lastValue;
+    }
+
+    public double[] getAllValues(double[] closePrices) {
+        double[] values = this.indicator.getAllValues(closePrices);
+        // Compute the short EMA (generally 12) and the long EMA (generally 26) used for the MACD line
+        double[] shortEMAS = Calculus.expMovingAvgesWithSize(values, this.shortNbOfPeriods);
+        double[] longEMAs = Calculus.expMovingAvgesWithSize(values, this.longNbOfPeriods);
 
         // Compute the MACD Line which is the subtraction of the longEMA from the shortEMA
         double[] MACDLine = this.computeMACDLine(shortEMAS, longEMAs);
 
-        // Compute the signal line which is the EMA9 of the MACD line (subtractions)
-        double[] signalLine = Calculus.expMovingAvgesWithSize(MACDLine, signalNbOfPeriods);
-        this.lastValue = MACDLine[MACDLine.length - 1] - signalLine[signalLine.length - 1];
-        return this.lastValue;
+        return MACDLine;
     }
 
     protected double[] computeMACDLine(double[] shortEMAs, double[] longEMAs) {

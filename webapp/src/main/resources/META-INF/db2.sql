@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS trading_bot;
 
 USE trading_bot;
 
-CREATE TABLE IF NOT EXISTS Utilisateur(usr_id INT AUTO_INCREMENT, usr_email VARCHAR(50) NOT NULL, usr_password VARCHAR(51) NOT NULL, usr_signup_datetime DATETIME NOT NULL, PRIMARY KEY(usr_id), UNIQUE(usr_email));
+CREATE TABLE IF NOT EXISTS User(usr_id INT AUTO_INCREMENT, usr_email VARCHAR(50) NOT NULL, usr_password VARCHAR(51) NOT NULL, usr_signup_datetime DATETIME NOT NULL, PRIMARY KEY(usr_id), UNIQUE(usr_email));
 
 CREATE TABLE IF NOT EXISTS Exchange(exc_id INT AUTO_INCREMENT, exc_name VARCHAR(50) NOT NULL, exc_url VARCHAR(100) NOT NULL, PRIMARY KEY(exc_id), UNIQUE(exc_name));
 
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS Side(sid_id INT AUTO_INCREMENT,sid_name VARCHAR(50) N
 
 CREATE TABLE IF NOT EXISTS Type(typ_id INT AUTO_INCREMENT, typ_name VARCHAR(50) NOT NULL,PRIMARY KEY(typ_id), UNIQUE(typ_name));
 
-CREATE TABLE IF NOT EXISTS Account (acc_id INT AUTO_INCREMENT, exc_id INT NOT NULL, usr_id INT NOT NULL, PRIMARY KEY(acc_id), FOREIGN KEY(exc_id) REFERENCES Exchange(exc_id), FOREIGN KEY(usr_id) REFERENCES Utilisateur(usr_id));
+CREATE TABLE IF NOT EXISTS Account (acc_id INT AUTO_INCREMENT, exc_id INT NOT NULL, usr_id INT NOT NULL, PRIMARY KEY(acc_id), FOREIGN KEY(exc_id) REFERENCES Exchange(exc_id), FOREIGN KEY(usr_id) REFERENCES User(usr_id));
 
 CREATE TABLE IF NOT EXISTS Action(act_id INT AUTO_INCREMENT,act_datetime DATETIME NOT NULL,act_name VARCHAR(50) NOT NULL,typ_id INT NOT NULL,PRIMARY KEY(act_id),UNIQUE(act_datetime),UNIQUE(act_name),FOREIGN KEY(typ_id) REFERENCES Type(typ_id));
 
@@ -24,6 +24,6 @@ CREATE TABLE IF NOT EXISTS Filler(fil_id INT AUTO_INCREMENT,fil_datetime DATETIM
 
 CREATE TABLE IF NOT EXISTS BalanceHistory(bal_id INT AUTO_INCREMENT,bal_datetime DATETIME NOT NULL,bal_base_amount DOUBLE NOT NULL,bal_quote_amount DOUBLE NOT NULL,bal_price DOUBLE NOT NULL,bot_id INT NOT NULL,PRIMARY KEY(bal_id),FOREIGN KEY(bot_id) REFERENCES Bot(bot_id));
 
-CREATE TABLE IF NOT EXISTS performs(usr_id INT,act_id INT,PRIMARY KEY(usr_id, act_id),FOREIGN KEY(usr_id) REFERENCES Utilisateur(usr_id),FOREIGN KEY(act_id) REFERENCES Action(act_id));
+CREATE TABLE IF NOT EXISTS performs(usr_id INT,act_id INT,PRIMARY KEY(usr_id, act_id),FOREIGN KEY(usr_id) REFERENCES User(usr_id),FOREIGN KEY(act_id) REFERENCES Action(act_id));
 
 CREATE TABLE IF NOT EXISTS is_affected_by(bot_id INT,act_id INT,PRIMARY KEY(bot_id, act_id),FOREIGN KEY(bot_id) REFERENCES Bot(bot_id),FOREIGN KEY(act_id) REFERENCES Action(act_id));
