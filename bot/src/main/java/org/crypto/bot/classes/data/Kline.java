@@ -2,6 +2,9 @@ package org.crypto.bot.classes.data;
 
 import java.util.Date;
 
+/**
+ * Represents one candle of a specific crypto pair on Binance
+ */
 public class Kline {
     private Long openTime;
     private Double openPrice;

@@ -11,6 +11,9 @@ import org.crypto.bot.classes.data.Ticker;
 import org.crypto.bot.enums.Symbol;
 import org.crypto.bot.utils.Deserializer;
 
+/**
+ * Used to retrieve the current price of a crypto pair
+ */
 public class TickerService {
     SpotClientImpl client;
 
@@ -19,7 +22,8 @@ public class TickerService {
     }
 
     /**
-     * Queries Binance's API to get the current Ticker price for symbol
+     * Queries Binance's API to get the current Ticker price for a symbol.
+     * @param symbol symbol for which to retrieve the price
      */
     public Ticker getTicker(Symbol symbol) throws BinanceConnectorException, BinanceClientException, BinanceServerException {
         LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();

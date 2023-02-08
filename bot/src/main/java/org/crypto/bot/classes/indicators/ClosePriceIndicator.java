@@ -2,7 +2,7 @@ package org.crypto.bot.classes.indicators;
 
 public class ClosePriceIndicator implements Indicator {
     @Override
-    public double getValue(double[] prices) {
+    public double getLastValue(double[] prices) {
         return prices[prices.length - 1];
     }
 

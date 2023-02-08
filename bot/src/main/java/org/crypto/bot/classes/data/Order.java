@@ -6,6 +6,9 @@ import org.crypto.bot.enums.OrderResponseType;
 import org.crypto.bot.enums.Symbol;
 import org.crypto.bot.enums.*;
 
+/**
+ * Represents an order on Binance
+ */
 public class Order {
     private Symbol symbol;
     private OrderSide side;

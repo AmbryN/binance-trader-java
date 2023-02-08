@@ -1,6 +1,5 @@
 package org.crypto.bot.classes.indicators;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +16,7 @@ class ConstantIndicatorTest {
     @Test
     void shouldReturnTheValueItWasCreatedWith() {
         double[] prices = new double[10];
-        assertEquals(100.25, constantIndicator.getValue(prices));
+        assertEquals(100.25, constantIndicator.getLastValue(prices));
     }
 
     @Test

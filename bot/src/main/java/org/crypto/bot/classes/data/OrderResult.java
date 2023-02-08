@@ -9,6 +9,9 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.Date;
 
+/**
+ * Represents the result of an order sent to Binance
+ */
 public class OrderResult {
         private Symbol symbol;
         private Long orderId;

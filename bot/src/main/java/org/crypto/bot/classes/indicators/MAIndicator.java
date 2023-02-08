@@ -22,7 +22,7 @@ public abstract class MAIndicator implements Indicator {
     }
 
     @Override
-    public double getValue(double[] closePrices) {
+    public double getLastValue(double[] closePrices) {
         double[] values = this.indicator.getAllValues(closePrices);
         return calculateMovingAvg(values);
     }
@@ -33,8 +33,4 @@ public abstract class MAIndicator implements Indicator {
     }
 
     protected abstract double calculateMovingAvg(double[] closePrices);
-
-    public String describe() {
-        return "\n-> Number of Periods: " + this.nbOfPeriods;
-    }
 }

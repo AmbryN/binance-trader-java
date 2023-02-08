@@ -1,5 +1,8 @@
 package org.crypto.bot.classes.rules;
 
+/**
+ * A rule satisfied when both underlying rules are satisfied (Logical AND).
+ */
 public class AndRule implements Rule {
 
     private final Rule firstRule;

@@ -1,19 +1,11 @@
 package org.crypto.bot;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
-import org.crypto.bot.classes.exchange.BinanceExchange;
-import org.crypto.bot.classes.factory.RuleFactory;
 import org.crypto.bot.classes.handlers.Try;
-import org.crypto.bot.classes.rules.Rule;
-import org.crypto.bot.classes.selectors.*;
 import org.crypto.bot.enums.Period;
-import org.crypto.bot.enums.RuleEnum;
 import org.crypto.bot.enums.StrategyResult;
 import org.crypto.bot.enums.Symbol;
 import org.crypto.bot.classes.exchange.Exchange;
 import org.crypto.bot.classes.strategies.Strategy;
-import org.crypto.bot.utils.Logging;
 
 import java.util.HashMap;
 
@@ -29,6 +21,13 @@ public class Trader implements Runnable {
     private final Symbol symbol;
     private double lastBuyingPrice;
 
+    /**
+     * Creates an instance of a trading bot
+     * @param exchange the exchange to trade on
+     * @param period period used for computation (e.g. 5 minutes)
+     * @param symbol crypto pair to trade (e.g. BTCUSDT)
+     * @param strategy the user's custom strategy
+     */
     public Trader(Exchange exchange, Period period, Symbol symbol, Strategy strategy) {
         this.exchange = exchange;
         this.period = period;
@@ -47,7 +46,7 @@ public class Trader implements Runnable {
         while (!Thread.interrupted()) {
             Try.toRunTimes(this::tick, MAX_RECONNECT_TRIES);
             try {
-                Thread.sleep(3600000 / 120); // 1 hour in ms / 120 = 30s
+                Thread.sleep(this.period.toMillis() / 120);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -55,7 +54,9 @@ public class Trader implements Runnable {
     }
 
     /**
-     *  Computes on iteration of the strategy.
+     *  Calculates one iteration of the strategy.
+     *  It fetches the available balances on the exchange, the last
+     *  ticker price and enough price recors to compute the selected strategy.
      */
     private void tick() {
         HashMap<String, Double> balances = exchange.getBaseAndQuoteBalances(symbol);
@@ -88,43 +89,5 @@ public class Trader implements Runnable {
     @Override
     public String toString() {
         return String.format("On: %s\nSymbol:  %s\nStrategy: %s\n", exchange, symbol, strategy);
-    }
-
-
-    /**
-     * Used as a point of entry when running the bot in console mode.
-     */
-    public static void main( String[] args ) {
-        Logger logger = Logging.getInstance();
-        logger.setLevel(Level.WARN);
-
-        Symbol symbol;
-        Period period;
-        Strategy strategy;
-        Rule entranceRule;
-        Rule exitRule;
-        Trader trader = null;
-
-        boolean start = false;
-        while(!start) {
-            symbol = new SymbolListSelector().startSelector();
-            period = new PeriodListSelector().startSelector();
-
-            RuleEnum entranceChoice = new RuleSelector().startSelector();
-            entranceRule = RuleFactory.createRule(entranceChoice);
-
-            RuleEnum exitChoice = new RuleSelector().startSelector();
-            exitRule = RuleFactory.createRule(exitChoice);
-
-            strategy = new Strategy(entranceRule, exitRule);
-            trader = new Trader(new BinanceExchange(), period, symbol, strategy);
-
-            System.out.println("=== SUMMARY ===\nYou want to trade:");
-            System.out.println(trader);
-
-            start = new YesNoSelector().startSelector();
-        }
-
-        trader.run();
     }
 }

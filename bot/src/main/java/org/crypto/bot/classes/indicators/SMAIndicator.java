@@ -1,8 +1,10 @@
 package org.crypto.bot.classes.indicators;
 
-import org.crypto.bot.enums.Period;
 import org.crypto.bot.utils.Calculus;
 
+/**
+ * Indicator representing a simple moving average (sum of all values / amount of values).
+ */
 public class SMAIndicator extends MAIndicator {
 
     public SMAIndicator() {}

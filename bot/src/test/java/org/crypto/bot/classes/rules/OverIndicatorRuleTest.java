@@ -30,16 +30,16 @@ class OverIndicatorRuleTest {
 
     @Test
     void isSatisfiedWhenFirstIndicatorIsHigherThanSecond() {
-        when(first.getValue(any())).thenReturn(1000.);
-        when(second.getValue(any())).thenReturn(999.);
+        when(first.getLastValue(any())).thenReturn(1000.);
+        when(second.getLastValue(any())).thenReturn(999.);
         boolean result = rule.isSatisfied(0., new double[0]);
         assertTrue(result);
     }
 
     @Test
     void isNotSatisfiedWhenFirstIndicatorIsLowerThanSecond() {
-        when(first.getValue(any())).thenReturn(999.);
-        when(second.getValue(any())).thenReturn(1005.);
+        when(first.getLastValue(any())).thenReturn(999.);
+        when(second.getLastValue(any())).thenReturn(1005.);
         assertFalse(rule.isSatisfied(0., new double[0]));
     }
 

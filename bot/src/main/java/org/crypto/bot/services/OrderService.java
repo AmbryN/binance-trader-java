@@ -20,6 +20,9 @@ import com.binance.connector.client.impl.SpotClientImpl;
 import org.crypto.bot.classes.data.Order;
 import org.crypto.bot.utils.Deserializer;
 
+/**
+ * Used to send orders on the exchange
+ */
 public class OrderService {
     private final SpotClientImpl client;
 
@@ -27,11 +30,27 @@ public class OrderService {
         this.client =  client;
     }
 
+    /**
+     * Sends a buy order to the exchange
+     * @param symbol symbol to trade
+     * @param quoteBalance how much of the quote balance should be used to buy the base asset
+     * @throws BinanceConnectorException
+     * @throws BinanceClientException
+     * @throws BinanceServerException
+     */
     public void buy(Symbol symbol, double quoteBalance) throws BinanceConnectorException, BinanceClientException, BinanceServerException {
         Order order = buildMarketBuyOrder(quoteBalance, symbol);
         this.sendOrder(order);
     }
 
+    /**
+     * Sends a sell order to the exchange
+     * @param symbol symbol to trade
+     * @param baseBalance how much of the base balance should be sold
+     * @throws BinanceConnectorException
+     * @throws BinanceClientException
+     * @throws BinanceServerException
+     */
     public void sell(Symbol symbol, double baseBalance) throws BinanceConnectorException, BinanceClientException, BinanceServerException {
         Order order = buildMarkerSellOrder(baseBalance, symbol);
         this.sendOrder(order);

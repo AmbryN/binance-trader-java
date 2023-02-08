@@ -23,7 +23,6 @@ public class IndicatorDirector {
         IntSelector selector = new IntSelector();
         builder.setShortNbOfPeriods(selector.startSelector("Short number of periods"));
         builder.setLongNbOfPeriods(selector.startSelector("Long number of periods"));
-        builder.setSignalNbOfPeriods(selector.startSelector("Signal number of periods"));
         return builder.getIndicator();
     }
 }

@@ -11,20 +11,20 @@ public class MACDIndicatorTest {
 
     @BeforeEach
     void setup() {
-        macd = new MACDIndicator(new ClosePriceIndicator(),12, 26, 9);
+        macd = new MACDIndicator(new ClosePriceIndicator(),12, 26);
     }
     @Test
     public void shouldReturnTheCorrectMACDDifference() {
         double[] prices = prepareListOfPricesForDoingNothingUnder();
 
-        assertEquals(-9.9828, macd.getValue(prices), 0.0001);
+        assertEquals(-9.9828, macd.getLastValue(prices), 0.0001);
     }
 
     @Test
     public void shouldReturnZeroIfPricesAreEmpty() {
         double[] prices = new double[126];
 
-        assertEquals(macd.getValue(prices), 0, 0);
+        assertEquals(macd.getLastValue(prices), 0, 0);
     }
 
     private double[] prepareListOfPricesForDoingNothingUnder() {

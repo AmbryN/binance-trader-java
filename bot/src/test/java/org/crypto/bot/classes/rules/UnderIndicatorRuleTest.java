@@ -30,15 +30,15 @@ class UnderIndicatorRuleTest {
 
     @Test
     void isSatisfiedWhenFirstIndicatorIsLowerThanSecond() {
-        when(first.getValue(any())).thenReturn(999.);
-        when(second.getValue(any())).thenReturn(1000.);
+        when(first.getLastValue(any())).thenReturn(999.);
+        when(second.getLastValue(any())).thenReturn(1000.);
         assertTrue(rule.isSatisfied(0., new double[0]));
     }
 
     @Test
     void isNotSatisfiedWhenFirstIndicatorIsHigherThanSecond() {
-        when(first.getValue(any())).thenReturn(1000.);
-        when(second.getValue(any())).thenReturn(999.);
+        when(first.getLastValue(any())).thenReturn(1000.);
+        when(second.getLastValue(any())).thenReturn(999.);
         assertFalse(rule.isSatisfied(0., new double[0]));
     }
 

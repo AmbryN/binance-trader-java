@@ -11,9 +11,16 @@ import com.binance.connector.client.impl.SpotClientImpl;
 import org.crypto.bot.classes.data.AccountInfo;
 import org.crypto.bot.utils.Deserializer;
 
+/**
+ * Service used to query Binance for the user's account information.
+ */
 public class AccountInfoService {
     SpotClientImpl client;
 
+    /**
+     * Creates a new instance of the AccountInfoService
+     * @param client the connection client to the exchange
+     */
     public AccountInfoService(SpotClientImpl client) {
         this.client = client;
     }

@@ -2,6 +2,12 @@ package org.crypto.bot.classes.indicators;
 
 import org.crypto.bot.utils.Calculus;
 
+/**
+ * Indicator representing an exponential moving average.
+ * <a href="https://www.investopedia.com/ask/answers/122314/what-exponential-moving-average-ema-formula-and-how-ema-calculated.asp">
+ *     https://www.investopedia.com/ask/answers/122314/what-exponential-moving-average-ema-formula-and-how-ema-calculated.asp
+ * </a>
+ */
 public class EMAIndicator extends MAIndicator {
     public EMAIndicator() {}
 

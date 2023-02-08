@@ -1,5 +1,8 @@
 package org.crypto.bot.enums;
 
+/**
+ * Represents the order type sent to the Exchange
+ */
 public enum OrderType {
     LIMIT,
     MARKET,

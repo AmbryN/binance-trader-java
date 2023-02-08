@@ -1,18 +1,18 @@
 package org.crypto.bot.classes.selectors;
 
-import org.crypto.bot.enums.IndicatorEnum;
+import org.crypto.bot.enums.Period;
 
-public class IndicatorSelector extends ListSelector<IndicatorEnum> {
+public class PeriodSelector extends ListSelector<Period> {
 
-    public IndicatorSelector() {
-        this.list = IndicatorEnum.values();
+    public PeriodSelector() {
+        this.list = Period.values();
     }
 
     @Override
     protected void showSelector() {
         System.out.println("What rule do you want to use? ");
         int index = 0;
-        for (IndicatorEnum rule : list) {
+        for (Period rule : list) {
             System.out.println(index + ") " + rule);
             index++;
         }

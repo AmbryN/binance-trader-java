@@ -2,11 +2,13 @@ package org.crypto.bot.classes.rules;
 
 import org.crypto.bot.classes.indicators.Indicator;
 
+/**
+ * A trading rule satisfied when the first
+ * indicator is under the second indicator.
+ */
 public class UnderIndicatorRule implements Rule {
     Indicator first;
     Indicator second;
-
-    public UnderIndicatorRule() {}
 
     public UnderIndicatorRule(Indicator first, Indicator second) {
         this.first = first;
@@ -15,7 +17,7 @@ public class UnderIndicatorRule implements Rule {
 
     @Override
     public boolean isSatisfied(double ticker, double[] prices) {
-        return first.getValue(prices) < second.getValue(prices);
+        return first.getLastValue(prices) < second.getLastValue(prices);
     }
 
     @Override

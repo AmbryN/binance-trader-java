@@ -2,6 +2,9 @@ package org.crypto.bot.classes.data;
 
 import org.crypto.bot.enums.Symbol;
 
+/**
+ * Represents the current price of a crypto pair on Binance
+ */
 public class Ticker {
     private final Symbol symbol;
     private final double price;

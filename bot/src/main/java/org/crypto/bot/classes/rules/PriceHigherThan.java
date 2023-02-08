@@ -1,5 +1,9 @@
 package org.crypto.bot.classes.rules;
 
+/**
+ * A trading rule satisfied when the price
+ * is over a specific value.
+ */
 public class PriceHigherThan implements Rule {
     private double value;
 

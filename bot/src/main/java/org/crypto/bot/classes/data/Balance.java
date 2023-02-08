@@ -2,6 +2,9 @@ package org.crypto.bot.classes.data;
 
 import org.crypto.bot.enums.Crypto;
 
+/**
+ * Represents the Balance data for one crypto asset on Binance
+ */
 public class Balance {
     private final Crypto asset;
     private final double free;

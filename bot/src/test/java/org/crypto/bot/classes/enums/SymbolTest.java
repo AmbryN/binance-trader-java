@@ -5,8 +5,7 @@ import org.crypto.bot.enums.Symbol;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SymbolTest {
 
@@ -28,7 +27,7 @@ public class SymbolTest {
     }
 
     @Test
-    public void shouldReturnNullIfNotFound() {
-        assertNull(Symbol.toSymbol("TEST"));
+    public void shouldThrowIllegalArgumentExceptionIfNotFound() {
+        assertThrows(IllegalArgumentException.class, () -> Symbol.toSymbol("TEST"));
     }
 }

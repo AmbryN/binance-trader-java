@@ -18,10 +18,6 @@ public class MACDIndicatorBuilder implements IndicatorBuilder {
         this.indicator.setLongNbOfPeriods(longNbOfPeriods);
     }
 
-    public void setSignalNbOfPeriods(int signalNbOfPeriods) {
-        this.indicator.setSignalNbOfPeriods(signalNbOfPeriods);
-    }
-
     public MACDIndicator getIndicator() {
         return this.indicator;
     }

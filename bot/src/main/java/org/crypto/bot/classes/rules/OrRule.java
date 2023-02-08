@@ -1,5 +1,8 @@
 package org.crypto.bot.classes.rules;
 
+/**
+ * A rule satisfied when one or both underlying rules are satisfied (Logical OR).
+ */
 public class OrRule implements Rule {
     private final Rule firstRule;
     private final Rule secondRule;

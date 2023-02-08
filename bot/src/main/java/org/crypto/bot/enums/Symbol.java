@@ -1,7 +1,9 @@
 package org.crypto.bot.enums;
 
 /**
- * Pair of crypto defined by its Base crypto and its Quote crypto which can be traded on Binance
+ * Supported pairs of cryptocurrencies.
+ * They are defined by their Base currency and their Quote currency.
+ * The minimum transaction and movement amounts are those used by Binance.
  */
 public enum Symbol {
     BTCUSDT(Crypto.BTC, Crypto.USDT, 0.00001, 10, 100000, 100),
@@ -15,21 +17,21 @@ public enum Symbol {
     private final Crypto quote;
 
     /**
-     * Defines the minimum amount for a trade using this base crypto
+     * Defines the minimum amount for a trade using this base crypto.
      */
     public final double MIN_BASE_TRANSACTION;
     /**
-     * Defines the minimum amount for a trade using this quote crypto
+     * Defines the minimum amount for a trade using this quote crypto.
      */
     public final double MIN_QUOTE_TRANSACTION;
     /**
      * Defines the minimum increment for the amount of a trade using this base crypto
-     * Given as an int (e.g. 100000 means 0.00001)
+     * Given as an int (e.g., 100000 means 0.00001)
      */
     public final int MIN_BASE_MOVEMENT;
     /**
      * Defines the minimum increment for the amount of a trade using this quote crypto
-     * Given as an int (e.g. 100 means 0.01)
+     * Given as an int (e.g., 100 means 0.01)
      */
     public final int MIN_QUOTE_MOVEMENT;
 
@@ -55,12 +57,18 @@ public enum Symbol {
         return this.base.toString() + this.quote.toString();
     }
 
+    /**
+     * Gets the correct enum value from the corresponding String
+     * @param pair the crypto pair as a String
+     * @return the corresponding enums value if found
+     * @throws IllegalArgumentException if the value is not found
+     */
     public static Symbol toSymbol(String pair) {
         for (Symbol symbol : Symbol.values()) {
             if (symbol.toString().equals(pair)) {
                 return symbol;
             }
         }
-        return null;
+        throw new IllegalArgumentException("Pair was not found");
     }
 }

@@ -5,6 +5,9 @@ import org.crypto.bot.enums.Symbol;
 
 import java.util.HashMap;
 
+/**
+ * Represents the Account Information data returned by Binance
+ */
 public class AccountInfo {
     private int makerCommission;
     private int takerCommission;

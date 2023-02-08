@@ -2,6 +2,9 @@ package org.crypto.bot.classes.data;
 
 import org.crypto.bot.enums.Crypto;
 
+/**
+ * Represents one transaction used to complete an order on Binance
+ */
 public class Fill {
     double price;
     double qty;

@@ -1,9 +1,5 @@
 package org.crypto.bot.classes.indicators;
 
-import org.crypto.bot.utils.Calculus;
-
-import java.util.ArrayList;
-
 public class SubtractIndicator implements Indicator {
 
     private Indicator first;
@@ -17,8 +13,8 @@ public class SubtractIndicator implements Indicator {
     }
 
     @Override
-    public double getValue(double[] closePrices) {
-       return this.first.getValue(closePrices) - this.second.getValue(closePrices);
+    public double getLastValue(double[] closePrices) {
+       return this.first.getLastValue(closePrices) - this.second.getLastValue(closePrices);
     }
 
     @Override

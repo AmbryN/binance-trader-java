@@ -12,6 +12,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
+/**
+ * Service used to retrieve the kline (candle) data
+ */
 public class KlineService {
     private final SpotClientImpl client;
 
@@ -19,6 +22,13 @@ public class KlineService {
         this.client =  client;
     }
 
+    /**
+     * Fetches the kline data
+     * @param symbol symbol for which we want to fetch the data
+     * @param period time period of the data
+     * @param nbOfPeriods amount of periods needed
+     * @return the array of kline data
+     */
     public Kline[] fetchKlines(Symbol symbol, String period, int nbOfPeriods) {
         LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
         parameters.put("symbol", symbol.toString());

@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Optional;
 
 /**
- * Facade class for Binance exchange, which handles
+ * Represents the Binance exchange API, which handles
  * all the connections and work for the client application.
  */
 public class BinanceExchange implements Exchange {

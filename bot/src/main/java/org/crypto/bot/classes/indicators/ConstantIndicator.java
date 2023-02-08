@@ -30,7 +30,7 @@ public class ConstantIndicator implements Indicator{
      * @return the value the Indicator is set at
      */
     @Override
-    public double getValue(double[] prices) {
+    public double getLastValue(double[] prices) {
         return value;
     }
 

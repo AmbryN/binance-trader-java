@@ -1,6 +1,5 @@
 package org.crypto.bot.classes.indicators;
 
-import org.crypto.bot.enums.Period;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,7 +11,7 @@ public class SMAIndicatorTest {
         double[] prices = prepareListOfPricesWithAverage14_95();
         SMAIndicator smaIndicator = new SMAIndicator(new ClosePriceIndicator(), 10);
 
-        assertEquals(smaIndicator.getValue(prices), 14.95);
+        assertEquals(smaIndicator.getLastValue(prices), 14.95);
     }
 
     @Test
@@ -20,7 +19,7 @@ public class SMAIndicatorTest {
         double[] pricesEmpty = new double[10];
         SMAIndicator smaIndicator = new SMAIndicator(new ClosePriceIndicator(), 10);
 
-        assertEquals(0, smaIndicator.getValue(pricesEmpty), 0);
+        assertEquals(0, smaIndicator.getLastValue(pricesEmpty), 0);
     }
 
 

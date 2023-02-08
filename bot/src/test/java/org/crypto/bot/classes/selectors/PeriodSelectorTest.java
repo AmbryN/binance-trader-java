@@ -16,7 +16,7 @@ public class PeriodSelectorTest {
     @Mock
     NumberInput inputMock;
     @InjectMocks
-    PeriodListSelector selector;
+    PeriodSelector selector;
 
     @BeforeEach
     public void setup() {

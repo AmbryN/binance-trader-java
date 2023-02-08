@@ -3,6 +3,9 @@ package org.crypto.bot.utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Utils to compute technical analysis indicators.
+ */
 public class Calculus {
     /**
      * This method takes a list of values and computes
@@ -23,12 +26,12 @@ public class Calculus {
     /**
      * This method takes a list of values and computes the last {emaSize}
      * values of the EMA.
-     * {emaSize} is the number of periods used to compute the EMA
+     * {emaSize} is the amount of periods used to compute the EMA
      * @param values the list of values to compute the EMA from
      * @return EMAList the list of the last {emaSize} values
      */
     public static double[] expMovingAvg(double[] values) {
-        // Find the middle of the list and ceil it which gives the size (nb of periods) of the EMA
+        // Find the middle of the list and ceil it, which gives the size (nb of periods) of the EMA
         double middle = (double) values.length / 2.;
         int emaSize = (int) Math.ceil(middle);
 
@@ -41,7 +44,7 @@ public class Calculus {
     /**
      * Returns an array of the last {emaSize} values of the EMA.
      * @param values the list of values to compute the EMA from
-     * @param emaSize is the number of periods used to compute the EMA
+     * @param emaSize is the amount of periods used to compute the EMA
      * @return EMAList the list of the last {emaSize} values
      */
     public static double[] expMovingAvgesWithSize(double[] values, int emaSize) {
@@ -57,7 +60,7 @@ public class Calculus {
         ArrayList<Double> EMAList = new ArrayList<>();
         EMAList.add(firstSMA);
 
-        // Sublist of the values which were not used for the SMA and need to be used for following EMAs
+        // Sublist of the values, which were not used for the SMA and need to be used for following EMAs
         double[] filteredValues = Arrays.copyOfRange(values, emaSize, values.length);
 
         // Compute the following EMA from the starting SMA
