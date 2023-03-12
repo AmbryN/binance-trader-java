@@ -3,6 +3,7 @@ package org.crypto.bot;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import org.crypto.bot.classes.facade.BinanceExchange;
+import org.crypto.bot.classes.handlers.ExceptionHandler;
 import org.crypto.bot.classes.handlers.Try;
 import org.crypto.bot.classes.selectors.StrategyListSelector;
 import org.crypto.bot.classes.selectors.SymbolListSelector;
@@ -15,6 +16,9 @@ import org.crypto.bot.interfaces.Strategy;
 import org.crypto.bot.utils.Logging;
 
 import java.util.HashMap;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Represents a trading bot.
@@ -57,12 +61,24 @@ public class Trader implements Runnable {
      *  Computes on iteration of the strategy.
      */
     private void tick() {
-        HashMap<String, Double> balances = exchange.getBaseAndQuoteBalances(symbol);
-        double tickerPrice = exchange.getTicker(symbol);
+        CompletableFuture<HashMap<String, Double>> balancesFut = exchange.getBaseAndQuoteBalances(symbol);
+        CompletableFuture<Double> tickerPriceFut = exchange.getTicker(symbol);
 
         Period period = strategy.getPeriod();
         int recordsToFetch = strategy.getAmountOfRecordsToFetch();
-        double[] closePrices = exchange.getClosePrices(symbol, period, recordsToFetch);
+        CompletableFuture<double[]> closePricesFut = exchange.getClosePrices(symbol, period, recordsToFetch);
+
+
+        HashMap<String, Double> balances = null;
+        double tickerPrice = 0;
+        double[] closePrices = null;
+        try {
+            balances = balancesFut.join();
+            tickerPrice = tickerPriceFut.join();
+            closePrices = closePricesFut.join();
+        } catch (CompletionException ce) {
+            ExceptionHandler.handle(ce);
+        }
 
         StrategyResult result = strategy.execute(tickerPrice, closePrices);
 

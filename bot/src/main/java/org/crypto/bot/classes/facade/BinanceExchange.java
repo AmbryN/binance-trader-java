@@ -1,9 +1,9 @@
 package org.crypto.bot.classes.facade;
 
 import com.binance.connector.client.impl.SpotClientImpl;
-import org.crypto.bot.classes.data.AccountInfo;
 import org.crypto.bot.classes.data.Kline;
 import org.crypto.bot.classes.data.Ticker;
+import org.crypto.bot.classes.handlers.ExceptionHandler;
 import org.crypto.bot.classes.handlers.Try;
 import org.crypto.bot.enums.Period;
 import org.crypto.bot.enums.Symbol;
@@ -16,7 +16,7 @@ import org.crypto.bot.services.TickerService;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Facade class for Binance exchange, which handles
@@ -54,14 +54,9 @@ public class BinanceExchange implements Exchange {
     /**
      * Gets the balances for the symbol from the exchange.
      */
-    public HashMap<String, Double> getBaseAndQuoteBalances(Symbol symbol) throws BinanceTraderException {
-        Optional<AccountInfo> optionalAccountInfo =
-                Try.toGet(() -> accountInfoService.getAccountInfo());
-        if (optionalAccountInfo.isPresent()) {
-            AccountInfo accountInfo = optionalAccountInfo.get();
-            return accountInfo.getBaseAndQuoteBalancesFor(symbol);
-        }
-        throw new BinanceTraderException("Could not get Balances from the exchange");
+    public CompletableFuture<HashMap<String, Double>> getBaseAndQuoteBalances(Symbol symbol) throws BinanceTraderException {
+        return accountInfoService.getAccountInfo()
+                .thenApply(accountInfo -> accountInfo.getBaseAndQuoteBalancesFor(symbol));
     }
 
     /**
@@ -70,15 +65,9 @@ public class BinanceExchange implements Exchange {
      * @return current price for given symbol
      * @throws BinanceTraderException if price could not be gotten from the exchange
      */
-    public double getTicker(Symbol symbol) {
-        Optional<Ticker> optionalTicker =
-                Try.toGet(() -> tickerService.getTicker(symbol));
-        if (optionalTicker.isPresent()) {
-            return optionalTicker.get().getPrice();
-        } else {
-            throw new BinanceTraderException("Could not get Ticker from the exchange");
-        }
-
+    public CompletableFuture<Double> getTicker(Symbol symbol) {
+        return tickerService.getTicker(symbol)
+                .thenApply(Ticker::getPrice);
     }
 
     /**
@@ -89,14 +78,11 @@ public class BinanceExchange implements Exchange {
      * @return array of closing prices
      * @throws BinanceTraderException if prices could not be gotten from the exchange
      */
-    public double[] getClosePrices(Symbol symbol, Period period, int nbOfRecordsToFetch) {
+    public CompletableFuture<double[]> getClosePrices(Symbol symbol, Period period, int nbOfRecordsToFetch) {
         String periodAsString = period.toString();
-        Optional<Kline[]> optionalKlines = Try.toGet(() -> klineService.fetchKlines(symbol, periodAsString, nbOfRecordsToFetch));
-        if (optionalKlines.isPresent()) {
-            Kline[] klines = optionalKlines.get();
-            return getClosesPricesFrom(klines);
-        }
-        throw new BinanceTraderException("Could not get Close Prices from the exchange");
+
+        return klineService.fetchKlines(symbol, periodAsString, nbOfRecordsToFetch)
+                .thenApply(this::getClosesPricesFrom);
     }
 
     private double[] getClosesPricesFrom(Kline[] klines) {
