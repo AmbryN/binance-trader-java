@@ -89,11 +89,13 @@ public class Trader implements Runnable {
                 strategy.getCurrentStatus());
 
         if (result == StrategyResult.BUY && balances.get("quote") > symbol.MIN_QUOTE_TRANSACTION) {
-            exchange.buy(symbol, tickerPrice, balances.get("quote"));
+            double roundedQuoteBalance = Math.round(balances.get("quote") * (double) symbol.MIN_QUOTE_MOVEMENT) / (double) symbol.MIN_QUOTE_MOVEMENT;
+            exchange.buy(symbol, tickerPrice, roundedQuoteBalance);
             lastBuyingPrice = tickerPrice;
         } else if ((result == StrategyResult.SELL || tickerPrice < lastBuyingPrice * 0.99)
                 && balances.get("base") > symbol.MIN_BASE_TRANSACTION) {
-            exchange.sell(symbol, tickerPrice, balances.get("base"));
+            double roundedBaseBalance = Math.round(balances.get("base") * (double) symbol.MIN_BASE_MOVEMENT) / (double) symbol.MIN_BASE_MOVEMENT;
+            exchange.sell(symbol, tickerPrice, roundedBaseBalance);
             lastBuyingPrice = 0.;
         }
     }
