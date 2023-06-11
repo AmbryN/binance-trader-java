@@ -6,13 +6,8 @@
 
 It allows:
 * to select a crypto pair to trade from the available pairs
-* to create a custom strategy for your specific needs based on the available rules :
-  * `OverIndicatorRule`: returns true when the value the first indicator is above the second indicator.
-  * `UnderIndicatorRule`: returns true when the value the first indicator is under the second indicator.
-  * `AndRule`: returns true when all the provided rules are true.
-  * `OrRule`: returns true when at least one of the provided rules is true.
-* to send buy and sell orders on an Exchange:
-    * `Binance` is the only exchange supported for now
+* to create a custom strategy for your specific needs based on the available rules
+* to send buy and sell orders on an Exchange
 * to log the trades into a file (orderLog.txt) in the project root directory
 
 Planned features:
@@ -35,13 +30,6 @@ A strategy is always defined by an entrance rule (i.e., when to enter a trade), 
 Each rule takes one or more indicators as parameters, which are used to determine the rule's outcome.
 Tailored rules can be created by composing the available rules and indicators using the `AndRule` and `OrRule`.
 
-### Available indicators
-- `ConstantIndicator`: represents a constant value
-- `PriceIndicator`: the result of this indicator are the closing prices of the prices
-- `SMAIndicator`: represents the Simple Moving Average of the prices which were given
-- `EMAIndicator`: represents the Exponential Moving Average of the prices which were given
-- `SubtractIndicator`: represents the difference between two indicators
-
 ### Example use
 
 #### Creating a new Indicator
@@ -49,8 +37,15 @@ Your first indicator will be calculated on the closing prices of the last bars.
 First the indicator needs to be instantiated as follows:
 ```java
 // SMAIndicator(baseIndicator, numberOfPeriods)
-Indicator SMA = new SMAIndicator(new PriceIndicator(), 15); 
+Indicator SMA = new SMAIndicator(new PriceIndicator(), 15);
 ```
+
+Available indicators:
+- `ConstantIndicator`: represents a constant value
+- `PriceIndicator`: the result of this indicator are the closing prices of the prices
+- `SMAIndicator`: represents the Simple Moving Average of the prices which were given
+- `EMAIndicator`: represents the Exponential Moving Average of the prices which were given
+- `SubtractIndicator`: represents the difference between two indicators
 
 ### Creating a Strategy
 Now, lets say you want to buy when the price is above the SMA and sell when the price is below the SMA.
@@ -66,6 +61,12 @@ Finally, you can create your strategy:
 ```java
 Strategy strategy = new Strategy(entranceRule, exitRule);
 ```
+
+Available rules:
+* `OverIndicatorRule`: returns true when the value the first indicator is above the second indicator.
+* `UnderIndicatorRule`: returns true when the value the first indicator is under the second indicator.
+* `AndRule`: returns true when all the provided rules are true.
+* `OrRule`: returns true when at least one of the provided rules is true.
 
 #### Building more complex rules
 If you wanted to build a more complex rule, say the Moving Average Convergence Divergence
@@ -84,6 +85,10 @@ Rule entrance = new OverIndicatorRule(subtraction, new ConstantIndicator(0));
 // Sell when MACD is below the signal (i.e., subtraction is negative)
 Rule exit = new UnderIndicatorRule(subtraction, new ConstantIndicator(0));
 ```
+**Caching of indicators**:
+When an indicator is used multiple times in one strategy (e.g., the MACD in the example above is
+used as reference once, and twice as base indicator for the signal and subtraction indicators), it 
+is computed only once, and the result is cached for subsequent uses until the next prices are fetched.
 
 ### Choosing an Exchange
 Simply instantiate an `Exchange` corresponding to the exchange you want to trade on:
