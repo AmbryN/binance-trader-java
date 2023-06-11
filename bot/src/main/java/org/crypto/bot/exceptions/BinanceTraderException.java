@@ -4,13 +4,12 @@ package org.crypto.bot.exceptions;
  * Custom exception for the trading bot
  */
 public class BinanceTraderException extends RuntimeException {
-    private final String message;
-    
+
     public BinanceTraderException(String message) {
-        this.message = message;
+          super(message);
     }
 
-    public String getMessage() {
-        return this.message;
+    public BinanceTraderException(String message, Throwable t) {
+        super(message, t);
     }
 }

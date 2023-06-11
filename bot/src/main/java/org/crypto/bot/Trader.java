@@ -1,5 +1,6 @@
 package org.crypto.bot;
 
+import org.crypto.bot.classes.handlers.ExceptionHandler;
 import org.crypto.bot.classes.handlers.Try;
 import org.crypto.bot.enums.Period;
 import org.crypto.bot.enums.StrategyResult;
@@ -8,6 +9,8 @@ import org.crypto.bot.classes.exchange.Exchange;
 import org.crypto.bot.classes.strategies.Strategy;
 
 import java.util.HashMap;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 
 /**
  * Represents a trading bot.
@@ -57,12 +60,23 @@ public class Trader implements Runnable {
      *  ticker price and enough price recors to compute the selected strategy.
      */
     private void tick() {
-        HashMap<String, Double> balances = exchange.getBaseAndQuoteBalances(symbol);
+        CompletableFuture<HashMap<String, Double>> balancesFut = exchange.getBaseAndQuoteBalances(symbol);
+        CompletableFuture<Double> tickerPriceFut = exchange.getTicker(symbol);
 
         int recordsToFetch = strategy.getNbOfRecordsToFetch();
-        double[] closePrices = exchange.getClosePrices(symbol, period, recordsToFetch);
+        CompletableFuture<double[]> closePricesFut = exchange.getClosePrices(symbol, period, recordsToFetch);
 
-        double tickerPrice = exchange.getTicker(symbol);
+
+        HashMap<String, Double> balances = null;
+        double tickerPrice = 0;
+        double[] closePrices = null;
+        try {
+            balances = balancesFut.join();
+            tickerPrice = tickerPriceFut.join();
+            closePrices = closePricesFut.join();
+        } catch (CompletionException ce) {
+            ExceptionHandler.handle(ce);
+        }
 
         StrategyResult result = strategy.execute(tickerPrice, closePrices);
 
@@ -73,10 +87,12 @@ public class Trader implements Runnable {
                 "\nStrategy: " + strategy);
 
         if (result == StrategyResult.BUY && balances.get("quote") > symbol.MIN_QUOTE_TRANSACTION) {
-            exchange.buy(symbol, balances.get("quote"));
+            double roundedQuoteBalance = Math.floor(balances.get("quote") * symbol.MIN_QUOTE_MOVEMENT) / symbol.MIN_QUOTE_MOVEMENT;
+            exchange.buy(symbol, roundedQuoteBalance);
         } else if ((result == StrategyResult.SELL)
                 && balances.get("base") > symbol.MIN_BASE_TRANSACTION) {
-            exchange.sell(symbol, balances.get("base"));
+            double roundedBaseBalance = Math.floor(balances.get("base") * symbol.MIN_BASE_MOVEMENT) / symbol.MIN_BASE_MOVEMENT;
+            exchange.sell(symbol, roundedBaseBalance);
         }
     }
 
