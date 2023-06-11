@@ -28,6 +28,6 @@ public class EMAIndicator extends MAIndicator {
 
     @Override
     public String toString() {
-        return "(Exp. Moving Average: " + nbOfPeriods + " - Current: " + lastValue + ")";
+        return "(Exp. Moving Average: " + nbOfPeriods + " - Current: " + lastValues[lastValues.length - 1] + ")";
     }
 }

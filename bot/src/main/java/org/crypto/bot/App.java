@@ -22,7 +22,7 @@ public class App {
         Logger logger = Logging.getInstance();
         logger.setLevel(Level.WARN);
 
-        Period period = Period.OneSecond;
+        Period period = Period.OneMinute;
 
         Indicator MACD = new MACDIndicator(new PriceIndicator(), 12, 26);
         Indicator signal = new EMAIndicator(MACD, 9);
@@ -31,10 +31,7 @@ public class App {
         Rule entrance = new OverIndicatorRule(
                 subtraction,
                 new ConstantIndicator(0)
-        ).and(new OverIndicatorRule(
-                MACD,
-                new ConstantIndicator(0)
-        ));
+        );
 
         Rule exit = new UnderIndicatorRule(
                 subtraction,

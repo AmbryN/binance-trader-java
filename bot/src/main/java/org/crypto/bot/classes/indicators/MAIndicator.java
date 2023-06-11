@@ -3,7 +3,6 @@ package org.crypto.bot.classes.indicators;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class MAIndicator implements Indicator {
-    protected double lastValue;
 
     protected Indicator indicator;
     protected int nbOfPeriods;
