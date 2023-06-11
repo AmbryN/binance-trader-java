@@ -22,10 +22,8 @@ public class EMAIndicator extends MAIndicator {
         return this.nbOfPeriods * 5 - 4;
     }
     @Override
-    protected double calculateMovingAvg(double[] closePrices) {
-        double[] emaList = Calculus.expMovingAvgesWithSize(closePrices, this.nbOfPeriods);
-        this.lastValue = emaList[(emaList.length - 1)];
-        return this.lastValue;
+    protected double[] calculateMovingAvgWithSize(double[] closePrices, int nbOfPeriods) {
+        return Calculus.expMovingAvgesWithSize(closePrices, this.nbOfPeriods);
     }
 
     @Override

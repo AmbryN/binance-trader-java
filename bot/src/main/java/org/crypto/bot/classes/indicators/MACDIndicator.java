@@ -1,8 +1,7 @@
 package org.crypto.bot.classes.indicators;
 
 import org.crypto.bot.utils.Calculus;
-
-import java.util.ArrayList;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Indicator representing the Moving Average Convergence Divergence
@@ -13,8 +12,10 @@ import java.util.ArrayList;
 public class MACDIndicator implements Indicator {
     private int shortNbOfPeriods;
     private int longNbOfPeriods;
-    private double lastValue;
+    private double[] lastValues;
     private Indicator indicator;
+    // This field is used to avoid recomputing the MACD line when the last prices used for the computation are the same.
+    private double[] lastPricesUsedForComputation;
 
     public MACDIndicator() {}
 
@@ -34,25 +35,40 @@ public class MACDIndicator implements Indicator {
 
     @Override
     public double getLastValue(double[] closePrices) {
+        double[] lastValues = getFromCacheOrUpdatePricesUsedForComputation(closePrices);
+        if (lastValues != null) return lastValues[lastValues.length - 1];
+
         double[] values = this.indicator.getAllValues(closePrices);
         // Compute the short EMA (generally 12) and the long EMA (generally 26) used for the MACD line
         double[] shortEMAS = Calculus.expMovingAvgesWithSize(values, this.shortNbOfPeriods);
         double[] longEMAs = Calculus.expMovingAvgesWithSize(values, this.longNbOfPeriods);
 
         // Compute the MACD Line which is the subtraction of the longEMA from the shortEMA
-        double[] MACDLine = this.computeMACDLine(shortEMAS, longEMAs);
-        this.lastValue = MACDLine[MACDLine.length - 1];
-        return this.lastValue;
+        this.lastValues = this.computeMACDLine(shortEMAS, longEMAs);
+        return this.lastValues[this.lastValues.length - 1];
     }
 
     public double[] getAllValues(double[] closePrices) {
+        double[] lastValues = getFromCacheOrUpdatePricesUsedForComputation(closePrices);
+        if (lastValues != null) return lastValues;
+
         double[] values = this.indicator.getAllValues(closePrices);
         // Compute the short EMA (generally 12) and the long EMA (generally 26) used for the MACD line
         double[] shortEMAS = Calculus.expMovingAvgesWithSize(values, this.shortNbOfPeriods);
         double[] longEMAs = Calculus.expMovingAvgesWithSize(values, this.longNbOfPeriods);
 
         // Compute the MACD Line which is the subtraction of the longEMA from the shortEMA
-        return this.computeMACDLine(shortEMAS, longEMAs);
+        this.lastValues = this.computeMACDLine(shortEMAS, longEMAs);
+        return this.lastValues;
+    }
+
+    @Nullable
+    private double[] getFromCacheOrUpdatePricesUsedForComputation(double[] closePrices) {
+        if (closePrices == this.lastPricesUsedForComputation) {
+            return this.lastValues;
+        }
+        this.lastPricesUsedForComputation = closePrices;
+        return null;
     }
 
     protected double[] computeMACDLine(double[] shortEMAs, double[] longEMAs) {
@@ -79,6 +95,6 @@ public class MACDIndicator implements Indicator {
 
     @Override
     public String toString() {
-        return  "(MACD: Short " + this.shortNbOfPeriods + " / Long " + this.longNbOfPeriods + " - Current: " + lastValue + ")";
+        return  "(MACD: Short " + this.shortNbOfPeriods + " / Long " + this.longNbOfPeriods + " - Current: " + lastValues[lastValues.length - 1] + ")";
     }
 }

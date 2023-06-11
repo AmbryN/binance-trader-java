@@ -19,7 +19,6 @@ public class Trader implements Runnable {
     private final Period period;
     private final Strategy strategy;
     private final Symbol symbol;
-    private double lastBuyingPrice;
 
     /**
      * Creates an instance of a trading bot
@@ -33,7 +32,6 @@ public class Trader implements Runnable {
         this.period = period;
         this.symbol = symbol;
         this.strategy = strategy;
-        this.lastBuyingPrice = 0.;
     }
 
     /**
@@ -60,13 +58,11 @@ public class Trader implements Runnable {
      */
     private void tick() {
         HashMap<String, Double> balances = exchange.getBaseAndQuoteBalances(symbol);
+
+        int recordsToFetch = strategy.getNbOfRecordsToFetch();
+        double[] closePrices = exchange.getClosePrices(symbol, period, recordsToFetch);
+
         double tickerPrice = exchange.getTicker(symbol);
-
-        int recordsToFetchEntrance = strategy.getEntranceRule().getNbOfRecordsToFetch();
-        int recordsToFetchExit = strategy.getExitRule().getNbOfRecordsToFetch();
-        int maxRecords = Math.max(recordsToFetchEntrance, recordsToFetchExit);
-
-        double[] closePrices = exchange.getClosePrices(symbol, period, maxRecords);
 
         StrategyResult result = strategy.execute(tickerPrice, closePrices);
 
@@ -78,11 +74,9 @@ public class Trader implements Runnable {
 
         if (result == StrategyResult.BUY && balances.get("quote") > symbol.MIN_QUOTE_TRANSACTION) {
             exchange.buy(symbol, balances.get("quote"));
-            lastBuyingPrice = tickerPrice;
-        } else if ((result == StrategyResult.SELL || tickerPrice < lastBuyingPrice * 0.99)
+        } else if ((result == StrategyResult.SELL)
                 && balances.get("base") > symbol.MIN_BASE_TRANSACTION) {
             exchange.sell(symbol, balances.get("base"));
-            lastBuyingPrice = 0.;
         }
     }
 

@@ -11,7 +11,7 @@ public class MACDIndicatorTest {
 
     @BeforeEach
     void setup() {
-        macd = new MACDIndicator(new ClosePriceIndicator(),12, 26);
+        macd = new MACDIndicator(new PriceIndicator(), 12, 26);
     }
     @Test
     public void shouldReturnTheCorrectMACDDifference() {

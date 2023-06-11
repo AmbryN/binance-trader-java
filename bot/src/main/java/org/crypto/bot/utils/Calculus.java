@@ -16,11 +16,32 @@ public class Calculus {
         if (values.length == 0) {
             return 0.;
         }
+
         double sum = 0;
         for (double value : values) {
             sum += value;
         }
         return sum / values.length;
+    }
+
+    /**
+     * This method takes a list of values and an smaSize and computes
+     * the list of all SMAs of that smaSize.
+     * @param values the list of values to compute the SMA from
+     * @param smaSize the size of the SMA
+     * @return the SMA's list
+     */
+    public static double[] simpleMovingAvgWithSize(double[] values, int smaSize) {
+        if (smaSize < values.length) {
+            throw new IllegalArgumentException("SMA size cannot be smaller than the number of values");
+        }
+
+        double[] smaList = new double[values.length - smaSize + 1];
+        for (int i = 0; i < smaList.length; i++) {
+            double[] subArray = Arrays.copyOfRange(values, i, i + smaSize);
+            smaList[i] = simpleMovingAvg(subArray);
+        }
+        return smaList;
     }
 
     /**

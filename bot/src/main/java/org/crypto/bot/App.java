@@ -3,6 +3,7 @@ package org.crypto.bot;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import org.crypto.bot.classes.exchange.BinanceExchange;
+import org.crypto.bot.classes.exchange.Exchange;
 import org.crypto.bot.classes.indicators.*;
 import org.crypto.bot.classes.rules.*;
 import org.crypto.bot.classes.strategies.Strategy;
@@ -23,7 +24,7 @@ public class App {
 
         Period period = Period.OneSecond;
 
-        Indicator MACD = new MACDIndicator(new ClosePriceIndicator(), 12, 26);
+        Indicator MACD = new MACDIndicator(new PriceIndicator(), 12, 26);
         Indicator signal = new EMAIndicator(MACD, 9);
         Indicator subtraction = new SubtractIndicator(MACD, signal);
 
@@ -41,7 +42,10 @@ public class App {
         );
 
         Strategy strategy = new Strategy(entrance, exit);
-        Trader trader = new Trader(new BinanceExchange(), period, Symbol.BTCUSDT, strategy);
+
+        Exchange binance = new BinanceExchange();
+
+        Trader trader = new Trader(binance, period, Symbol.BTCUSDT, strategy);
         trader.run();
     }
 }

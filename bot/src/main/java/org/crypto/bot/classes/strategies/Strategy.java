@@ -52,4 +52,11 @@ public class Strategy {
         return  "\nEntrance Rule: " + entranceRule +
                 "\nExit Rule: " + exitRule;
     }
+
+    public int getNbOfRecordsToFetch() {
+        int recordsToFetchEntrance = this.entranceRule.getNbOfRecordsToFetch();
+        int recordsToFetchExit = this.exitRule.getNbOfRecordsToFetch();
+        return Math.max(recordsToFetchEntrance, recordsToFetchExit);
+    }
+
 }

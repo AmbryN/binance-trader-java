@@ -1,10 +1,15 @@
 package org.crypto.bot.classes.indicators;
 
+import org.jetbrains.annotations.Nullable;
+
 public abstract class MAIndicator implements Indicator {
     protected double lastValue;
 
     protected Indicator indicator;
     protected int nbOfPeriods;
+
+    protected double[] lastPricesUsedForComputation;
+    protected double[] lastValues;
 
     protected MAIndicator() {}
 
@@ -23,14 +28,37 @@ public abstract class MAIndicator implements Indicator {
 
     @Override
     public double getLastValue(double[] closePrices) {
+        double[] cachedValues = getFromCacheOrUpdatePricesUsedForComputation(closePrices);
+        if (cachedValues != null) {
+            return cachedValues[cachedValues.length - 1];
+        }
+
         double[] values = this.indicator.getAllValues(closePrices);
-        return calculateMovingAvg(values);
+        double[] avgs = calculateMovingAvgWithSize(values, this.nbOfPeriods);
+        this.lastValues = avgs;
+        return avgs[avgs.length - 1];
     }
 
     public double[] getAllValues(double[] closePrices) {
+        double[] cachedValues = getFromCacheOrUpdatePricesUsedForComputation(closePrices);
+        if (cachedValues != null) {
+            return cachedValues;
+        }
+
         double[] values = this.indicator.getAllValues(closePrices);
-        return new double[] { calculateMovingAvg(values)};
+        double[] avgs = calculateMovingAvgWithSize(values, nbOfPeriods);
+        this.lastValues = avgs;
+        return avgs;
     }
 
-    protected abstract double calculateMovingAvg(double[] closePrices);
+    @Nullable
+    private double[] getFromCacheOrUpdatePricesUsedForComputation(double[] closePrices) {
+        if (closePrices == this.lastPricesUsedForComputation) {
+            return this.lastValues;
+        }
+        this.lastPricesUsedForComputation = closePrices;
+        return null;
+    }
+
+    protected abstract double[] calculateMovingAvgWithSize(double[] closePrices, int nbOfPeriods);
 }

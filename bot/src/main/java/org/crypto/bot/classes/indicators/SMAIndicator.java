@@ -14,8 +14,8 @@ public class SMAIndicator extends MAIndicator {
     }
 
     @Override
-    protected double calculateMovingAvg(double[] closePrices) {
-        return Calculus.simpleMovingAvg(closePrices);
+    protected double[] calculateMovingAvgWithSize(double[] closePrices, int nbOfPeriods) {
+        return Calculus.simpleMovingAvgWithSize(closePrices, nbOfPeriods);
     }
 
     @Override

@@ -8,7 +8,7 @@ public class EMAIndicatorTest {
     @Test
     public void shouldReturnTheCorrectEMA() {
         double[] prices = prepareListOfPricesWithExpAverage16_237();
-        EMAIndicator emaIndicator = new EMAIndicator(new ClosePriceIndicator(), 5);
+        EMAIndicator emaIndicator = new EMAIndicator(new PriceIndicator(), 5);
 
         assertEquals(16.237, emaIndicator.getLastValue(prices), 0.001);
     }
@@ -16,7 +16,7 @@ public class EMAIndicatorTest {
     @Test
     public void shouldReturnZero() {
         double[] pricesEmpty = new double[9];
-        EMAIndicator emaIndicator = new EMAIndicator(new ClosePriceIndicator(), 5);
+        EMAIndicator emaIndicator = new EMAIndicator(new PriceIndicator(), 5);
 
         assertEquals(0, emaIndicator.getLastValue(pricesEmpty), 0);
     }
